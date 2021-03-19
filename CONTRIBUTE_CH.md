@@ -1,5 +1,7 @@
 # 贡献规范
 
+[English version](CONTRIBUTE.md)
+
 ## 导引
 
 首先感谢您关注 EduCDM 并致力于让其变得更好！
