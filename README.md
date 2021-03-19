@@ -3,5 +3,6 @@
 [![Build Status](https://www.travis-ci.org/bigdata-ustc/EduCDM.svg?branch=main)](https://www.travis-ci.org/bigdata-ustc/EduCDM)
 [![codecov](https://codecov.io/gh/bigdata-ustc/EduCDM/branch/main/graph/badge.svg?token=B7gscOGQLD)](https://codecov.io/gh/bigdata-ustc/EduCDM)
 [![Download](https://img.shields.io/pypi/dm/EduCDM.svg?style=flat)](https://pypi.python.org/pypi/EduCDM)
+[![License](https://img.shields.io/github/license/bigdata-ustc/EduCDM)](LICENSE)
 
 The Model Zoo of Cognitive Diagnosis Models
