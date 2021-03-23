@@ -14,7 +14,10 @@ setup(
     },
     install_requires=[
         "torch",
-        "tqdm"
+        "tqdm",
+        "numpy",
+        "scikit-learn",
+        "pandas",
     ],  # And any other dependencies foo needs
     entry_points={
     },
