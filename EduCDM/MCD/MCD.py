@@ -8,7 +8,6 @@ from tqdm import tqdm
 from torch import nn
 from EduCDM import CDM
 from sklearn.metrics import roc_auc_score, accuracy_score
-from pprint import pformat
 
 
 class MFNet(nn.Module):
@@ -26,7 +25,7 @@ class MFNet(nn.Module):
     def forward(self, user_id, item_id):
         user = self.user_embedding(user_id)
         item = self.item_embedding(item_id)
-        return torch.squeeze(self.response(torch.cat(user, item)), dim=-1)
+        return torch.squeeze(torch.sigmoid(self.response(torch.cat([user, item], dim=-1))), dim=-1)
 
 
 class MCD(CDM):
@@ -37,7 +36,7 @@ class MCD(CDM):
         self.mf_net = MFNet(user_num, item_num, latent_dim)
 
     def train(self, train_data, test_data=None, *, epoch: int, device="cpu", lr=0.001) -> ...:
-        loss_function = nn.CrossEntropyLoss()
+        loss_function = nn.BCELoss()
 
         trainer = torch.optim.Adam(self.mf_net.parameters(), lr)
 
