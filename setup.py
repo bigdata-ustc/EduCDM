@@ -15,7 +15,7 @@ setup(
     install_requires=[
         "torch",
         "tqdm",
-        "numpy",
+        "numpy>=1.16.5",
         "scikit-learn",
         "pandas",
     ],  # And any other dependencies foo needs
