@@ -13,6 +13,8 @@ setup(
         'test': test_deps,
     },
     install_requires=[
+        "torch",
+        "tqdm"
     ],  # And any other dependencies foo needs
     entry_points={
     },
