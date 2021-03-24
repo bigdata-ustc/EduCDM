@@ -6,3 +6,13 @@
 [![License](https://img.shields.io/github/license/bigdata-ustc/EduCDM)](LICENSE)
 
 The Model Zoo of Cognitive Diagnosis Models
+
+## Brief introduction to CDM
+
+## List of models
+
+* [MCD](EduCDM/MCD) [[doc]](docs/MCD.md) [[example]](examples/MCD)
+
+## Contribute
+
+## Reference
