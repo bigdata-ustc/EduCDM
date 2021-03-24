@@ -122,32 +122,32 @@ function
 ```
 
 #### type
-- `feat`：新功能（feature）。
-- `fix/to`：修复 bug，可以是 Q&A  发现的 bug，也可以是自己在使用时发现的 bug。
-   - `fix`：产生 diff 并自动修复此问题。**适合于一次提交直接修复问题**。
-   - `to`：只产生 diff 不自动修复此问题。**适合于多次提交**。最终修复问题提交时使用 `fix`。
-- `docs`：文档（documentation）。
-- `style`：格式（不影响代码运行的变动）。
-- `refactor`：重构（即非新增功能，也不是修改 bug 的代码变动）。
-- `perf`：优化相关，比如提升性能、体验。
-- `test`：增加测试。
-- `chore`：构建过程或辅助工具的变动。
-- `revert`：回滚到上一个版本。
-- `merge`：代码合并。
-- `sync`：同步主线或分支的 bug。
-- `arch`: 工程文件或工具的改动。
+- `feat`：New feature。
+- `fix/to`：Fix bugs, either found in Q&A or found in your own use.
+   - `fix`：Generating diff and fixes the problem automatically. **Suitable for one submit to fix the problem directly**.
+   - `to`：Generating only **diff** but does not automatically fix the problem. **Suitable for multiple submissions**. Use `fix` when the final fix problem is committed.
+- `docs`：Documentation.
+- `style`：Format (do not affect code execution).
+- `refactor`：Refactoring (not new features or bug fix).
+- `perf`：Optimize related issues, such as code performance, user experience.
+- `test`：Add test unit.
+- `chore`：Build process or auxiliary tools change.
+- `revert`：Roll back to the previous version.
+- `merge`：Code merge.
+- `sync`：Synchronizing the bug of main or branch。
+- `arch`: Engineering documents or tools change.
 
 ##### scope (optional)
 
-scope 用于说明 commit 影响的范围，比如数据层、控制层、视图层等等，视项目不同而不同。
+Scope is used to describe the impact of the commit, such as **the data layer**, **the control layer**, **the view layer**, and so on, depending on the project.
 
-例如在Angular，可以是location，browser，compile，compile，rootScope， ngHref，ngClick，ngView 等。如果你的修改影响了不止一个 scope，你可以使用*代替。
+For example, in Angular, it can be location, browser, compile, compile, rootScope, ngHref, ngClick, ngView, and so on. If your changes affect more than one scope, you can use `*` instead.
 
-##### subject (必须)
+##### subject (mandatory)
 
-subject 是 commit 目的的简短描述，不超过50个字符。
+A subject is a short description of the purpose of the commit, not more than 50 characters.
 
-结尾不加句号或其他标点符号。
+There is no period or other punctuation at the end.
 
 #### Example
 
