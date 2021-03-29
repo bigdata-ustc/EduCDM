@@ -1,4 +1,4 @@
-# CONTRIBUTE1
+# CONTRIBUTE
 
 [中文版本](CONTRIBUTE_CH.md)
 
