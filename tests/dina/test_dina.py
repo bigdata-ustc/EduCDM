@@ -3,8 +3,8 @@
 from EduCDM import DINA
 
 
-def test_train(data, conf, tmp_path):
-    stu_num, prob_num, know_num, R, q_m = conf
+def test_train(data, tmp_path):
+    stu_num, prob_num, know_num, R, q_m = data
     cdm = DINA(R, q_m, stu_num, prob_num, know_num, skip_value=-1)
     cdm.train(epoch=2, epsilon=1e-3)
     rmse, mae = cdm.eval([{'user_id': 0, 'item_id': 0, 'score': 1.0}])
