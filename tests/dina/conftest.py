@@ -20,11 +20,11 @@ def data(conf):
     q_m = np.zeros(shape=(item_num, know_num))
     for i in range(item_num):
         for j in range(know_num):
-            q_m[i,j] = random.randint(0,1)
-            
+            q_m[i, j] = random.randint(0, 1)
+
     R = -1*np.ones(shape=(user_num, item_num))
     for i in range(user_num):
         for j in range(item_num):
-            R[i,j] = random.randint(-1, 1)
+            R[i, j] = random.randint(-1, 1)
 
     return user_num, item_num, know_num, R, q_m
