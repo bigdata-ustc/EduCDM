@@ -22,7 +22,7 @@ def data(conf):
         for j in range(know_num):
             q_m[i, j] = random.randint(0, 1)
 
-    R = -1*np.ones(shape=(user_num, item_num))
+    R = -1 * np.ones(shape=(user_num, item_num))
     for i in range(user_num):
         for j in range(item_num):
             R[i, j] = random.randint(-1, 1)

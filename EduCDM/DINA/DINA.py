@@ -39,8 +39,10 @@ class DINA(CDM):
         :param know_num (int): number of knowledge
         :param skip_value (int): skip value in response matrix
         """
+
     def __init__(self, R, q_m, stu_num, prob_num, know_num, skip_value=-1):
-        self.R, self.q_m, self.stu_num, self.prob_num, self.know_num, self.state_num, self.skip_value = R, q_m, stu_num, prob_num, know_num, 2 ** know_num, skip_value
+        self.R, self.q_m, self.state_num, self.skip_value = R, q_m, 2 ** know_num, skip_value
+        self.stu_num, self.prob_num, self.know_num = stu_num, prob_num, know_num
         self.theta, self.slip, self.guess = init_parameters(stu_num, prob_num)
         self.all_states = initial_all_knowledge_state(know_num)  # shape = (state_num, know_num)
         state_prob = np.transpose(np.sum(q_m, axis=1, keepdims=True) - np.dot(q_m, np.transpose(self.all_states)))
@@ -54,10 +56,11 @@ class DINA(CDM):
         for iteration in range(epoch):
             post_tmp, slip_tmp, guess_tmp = np.copy(post), np.copy(slip), np.copy(guess)
             answer_right = (1 - slip) * self.eta + guess * (1 - self.eta)
-            for l in range(self.state_num):
-                log_like = np.log(answer_right[l, :] + 1e-9) * self.R + np.log(1 - answer_right[l, :] + 1e-9) * (1 - self.R)
+            for s in range(self.state_num):
+                log_like = np.log(answer_right[s, :] + 1e-9) * self.R + np.log(1 - answer_right[s, :] + 1e-9) * (
+                    1 - self.R)
                 log_like[np.where(self.R == self.skip_value)[0], np.where(self.R == self.skip_value)[1]] = 0
-                like[:, l] = np.exp(np.sum(log_like, axis=1))
+                like[:, s] = np.exp(np.sum(log_like, axis=1))
             post = like / np.sum(like, axis=1, keepdims=True)
             i_l = np.expand_dims(np.sum(post, axis=0), axis=1)  # shape = (state_num, 1)
             r_jl = np.dot(np.transpose(post), tmp_R)  # shape = (state_num, prob_num)
@@ -65,7 +68,8 @@ class DINA(CDM):
             i_jl_0, i_jl_1 = np.sum(i_l * (1 - self.eta), axis=0), np.sum(i_l * self.eta, axis=0)
             guess, slip = r_jl_0 / i_jl_0, (i_jl_1 - r_jl_1) / i_jl_1
 
-            change = max(np.max(np.abs(post-post_tmp)), np.max(np.abs(slip-slip_tmp)), np.max(np.abs(guess-guess_tmp)))
+            change = max(np.max(np.abs(post - post_tmp)), np.max(np.abs(slip - slip_tmp)),
+                         np.max(np.abs(guess - guess_tmp)))
             theta = np.argmax(post, axis=1)
             if iteration > 20 and change < epsilon:
                 break
@@ -79,12 +83,12 @@ class DINA(CDM):
             test_rmse.append((pred_score[self.theta[stu], test_id] - true_score) ** 2)
             test_mae.append(abs(pred_score[self.theta[stu], test_id] - true_score))
         return np.sqrt(np.average(test_rmse)), np.average(test_mae)
-    
+
     def save(self, filepath):
         with open(filepath, 'wb') as file:
-            pickle.dump({"theta":self.theta, "slip":self.slip, "guess":self.guess},file)
+            pickle.dump({"theta": self.theta, "slip": self.slip, "guess": self.guess}, file)
             logging.info("save parameters to %s" % filepath)
-    
+
     def load(self, filepath):
         with open(filepath, 'rb') as file:
             self.theta, self.slip, self.guess = pickle.load(file).values()
