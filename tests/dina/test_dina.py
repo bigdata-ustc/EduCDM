@@ -4,10 +4,11 @@ from EduCDM import DINA
 
 
 def test_train(data, tmp_path):
-    stu_num, prob_num, know_num, R, q_m = data
+    stu_num, prob_num, know_num, R, q_m, stu_rec = data
     cdm = DINA(R, q_m, stu_num, prob_num, know_num, skip_value=-1)
-    cdm.train(epoch=2, epsilon=1e-3)
+    cdm.train(epoch=30, epsilon=1e-3)
     rmse, mae = cdm.eval([{'user_id': 0, 'item_id': 0, 'score': 1.0}])
     filepath = tmp_path / "dina.params"
     cdm.save(filepath)
     cdm.load(filepath)
+    dia_id, dia_state = cdm.transform(stu_rec)

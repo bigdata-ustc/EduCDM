@@ -5,4 +5,3 @@
 from .meta import CDM
 from .MCD import MCD
 from .DINA import DINA
-from .FuzzyCDF import FuzzyCDF
