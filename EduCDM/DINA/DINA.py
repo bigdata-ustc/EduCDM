@@ -38,7 +38,7 @@ class DINA(CDM):
         :param prob_num (int): number of problems
         :param know_num (int): number of knowledge
         :param skip_value (int): skip value in response matrix
-        """
+    """
 
     def __init__(self, R, q_m, stu_num, prob_num, know_num, skip_value=-1):
         self.R, self.q_m, self.state_num, self.skip_value = R, q_m, 2 ** know_num, skip_value
@@ -100,7 +100,9 @@ class DINA(CDM):
             self.R[stu, test_id] = true_score
         self.train(epoch, epsilon)
 
-    def transform(self, records):  # MLE for evaluating user's state
+    def transform(self, records):  # MLE for evaluating student's state
+        # max_like_id: diagnose which state among all_states the student belongs to
+        # dia_state: binaray vector of length know_num, 0/1 indicates whether masters the knowledge
         answer_right = (1 - self.slip) * self.eta + self.guess * (1 - self.eta)
         log_like = records * np.log(answer_right + 1e-9) + (1 - records) * np.log(1 - answer_right + 1e-9)
         log_like[:, np.where(records == self.skip_value)[0]] = 0
