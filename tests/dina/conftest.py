@@ -27,8 +27,10 @@ def data(conf):
         for j in range(item_num):
             R[i, j] = random.randint(-1, 1)
 
+    new_data = [{'user_id': 1, 'item_id': 1, 'score': 1.0}]
+
     stu_rec = np.ones(item_num)
     for i in range(item_num):
         stu_rec[i] = random.randint(-1, 1)
 
-    return user_num, item_num, know_num, R, q_m, stu_rec
+    return user_num, item_num, know_num, R, q_m, new_data, stu_rec

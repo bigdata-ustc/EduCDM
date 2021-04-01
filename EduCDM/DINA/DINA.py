@@ -94,6 +94,12 @@ class DINA(CDM):
             self.theta, self.slip, self.guess = pickle.load(file).values()
             logging.info("load parameters from %s" % filepath)
 
+    def inc_train(self, inc_train_data, epoch, epsilon):  # incremental training
+        for i in inc_train_data:
+            stu, test_id, true_score = i['user_id'], i['item_id'], i['score']
+            self.R[stu, test_id] = true_score
+        self.train(epoch, epsilon)
+
     def transform(self, records):  # MLE for evaluating user's state
         answer_right = (1 - self.slip) * self.eta + self.guess * (1 - self.eta)
         log_like = records * np.log(answer_right + 1e-9) + (1 - records) * np.log(1 - answer_right + 1e-9)
