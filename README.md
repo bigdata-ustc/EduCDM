@@ -12,6 +12,7 @@ The Model Zoo of Cognitive Diagnosis Models
 ## List of models
 
 * [MCD](EduCDM/MCD) [[doc]](docs/MCD.md) [[example]](examples/MCD)
+* [DINA](EduCDM/DINA) [[doc]](docs/DINA.md) [[example]](examples/DINA)
 
 ## Contribute
 
