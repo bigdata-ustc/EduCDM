@@ -1,3 +1,6 @@
+v0.0.3:
+    * add DINA
+    
 v0.0.2:
     * add MCD
 
