@@ -14,7 +14,10 @@
    - 之后，选择一个具体问题和评论，来提供您的解决性意见或者 bug 修复。
    - 如果对于具体的 issue，您需要更多的细节，请向我们咨询。
 
-一旦您实现并已经测试过了你的想法或者是对于 bug 的修复，请通过 Pull Request 提及到到 [EduCDM](https://github.com/bigdata-ustc/CDM) 。
+一旦您实现并已经测试过了你的想法或者是对于 bug 的修复，请通过 Pull Request 提及到到 [EduCDM](https://github.com/bigdata-ustc/CDM) :
+1. 首先fork此仓库到你的分支下
+2. 对代码进行修改。注意：我们强烈建议你遵守我们的 [commit格式规范](commit)
+3. 通过Pull Request 提及到到 [EduCDM](https://github.com/bigdata-ustc/CDM) 。注意：我们提供了一个标准的PR请求模板，你需要认真完成其中的信息，一个标准且规范的PR可参考[此处](https://github.com/bigdata-ustc/EduCDM/pull/7)
 
 以下是对于不同贡献内容的有用建议：
 
@@ -27,7 +30,8 @@
 新实现的 CDM 模型需要：
 1. 数据集的预处理。
 2. 继承 `EduCDM/meta.py` 中的的 `class CDM`，并实现中间的四个方法。
-3. 编写模型对应的 example 代码（这里指的是可供其他人运行测试使用的 demo），例子可见[]()。
+3. 编写模型对应的 example 代码（这里指的是可供其他人运行测试使用的 demo），例子可见[此处](examples/MCD)：至少应当包括：[notebook](examples/MCD/MCD.ipynb) 和 [script](examples/MCD/MCD.py)
+4. 编写模型对应的测试代码，保证测试覆盖度为100%，例子可见[此处](tests/MCD)
 
 #### 数据预处理
 
@@ -112,7 +116,7 @@ function 的功能
     >>> 举例怎么用
 ```
 
-### 关于 Commit 的格式
+### [关于Commit的格式](#commit)
 
 #### commit format
 
@@ -151,6 +155,10 @@ subject 是 commit 目的的简短描述，不超过50个字符。
 #### Example
 
 - **[docs] update the README.md**
+
+```sh
+git commit -m "[docs] update the README.md"
+```
 
 ## FAQ
 
