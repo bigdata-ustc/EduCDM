@@ -16,7 +16,7 @@
 
 一旦您实现并已经测试过了你的想法或者是对于 bug 的修复，请通过 Pull Request 提及到到 [EduCDM](https://github.com/bigdata-ustc/CDM) :
 1. 首先fork此仓库到你的分支下
-2. 对代码进行修改。注意：我们强烈建议你遵守我们的 [commit格式规范](commit)
+2. 对代码进行修改。注意：我们强烈建议你遵守我们的 [commit格式规范](CONTRIBUTE_CH.md#关于Commit的格式)
 3. 通过代码测试，测试覆盖度达到100%，例子可见[此处](tests/mcd)
 4. 通过Pull Request 提及到到 [EduCDM](https://github.com/bigdata-ustc/CDM) 。注意：我们提供了一个标准的PR请求模板，你需要认真完成其中的信息，一个标准且规范的PR可参考[此处](https://github.com/bigdata-ustc/EduCDM/pull/7)
 
