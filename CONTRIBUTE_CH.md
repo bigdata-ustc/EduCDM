@@ -17,7 +17,8 @@
 一旦您实现并已经测试过了你的想法或者是对于 bug 的修复，请通过 Pull Request 提及到到 [EduCDM](https://github.com/bigdata-ustc/CDM) :
 1. 首先fork此仓库到你的分支下
 2. 对代码进行修改。注意：我们强烈建议你遵守我们的 [commit格式规范](commit)
-3. 通过Pull Request 提及到到 [EduCDM](https://github.com/bigdata-ustc/CDM) 。注意：我们提供了一个标准的PR请求模板，你需要认真完成其中的信息，一个标准且规范的PR可参考[此处](https://github.com/bigdata-ustc/EduCDM/pull/7)
+3. 通过代码测试，测试覆盖度达到100%，例子可见[此处](tests/mcd)
+4. 通过Pull Request 提及到到 [EduCDM](https://github.com/bigdata-ustc/CDM) 。注意：我们提供了一个标准的PR请求模板，你需要认真完成其中的信息，一个标准且规范的PR可参考[此处](https://github.com/bigdata-ustc/EduCDM/pull/7)
 
 以下是对于不同贡献内容的有用建议：
 
@@ -31,7 +32,7 @@
 1. 数据集的预处理。
 2. 继承 `EduCDM/meta.py` 中的的 `class CDM`，并实现中间的四个方法。
 3. 编写模型对应的 example 代码（这里指的是可供其他人运行测试使用的 demo），例子可见[此处](examples/MCD)：至少应当包括：[notebook](examples/MCD/MCD.ipynb) 和 [script](examples/MCD/MCD.py)
-4. 编写模型对应的测试代码，保证测试覆盖度为100%，例子可见[此处](tests/MCD)
+4. 编写模型对应的测试代码，保证测试覆盖度为100%，例子可见[此处](tests/mcd)
 
 #### 数据预处理
 
