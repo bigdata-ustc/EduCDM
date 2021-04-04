@@ -116,7 +116,7 @@ function 的功能
     >>> 举例怎么用
 ```
 
-### [关于Commit的格式](#commit)
+### 关于Commit的格式
 
 #### commit format
 
