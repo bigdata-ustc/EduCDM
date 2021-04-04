@@ -41,7 +41,7 @@
 1. 编写一个 script，完成：
    - 对原始数据集中进行处理，转换。
    - 训练/验证/测试集划分。
-2. 提交或使用 [CDBD](https://github.com/bigdata-ustc/EduData 数据集（已划分好训练/验证/测试集）。
+2. 提交或使用 [CDBD](https://github.com/bigdata-ustc/EduData) 数据集（已划分好训练/验证/测试集）。
 
 #### 模块编写
 
