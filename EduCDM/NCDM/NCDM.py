@@ -77,7 +77,7 @@ class NCDM(CDM):
         super(NCDM, self).__init__()
         self.ncdm_net = Net(knowledge_n, exer_n, student_n)
 
-    def train(self, train_data, test_data=None, epoch=10, device="cpu", lr=0.002):
+    def train(self, train_data, test_data=None, epoch=10, device="cpu", lr=0.002, silence=False):
         self.ncdm_net = self.ncdm_net.to(device)
         self.ncdm_net.train()
         loss_function = nn.BCELoss()
@@ -102,7 +102,7 @@ class NCDM(CDM):
 
                 epoch_losses.append(loss.mean().item())
                 batch_losses.append(loss.mean().item())
-                if batch_count % 200 == 199:
+                if (not silence) and (batch_count % 200 == 199):
                     print('[%d, %5d] loss: %.3f' % (epoch_i, batch_count, float(np.mean(batch_losses))))
                     batch_losses = []
             print("[Epoch %d] average loss: %.6f" % (epoch_i, float(np.mean(epoch_losses))))
