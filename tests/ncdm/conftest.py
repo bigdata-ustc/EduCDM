@@ -35,7 +35,7 @@ def data(conf):
     dataset = TensorDataset(
         torch.tensor(user_id, dtype=torch.int64),
         torch.tensor(item_id, dtype=torch.int64),
-        torch.tensor(knowledge_embs, dtype=torch.int64),
+        torch.tensor(knowledge_emb, dtype=torch.int64),
         torch.tensor(score, dtype=torch.float)
     )
     return DataLoader(dataset, batch_size=batch_size)
