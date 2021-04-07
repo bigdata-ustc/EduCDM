@@ -83,7 +83,7 @@ class NCDM(CDM):
         loss_function = nn.BCELoss()
         optimizer = optim.Adam(self.ncdm_net.parameters(), lr=lr)
         for epoch_i in range(epoch):
-            epoch_losses, batch_losses = [], []
+            epoch_losses = []
             batch_count = 0
             for batch_data in tqdm(train_data, "Epoch %s" % epoch_i):
                 batch_count += 1
@@ -101,10 +101,7 @@ class NCDM(CDM):
                 self.ncdm_net.apply_clipper()
 
                 epoch_losses.append(loss.mean().item())
-                batch_losses.append(loss.mean().item())
-                if (not silence) and (batch_count % 200 == 199):
-                    print('[%d, %5d] loss: %.3f' % (epoch_i, batch_count, float(np.mean(batch_losses))))
-                    batch_losses = []
+
             print("[Epoch %d] average loss: %.6f" % (epoch_i, float(np.mean(epoch_losses))))
 
             if test_data is not None:
