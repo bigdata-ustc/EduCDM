@@ -17,7 +17,12 @@ based on the type of contribution:
     * If you need more context on a particular issue, please ask and we shall provide.
 
 Once you implement and test your feature or bug-fix, 
-please submit a Pull Request to [EduCDM](https://github.com/bigdata-ustc/CDM).
+please submit a Pull Request to [EduCDM](https://github.com/bigdata-ustc/CDM):
+
+1. Fork this repository to your branch.
+2. Modify the code. Note that we strongly recommend that you comply with our [commit format specifications](CONTRIBUTE.md#About-Commit).
+3. Pass code tests and make the test coverage reach 100%. [An example](tests/mcd).
+4. Submit a Pull Request to [EduCDM](https://github.com/bigdata-ustc/CDM). Note that we provide a standard template of Pull Request [here](https://github.com/bigdata-ustc/EduCDM/pull/7). Please fill in the information carefully.
 
 The followings are some helpful guidelines for different types contribution:
  
@@ -26,6 +31,13 @@ The followings are some helpful guidelines for different types contribution:
 If you want to add the data analysis or a new dataset, please submit a Pull Request to [EduData](https://github.com/bigdata-ustc/EduData).
 
 ### Add new CDM model
+
+The newly implemented CDM model requires:
+
+1. Dataset processing.
+2. Inherit the `class CDM` in `EduCDM/meta.py` and implement four methods in it.
+3. Write the corresponding example code for the model (This refers to a demo that can be tested by others). It should include at least [notebook](examples/MCD/MCD.ipynb) and [script](examples/MCD/MCD.py). [An example](examples/MCD).
+4. Write the corresponding test code for the model and make sure that the test coverage is 100%. [An example](tests/mcd).
 
 #### Dataset Processing
 
@@ -152,6 +164,10 @@ There is no period or other punctuation at the end.
 #### Example
 
 - **[docs] update the README.md**
+
+```sh
+git commit -m "[docs] update the README.md"
+```
 
 ## FAQ
 
