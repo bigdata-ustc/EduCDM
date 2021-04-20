@@ -33,10 +33,12 @@ More recent researches about CDMs:
 
 ## List of models
 
-* [MCD](EduCDM/MCD) [[doc]](docs/MCD.md) [[example]](examples/MCD)
-* [DINA](EduCDM/DINA) [[doc]](docs/DINA.md) [[example]](examples/DINA)
-* [FuzzyCDF](EduCDM/FuzzyCDF) [[doc]](docs/FuzzyCDF.md) [[example]](examples/FuzzyCDF)
 * [NCDM](EduCDM/NCDM) [[doc]](docs/NCDM.md) [[example]](examples/NCDM)
+* [FuzzyCDF](EduCDM/FuzzyCDF) [[doc]](docs/FuzzyCDF.md) [[example]](examples/FuzzyCDF)
+* [DINA](EduCDM/DINA) [[doc]](docs/DINA.md) [[example]](examples/DINA)
+* [MCD](EduCDM/MCD) [[doc]](docs/MCD.md) [[example]](examples/MCD)
+
+
 
 ## Contribute
 
