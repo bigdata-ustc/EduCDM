@@ -18,7 +18,7 @@ setup(
         "numpy>=1.16.5",
         "scikit-learn",
         "pandas",
-    ],  # And any other dependencies foo needs
+    ],  # And any other dependencies for needs
     entry_points={
     },
 )
