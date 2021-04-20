@@ -12,17 +12,17 @@ based on the type of contribution:
     and we shall discuss the design and implementation. 
     Once we agree that the plan looks good, go ahead and implement it.
 2. You want to implement a feature or bug-fix for an outstanding issue.
-    * Search for your issue in the [EduCDM issue list](https://github.com/bigdata-ustc/CDM/issues).
+    * Search for your issue in the [EduCDM issue list](https://github.com/bigdata-ustc/EduCDM/issues).
     * Pick an issue and comment that you'd like to work on the feature or bug-fix.
     * If you need more context on a particular issue, please ask and we shall provide.
 
 Once you implement and test your feature or bug-fix, 
-please submit a Pull Request to [EduCDM](https://github.com/bigdata-ustc/CDM):
+please submit a Pull Request to [EduCDM](https://github.com/bigdata-ustc/EduCDM):
 
 1. Fork this repository to your branch.
 2. Modify the code. Note that we strongly recommend that you comply with our [commit format specifications](CONTRIBUTE.md#About-Commit).
 3. Pass code tests and make the test coverage reach 100%. [An example](tests/mcd).
-4. Submit a Pull Request to [EduCDM](https://github.com/bigdata-ustc/CDM). Note that we provide a standard template of Pull Request [here](https://github.com/bigdata-ustc/EduCDM/pull/7). Please fill in the information carefully.
+4. Submit a Pull Request to [EduCDM](https://github.com/bigdata-ustc/EduCDM). Note that we provide a standard template of Pull Request [here](https://github.com/bigdata-ustc/EduCDM/pull/7). Please fill in the information carefully.
 
 The followings are some helpful guidelines for different types contribution:
  
@@ -93,7 +93,7 @@ This module is a model loading module, which is used to load the saved model.
 
 #### Demo
 
-Make sure you make a demo for your model. [An example]().
+Make sure you make a demo for your model. [An example](examples/MCD).
 
 #### Docs Format
 
