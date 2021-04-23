@@ -1,4 +1,7 @@
 v0.0.4:
+   * add Item Response Theory with Gradient Descent Optimization (GDIRT)
+   
+v0.0.4:
    * add NeuralCDM (NCDM)
 
 v0.0.3:
