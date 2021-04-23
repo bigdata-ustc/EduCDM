@@ -24,9 +24,9 @@ class IRTNet(nn.Module):
 
     def forward(self, user, item):
         theta = torch.squeeze(self.theta(user), dim=-1)
-        a = torch.squeeze(self.theta(item), dim=-1)
-        b = torch.squeeze(self.theta(item), dim=-1)
-        c = torch.squeeze(self.theta(item), dim=-1)
+        a = torch.squeeze(self.a(item), dim=-1)
+        b = torch.squeeze(self.b(item), dim=-1)
+        c = torch.squeeze(self.c(item), dim=-1)
         return torch.squeeze(torch.sigmoid(self.irf(theta, a, b, c, **self.irf_kwargs)), dim=-1)
 
     @classmethod
