@@ -27,7 +27,7 @@ class IRTNet(nn.Module):
         a = torch.squeeze(self.a(item), dim=-1)
         b = torch.squeeze(self.b(item), dim=-1)
         c = torch.squeeze(self.c(item), dim=-1)
-        return torch.squeeze(torch.sigmoid(self.irf(theta, a, b, c, **self.irf_kwargs)), dim=-1)
+        return torch.sigmoid(self.irf(theta, a, b, c, **self.irf_kwargs))
 
     @classmethod
     def irf(cls, theta, a, b, c, **kwargs):
