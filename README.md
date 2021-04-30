@@ -39,6 +39,21 @@ More recent researches about CDMs:
 * [IRT](EduCDM/IRT) [[doc]](docs/IRT.md) [[example]](examples/IRT)
 * [MCD](EduCDM/MCD) [[doc]](docs/MCD.md) [[example]](examples/MCD)
 
+## Installation
+
+Git and install with `pip`:
+
+```
+git clone https://github.com/bigdata-ustc/EduCDM.git
+cd path/to/code
+pip install .
+```
+
+Or directly install from pypi:
+
+```
+pip install EduCDM
+```
 
 
 ## Contribute
