@@ -36,6 +36,7 @@ More recent researches about CDMs:
 * [NCDM](EduCDM/NCDM) [[doc]](docs/NCDM.md) [[example]](examples/NCDM)
 * [FuzzyCDF](EduCDM/FuzzyCDF) [[doc]](docs/FuzzyCDF.md) [[example]](examples/FuzzyCDF)
 * [DINA](EduCDM/DINA) [[doc]](docs/DINA.md) [[example]](examples/DINA)
+* [IRT](EduCDM/IRT) [[doc]](docs/IRT.md) [[example]](examples/IRT)
 * [MCD](EduCDM/MCD) [[doc]](docs/MCD.md) [[example]](examples/MCD)
 
 
