@@ -1,3 +1,6 @@
+v0.0.6:
+   * add Item Response Theory with Expectation Maximization Optimization (EMIRT)
+   
 v0.0.5:
    * add Item Response Theory with Gradient Descent Optimization (GDIRT)
    
