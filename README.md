@@ -37,6 +37,8 @@ More recent researches about CDMs:
 * [FuzzyCDF](EduCDM/FuzzyCDF) [[doc]](docs/FuzzyCDF.md) [[example]](examples/FuzzyCDF)
 * [DINA](EduCDM/DINA) [[doc]](docs/DINA.md) [[example]](examples/DINA)
 * [IRT](EduCDM/IRT) [[doc]](docs/IRT.md) [[example]](examples/IRT)
+  * Eexpectation Maximization (EMIRT) [[example]](examples/IRT/EM)
+  * Gradient Descent (GDIRT) [[example]](examples/IRT/GD)
 * [MCD](EduCDM/MCD) [[doc]](docs/MCD.md) [[example]](examples/MCD)
 
 ## Installation
