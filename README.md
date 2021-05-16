@@ -40,6 +40,10 @@ More recent researches about CDMs:
   * Eexpectation Maximization ([EMIRT](EduCDM/IRT/EM)) [[example]](examples/IRT/EM)
   * Gradient Descent ([GDIRT](EduCDM/IRT/GD)) [[example]](examples/IRT/GD)
 * [MCD](EduCDM/MCD) [[doc]](docs/MCD.md) [[example]](examples/MCD)
+* [IRR](EduCDM/IRR)[[doc]](docs/IRR.md)[[example]](examples/IRR)
+  * IRR-NCDM
+  * IRR-DINA
+  * IRR-IRT
 
 ## Installation
 
