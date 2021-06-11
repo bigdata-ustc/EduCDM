@@ -64,13 +64,20 @@ def update_irt(a, b, c, D, prof, R, r_ek, s_ek, lr, epoch=10, epsilon=1e-3):
 class IRT(CDM):
     """
     IRT model, training (EM) and testing methods
-    :param R (array): response matrix, shape = (stu_num, prob_num)
-    :param stu_num (int): number of students
-    :param prob_num (int): number of problems
-    :param dim (int): dimension of student/problem embedding, MIRT for dim > 1
-    :param skip_value (int): skip value in response matrix
+    Parameters
+    ----------
+    R: numpy.array
+       response matrix, shape = (stu_num, prob_num)
+    stu_num: int
+       number of students
+    prob_num: int
+       number of problems
+    dim: int
+       dimension of student/problem embedding, MIRT for dim > 1
+    skip_value: int
+       skip value in response matrix
+    ----------
     """
-
     def __init__(self, R, stu_num, prob_num, dim=1, skip_value=-1):
         super(IRT, self).__init__()
         self.R, self.skip_value = R, skip_value
