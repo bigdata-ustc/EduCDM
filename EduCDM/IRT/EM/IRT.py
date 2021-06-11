@@ -67,15 +67,15 @@ class IRT(CDM):
     Parameters
     ----------
     R: numpy.array
-       response matrix, shape = (stu_num, prob_num)
+        response matrix, shape = (stu_num, prob_num)
     stu_num: int
-       number of students
+        number of students
     prob_num: int
-       number of problems
+        number of problems
     dim: int
-       dimension of student/problem embedding, MIRT for dim > 1
+        dimension of student/problem embedding, MIRT for dim > 1
     skip_value: int
-       skip value in response matrix
+        skip value in response matrix
     ----------
     """
     def __init__(self, R, stu_num, prob_num, dim=1, skip_value=-1):
