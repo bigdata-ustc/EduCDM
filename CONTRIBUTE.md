@@ -66,7 +66,7 @@ This module is a training module, which is used to train model.
 
 - **Eval** module
 
-This module is a evaluation module, which is used to verify and test the model.
+This module is an evaluation module, which is used to verify and test the model.
 
 ```python3
     def eval(self, *args, **kwargs) -> ...:
@@ -171,7 +171,7 @@ git commit -m "[docs] update the README.md"
 
 ## FAQ
 
-Q: I have carefully test the code in my local system (all testing passed) but still failed in online CI?
+Q: I have carefully tested the code in my local system (all testing passed) but still failed in online CI?
  
 A: There are two possible reasons: 
 1. the online CI system is different from your local system;
