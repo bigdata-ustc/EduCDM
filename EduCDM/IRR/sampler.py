@@ -206,13 +206,13 @@ class UITripletPairSampler(TripletPairSampler):
     (0, [0])
     >>> sampler = UITripletPairSampler(triplet_df, item_id_range=item_num)
     >>> sampler(0, implicit=True)
-    (1, [0])
+    (1, [2])
     >>> sampler(0, 5, implicit=True)
-    (3, [3, 2, 0, 0, 0])
+    (2, [2, 3, 0, 0, 0])
     >>> sampler(0, 5, implicit=True, pad_value=-1)
-    (3, [3, 2, 0, -1, -1])
+    (2, [3, 2, -1, -1, -1])
     >>> sampler([0, 1, 2], 5, implicit=True, pad_value=-1)
-    [(3, [3, 2, 0, -1, -1]), (1, [1, -1, -1, -1, -1]), (3, [3, 0, 2, -1, -1])]
+    [(2, [2, 3, -1, -1, -1]), (1, [1, -1, -1, -1, -1]), (2, [3, 2, -1, -1, -1])]
     >>> rating_matrix = pd.DataFrame({
     ...     "user_id": [0, 1, 1, 1, 2],
     ...     "item_id": [1, 3, 0, 2, 1],
