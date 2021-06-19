@@ -68,7 +68,7 @@ class IRT(PointIRT):
                 trainer.step()
 
                 point_losses.append(point_loss.mean().item())
-                pair_losses.append(pair_loss.mean().item())
+                pair_losses.append(pair_loss.mean().item() if not isinstance(pair_loss, int) else pair_loss)
                 losses.append(loss.item())
             print(
                 "[Epoch %d] Loss: %.6f, PointLoss: %.6f, PairLoss: %.6f" % (
