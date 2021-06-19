@@ -138,7 +138,7 @@ def ranking_report(y_true, y_pred, k: (int, list) = None, coerce="ignore", pad_p
                     k_label_pred = label_pred[:_k]
                     total_label = sum(label)
                 else:
-                    inv_label_pred = [(1 - l, -p) for l, p in label_pred][::-1]
+                    inv_label_pred = [(1 - _l, -p) for _l, p in label_pred][::-1]
                     if len(inv_label_pred) < _k:
                         if coerce == "abandon":
                             continue
