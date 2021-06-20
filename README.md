@@ -43,7 +43,7 @@ More recent researches about CDMs:
 * [IRR](EduCDM/IRR)[[doc]](docs/IRR.md)[[example]](examples/IRR)
   * IRR-NCDM
   * IRR-DINA
-  * IRR-IRT
+  * [IRR-IRT](examples/IRR/IRT.ipynb)
 
 ## Installation
 
