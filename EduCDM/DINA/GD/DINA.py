@@ -32,8 +32,7 @@ class DINANet(nn.Module):
         guess = torch.squeeze(torch.sigmoid(self.guess(item)) * self.max_guess)
         if self.training:
             n = torch.sum(knowledge * (torch.sigmoid(theta) - 0.5), axis=1)
-            t, self.step = max((np.sin(
-                2 * np.pi * self.step / self.max_step) + 1) / 2 * 100,
+            t, self.step = max((np.sin(2 * np.pi * self.step / self.max_step) + 1) / 2 * 100,
                                1e-6), self.step + 1 if self.step < self.max_step else 0
             return torch.sum(
                 torch.stack([1 - slip, guess]).T * torch.softmax(torch.stack([n, torch.zeros_like(n)]).T / t, dim=-1),
