@@ -42,8 +42,9 @@ More recent researches about CDMs:
   * Gradient Descent ([GDIRT](EduCDM/IRT/GD)) [[example]](examples/IRT/GD)
 * [MCD](EduCDM/MCD) [[doc]](docs/MCD.md) [[example]](examples/MCD)
 * [IRR](EduCDM/IRR)[[doc]](docs/IRR.md)[[example]](examples/IRR)
-  * IRR-NCDM
-  * IRR-DINA
+  * IRR-NCDM (TBA)
+  * IRR-MIRT (TBA)
+  * IRR-DINA (TBA)
   * [IRR-IRT](examples/IRR/IRT.ipynb)
 
 ## Installation
