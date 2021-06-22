@@ -2,4 +2,5 @@
 # 2021/3/28 @ liujiayu
 
 
-from .DINA import DINA
+from .GD import DINA as GDDINA
+from .EM import DINA as EMDINA

@@ -3,13 +3,13 @@
 import logging
 import numpy as np
 import json
-from EduCDM import DINA
+from EduCDM import EMDINA as DINA
 
-q_m = np.loadtxt("../../data/math2015/Math1/q_m.csv", dtype=int, delimiter=',')
+q_m = np.loadtxt("../../../data/math2015/Math1/q_m.csv", dtype=int, delimiter=',')
 prob_num, know_num = q_m.shape[0], q_m.shape[1]
 
 # training data
-with open("../../data/math2015/Math1/train_data.json", encoding='utf-8') as file:
+with open("../../../data/math2015/Math1/train_data.json", encoding='utf-8') as file:
     train_set = json.load(file)
 stu_num = max([x['user_id'] for x in train_set]) + 1
 R = -1 * np.ones(shape=(stu_num, prob_num))
@@ -17,7 +17,7 @@ for log in train_set:
     R[log['user_id'], log['item_id']] = log['score']
 
 # testing data
-with open("../../data/math2015/Math1/test_data.json", encoding='utf-8') as file:
+with open("../../../data/math2015/Math1/test_data.json", encoding='utf-8') as file:
     test_set = json.load(file)
 
 logging.getLogger().setLevel(logging.INFO)
