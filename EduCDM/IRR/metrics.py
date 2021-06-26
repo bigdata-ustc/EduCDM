@@ -41,7 +41,7 @@ def ranking_auc(ranked_label):
     """
     pos_num = sum(ranked_label)
     neg_num = len(ranked_label) - sum(ranked_label)
-    if pos_num * neg_num == 0:
+    if pos_num * neg_num == 0:  # pragma: no cover
         return 1
     return sum(
         [len(ranked_label[i + 1:]) - sum(ranked_label[i + 1:]) for i, score in enumerate(ranked_label) if score == 1]
@@ -104,11 +104,11 @@ def ranking_report(y_true, y_pred, k: (int, list) = None, coerce="ignore", pad_p
 
         try:
             results["coverage_error"].append(coverage_error([label], [pred]))
-        except ValueError:
+        except ValueError:  # pragma: no cover
             pass
         try:
             results["ranking_loss"].append(label_ranking_loss([label], [pred]))
-        except ValueError:
+        except ValueError:  # pragma: no cover
             pass
         results["len"].append(len(label))
         results["support"].append(1)
@@ -117,21 +117,21 @@ def ranking_report(y_true, y_pred, k: (int, list) = None, coerce="ignore", pad_p
         results["auc"].append(ranking_auc(sorted_label))
         try:
             results["mrr"].append(1 / (np.asarray(sorted_label).nonzero()[0][0] + 1))
-        except IndexError:
+        except IndexError:  # pragma: no cover
             pass
         try:
             if bottom:
                 results["mrr(B)"].append(1 / (np.asarray(sorted_label[::-1]).nonzero()[0][0] + 1))
-        except IndexError:
+        except IndexError:  # pragma: no cover
             pass
         for _k in k:
             for _suffix in suffix:
                 if _suffix == "":
                     _label_pred = deepcopy(label_pred)
                     if len(_label_pred) < _k:
-                        if coerce == "abandon":
+                        if coerce == "abandon":  # pragma: no cover
                             continue
-                        elif coerce == "raise":
+                        elif coerce == "raise":  # pragma: no cover
                             raise ValueError("Not enough value: %s vs target %s" % (len(_label_pred), _k))
                         elif coerce == "padding":
                             _label_pred += [(0, pad_pred)] * (_k - len(_label_pred))
@@ -140,16 +140,16 @@ def ranking_report(y_true, y_pred, k: (int, list) = None, coerce="ignore", pad_p
                 else:
                     inv_label_pred = [(1 - _l, -p) for _l, p in label_pred][::-1]
                     if len(inv_label_pred) < _k:
-                        if coerce == "abandon":
+                        if coerce == "abandon":  # pragma: no cover
                             continue
-                        elif coerce == "raise":
+                        elif coerce == "raise":  # pragma: no cover
                             raise ValueError("Not enough value: %s vs target %s" % (len(inv_label_pred), _k))
                         elif coerce == "padding":
                             inv_label_pred += [(0, pad_pred)] * (_k - len(inv_label_pred))
                     k_label_pred = inv_label_pred[:_k]
                     total_label = len(label) - sum(label)
 
-                if not k_label_pred:
+                if not k_label_pred:  # pragma: no cover
                     continue
                 k_label, k_pred = list(zip(*k_label_pred))
                 if len(k_label) == 1:
