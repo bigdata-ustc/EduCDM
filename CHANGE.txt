@@ -1,3 +1,6 @@
+v0.0.9:
+    * add STE operator in DINA
+
 v0.0.8:
     * add DINA model with Gradient Descent Optimization (GDDINA) and rename the previous DINA to EMDINA
 
