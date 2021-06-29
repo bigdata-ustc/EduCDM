@@ -7,7 +7,7 @@ from tqdm import tqdm
 import pandas as pd
 import numpy as np
 
-from EduCDM.IRR.sampler import UITripletPairSampler
+from longling.ML.toolkit.dataset import ItemSpecificSampler
 
 __all__ = ["etl"]
 
@@ -15,11 +15,11 @@ __all__ = ["etl"]
 def extract(data_src, params):
     with print_time("loading data from %s" % os.path.abspath(data_src), params.logger):
         df = pd.read_csv(data_src, dtype={"user_id": "int64", "item_id": "int64", "score": "float32"})
-        sampler = UITripletPairSampler(
-            UITripletPairSampler.rating2triplet(
+        sampler = ItemSpecificSampler(
+            ItemSpecificSampler.rating2triplet(
                 df, query_field="item_id", key_field="user_id", value_field="score"
             ),
-            query_field="item_id", item_id_range=params.hyper_params["user_num"],
+            query_field="item_id", user_id_range=[1, params.hyper_params["user_num"]],
         )
         return df, sampler
 
