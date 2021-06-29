@@ -1,6 +1,6 @@
 # coding: utf-8
 # 2021/3/28 @ liujiayu
-from EduCDM import DINA
+from EduCDM import EMDINA as DINA
 
 
 def test_train(data, tmp_path):

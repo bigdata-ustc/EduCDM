@@ -4,8 +4,7 @@
 
 from .meta import CDM
 from .MCD import MCD
-from .DINA import DINA
+from .DINA import EMDINA, GDDINA
 from .FuzzyCDF import FuzzyCDF
 from .NCDM import NCDM
-from .IRT import GDIRT
-from .IRT import EMIRT
+from .IRT import EMIRT, GDIRT
