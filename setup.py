@@ -19,6 +19,7 @@ setup(
         "numpy>=1.16.5",
         "scikit-learn",
         "pandas",
+        "longling>=1.3.22"
     ],  # And any other dependencies for needs
     entry_points={
     },
