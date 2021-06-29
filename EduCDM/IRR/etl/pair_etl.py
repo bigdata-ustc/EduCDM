@@ -3,7 +3,6 @@
 import torch
 import os
 from longling import print_time, iterwrap
-from tqdm import tqdm
 import pandas as pd
 import numpy as np
 
@@ -33,7 +32,7 @@ def transform(raw_data, knowledge, params):
     n_neg = params.n_neg
     n_imp = params.n_imp
     df: pd.DataFrame = raw_data[0]
-    sampler: UITripletPairSampler = raw_data[1]
+    sampler: ItemSpecificSampler = raw_data[1]
 
     for start in range(0, len(df), batch_size):
         _df = df.iloc[start: start + batch_size]
