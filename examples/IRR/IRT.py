@@ -13,8 +13,8 @@ set_logging_info()
 
 params = AttrDict(
     batch_size=256,
-    n_neg=0,
-    n_imp=0,
+    n_neg=10,
+    n_imp=10,
     logger=logging.getLogger(),
     hyper_params={"user_num": 4164}
 )
