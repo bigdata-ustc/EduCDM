@@ -1,6 +1,6 @@
 # EduCDM
 [![PyPI](https://img.shields.io/pypi/v/EduCDM.svg)](https://pypi.python.org/pypi/EduCDM)
-[![Build Status](https://www.travis-ci.com/bigdata-ustc/EduCDM.svg?branch=main)](https://www.travis-ci.org/bigdata-ustc/EduCDM)
+[![Build Status](https://www.travis-ci.com/bigdata-ustc/EduCDM.svg?branch=main)](https://www.travis-ci.com/bigdata-ustc/EduCDM)
 [![codecov](https://codecov.io/gh/bigdata-ustc/EduCDM/branch/main/graph/badge.svg?token=B7gscOGQLD)](https://codecov.io/gh/bigdata-ustc/EduCDM)
 [![Download](https://img.shields.io/pypi/dm/EduCDM.svg?style=flat)](https://pypi.python.org/pypi/EduCDM)
 [![License](https://img.shields.io/github/license/bigdata-ustc/EduCDM)](LICENSE)
@@ -30,6 +30,7 @@ More recent researches about CDMs:
 
 - [FuzzyCDF](http://staff.ustc.edu.cn/~qiliuql/files/Publications/Qi-Liu-TIST2018.pdf): fuzzy cognitive diagnosis framework, a continuous multidimensional CDM for students' cognitive modeling with both objective and subjective items.
 - [NeuralCD](http://staff.ustc.edu.cn/~cheneh/paper_pdf/2020/Fei-Wang-AAAI.pdf): neural cognitive diagnosis framework, a neural-network-based general cognitive diagnosis framework. In this repository we provide the basic implementation NCDM.
+- [IRR](http://home.ustc.edu.cn/~tongsw/files/IRR.pdf): item response ranking framework, a pairwise cognitive diagnosis framework. In this repository we provide the several implementations for most of CDMs.
 
 ## List of models
 
@@ -43,9 +44,10 @@ More recent researches about CDMs:
   * Gradient Descent ([GDIRT](EduCDM/IRT/GD)) [[example]](examples/IRT/GD)
 * [MCD](EduCDM/MCD) [[doc]](docs/MCD.md) [[example]](examples/MCD)
 * [IRR](EduCDM/IRR)[[doc]](docs/IRR.md)[[example]](examples/IRR)
-  * IRR-NCDM
-  * IRR-DINA
-  * IRR-IRT
+  * IRR-NCDM (TBA)
+  * IRR-MIRT (TBA)
+  * IRR-DINA (TBA)
+  * [IRR-IRT](examples/IRR/IRT.ipynb)
 
 ## Installation
 
