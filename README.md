@@ -39,6 +39,7 @@ More recent researches about CDMs:
 * [DINA](EduCDM/DINA) [[doc]](docs/DINA.md) [[example]](examples/DINA)
   * Eexpectation Maximization ([EMDINA](EduCDM/DINA/EM)) [[example]](examples/DINA/EM)
   * Gradient Descent ([GDDINA](EduCDM/DINA/GD)) [[example]](examples/DINA/GD)
+* [MIRT](EduCDM/MIRT) [[doc]](docs/MIRT.md) [[example]](examples/MIRT)
 * [IRT](EduCDM/IRT) [[doc]](docs/IRT.md) [[example]](examples/IRT)
   * Eexpectation Maximization ([EMIRT](EduCDM/IRT/EM)) [[example]](examples/IRT/EM)
   * Gradient Descent ([GDIRT](EduCDM/IRT/GD)) [[example]](examples/IRT/GD)
