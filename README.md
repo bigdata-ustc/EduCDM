@@ -6,7 +6,7 @@
 [![License](https://img.shields.io/github/license/bigdata-ustc/EduCDM)](LICENSE)
 [![DOI](https://zenodo.org/badge/348569904.svg)](https://zenodo.org/badge/latestdoi/348569904)
 
-The Model Zoo of Cognitive Diagnosis Models
+The Model Zoo of Cognitive Diagnosis Models, including classic Item Response Ranking (**IRT**), Multidimensional Item Response Ranking (**MIRT**), Deterministic Input, Noisy "And" model(**DINA**), and advanced Fuzzy Cognitive Diagnosis Framework (**FuzzyCDF**), Neural Cognitive Diagnosis Model (**NCDM**) and Item Response Ranking framework (**IRR**).
 
 ## Brief introduction to CDM
 
@@ -39,6 +39,7 @@ More recent researches about CDMs:
 * [DINA](EduCDM/DINA) [[doc]](docs/DINA.md) [[example]](examples/DINA)
   * Eexpectation Maximization ([EMDINA](EduCDM/DINA/EM)) [[example]](examples/DINA/EM)
   * Gradient Descent ([GDDINA](EduCDM/DINA/GD)) [[example]](examples/DINA/GD)
+* [MIRT](EduCDM/MIRT) [[doc]](docs/MIRT.md) [[example]](examples/MIRT)
 * [IRT](EduCDM/IRT) [[doc]](docs/IRT.md) [[example]](examples/IRT)
   * Eexpectation Maximization ([EMIRT](EduCDM/IRT/EM)) [[example]](examples/IRT/EM)
   * Gradient Descent ([GDIRT](EduCDM/IRT/GD)) [[example]](examples/IRT/GD)
