@@ -1,5 +1,8 @@
 # Item Response Ranking for Cognitive Diagnosis
-[[Paper]](http://home.ustc.edu.cn/~tongsw/files/IRR.pdf) [[Poster]](http://home.ustc.edu.cn/~tongsw/files/IRR_Poster.pdf) [[Slide]](http://home.ustc.edu.cn/~tongsw/files/IRR_Slide.pdf)
+[[Paper]](http://home.ustc.edu.cn/~tongsw/files/IRR.pdf)
+[[Poster]](http://home.ustc.edu.cn/~tongsw/files/IRR_Poster.pdf)
+[[Slide]](http://home.ustc.edu.cn/~tongsw/files/IRR_Slide.pdf)
+[[Code]](../EduCDM/IRR)
 
 
 Cognitive diagnosis, a fundamental task in education area, aims at providing an approach to reveal the proficiency level of students on knowledge concepts. 
