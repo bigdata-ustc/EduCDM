@@ -1,7 +1,7 @@
 v0.0.10:
     * add STE operator in DINA
     * add Multidimensional Item Response Theory (MIRT)
-    * add IRR-DINA
+    * add IRR-DINA, IRR-MIRT
 
 v0.0.9:
     * add Item Response Ranking for Cognitive Diagnosis (IRR)
