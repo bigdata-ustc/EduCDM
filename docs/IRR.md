@@ -23,7 +23,6 @@ We provide some examples for better illustration:
 ![Sampling](_static/IRR.png)
 
 In the following parts, we will simply introduce the basic lemma `pairwise monotonicity` and training procedure. 
-For the readers who want to know more about our work, they can find the paper in ijcai21.
 
 ## Pairwise Monotonicity
 
