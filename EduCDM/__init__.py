@@ -8,3 +8,4 @@ from .DINA import EMDINA, GDDINA
 from .FuzzyCDF import FuzzyCDF
 from .NCDM import NCDM
 from .IRT import EMIRT, GDIRT
+from .MIRT import MIRT
