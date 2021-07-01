@@ -2,7 +2,7 @@
 # 2021/6/19 @ tongshiwei
 
 
-from EduCDM.IRR import IRT
+from EduCDM.IRR import MIRT
 import logging
 from longling.lib.structure import AttrDict
 from longling import set_logging_info
@@ -22,7 +22,7 @@ train_data, train_df = etl("../../data/a0910/train.csv", item_knowledge, params)
 valid_data, _ = vt_etl("../../data/a0910/valid.csv", item_knowledge, params)
 test_data, _ = vt_etl("../../data/a0910/test.csv", item_knowledge, params)
 
-cdm = IRT(
+cdm = MIRT(
     4163 + 1,
     17746 + 1,
     123
@@ -32,7 +32,7 @@ cdm.train(
     valid_data,
     epoch=2,
 )
-cdm.save("IRR-IRT.params")
+cdm.save("IRR-MIRT.params")
 
-cdm.load("IRR-IRT.params")
+cdm.load("IRR-MIRT.params")
 print(cdm.eval(test_data))

@@ -1,21 +1,23 @@
 # coding: utf-8
-# 2021/6/19 @ tongshiwei
+# 2021/7/1 @ tongshiwei
+
 
 import torch
 from torch import nn
 from tqdm import tqdm
-from EduCDM.IRT.GD import IRT as PointIRT
+from EduCDM import MIRT as PointMIRT
 import numpy as np
 import pandas as pd
 from .loss import PairSCELoss, HarmonicLoss, loss_mask
 from longling.ML.metrics import ranking_report
 
-__all__ = ["IRT"]
+__all__ = ["MIRT"]
 
 
-class IRT(PointIRT):
-    def __init__(self, user_num, item_num, knowledge_num, zeta=0.5):
-        super(IRT, self).__init__(user_num, item_num)
+class MIRT(PointMIRT):
+    def __init__(self, user_num, item_num, knowledge_num, latent_dim=None, zeta=0.5):
+        latent_dim = knowledge_num if latent_dim is None else latent_dim
+        super(MIRT, self).__init__(user_num, item_num, latent_dim)
         self.knowledge_num = knowledge_num
         self.zeta = zeta
 

@@ -45,9 +45,9 @@ More recent researches about CDMs:
   * Gradient Descent ([GDIRT](EduCDM/IRT/GD)) [[example]](examples/IRT/GD)
 * [MCD](EduCDM/MCD) [[doc]](docs/MCD.md) [[example]](examples/MCD)
 * [IRR](EduCDM/IRR)[[doc]](docs/IRR.md)[[example]](examples/IRR)
-  * IRR-NCDM (TBA)
-  * IRR-MIRT (TBA)
-  * IRR-DINA (TBA)
+  * [IRR-NCDM](examples/IRR/NCDM.ipynb)
+  * [IRR-MIRT](examples/IRR/MIRT.ipynb)
+  * [IRR-DINA](examples/IRR/DINA.ipynb)
   * [IRR-IRT](examples/IRR/IRT.ipynb)
 
 ## Installation
@@ -85,5 +85,3 @@ If this repository is helpful for you, please cite our work
   howpublished = {\url{https://github.com/bigdata-ustc/EduCDM}},
 }
 ```
-
-## Reference

@@ -1,40 +1,38 @@
 # coding: utf-8
-# 2021/6/19 @ tongshiwei
+# 2021/7/1 @ tongshiwei
 
+import pandas as pd
+import numpy as np
 import torch
 from torch import nn
-from tqdm import tqdm
-from EduCDM.IRT.GD import IRT as PointIRT
-import numpy as np
-import pandas as pd
+from EduCDM import NCDM as PointNCDM
 from .loss import PairSCELoss, HarmonicLoss, loss_mask
+from tqdm import tqdm
 from longling.ML.metrics import ranking_report
 
-__all__ = ["IRT"]
 
-
-class IRT(PointIRT):
+class NCDM(PointNCDM):
     def __init__(self, user_num, item_num, knowledge_num, zeta=0.5):
-        super(IRT, self).__init__(user_num, item_num)
-        self.knowledge_num = knowledge_num
+        super(NCDM, self).__init__(knowledge_num, item_num, user_num)
         self.zeta = zeta
 
-    def train(self, train_data, test_data=None, *, epoch: int, device="cpu", lr=0.001) -> ...:
+    def train(self, train_data, test_data=None, epoch=10, device="cpu", lr=0.002, silence=False) -> ...:
         point_loss_function = nn.BCELoss()
         pair_loss_function = PairSCELoss()
         loss_function = HarmonicLoss(self.zeta)
 
-        trainer = torch.optim.Adam(self.irt_net.parameters(), lr, weight_decay=1e-4)
+        trainer = torch.optim.Adam(self.ncdm_net.parameters(), lr, weight_decay=1e-4)
 
         for e in range(epoch):
             point_losses = []
             pair_losses = []
             losses = []
             for batch_data in tqdm(train_data, "Epoch %s" % e):
-                user_id, item_id, _, score, n_samples, *neg_users = batch_data
+                user_id, item_id, knowledge, score, n_samples, *neg_users = batch_data
                 user_id: torch.Tensor = user_id.to(device)
                 item_id: torch.Tensor = item_id.to(device)
-                predicted_pos_score: torch.Tensor = self.irt_net(user_id, item_id)
+                knowledge: torch.Tensor = knowledge.to(device)
+                predicted_pos_score: torch.Tensor = self.ncdm_net(user_id, item_id, knowledge)
                 score: torch.Tensor = score.to(device)
                 neg_score = 1 - score
 
@@ -42,7 +40,7 @@ class IRT(PointIRT):
                 predicted_neg_scores = []
                 if neg_users:
                     for neg_user in neg_users:
-                        predicted_neg_score = self.irt_net(neg_user, item_id)
+                        predicted_neg_score = self.ncdm_net(neg_user, item_id, knowledge)
                         predicted_neg_scores.append(predicted_neg_score)
 
                     # prediction loss
@@ -81,15 +79,15 @@ class IRT(PointIRT):
                 print("[Epoch %d]\n%s" % (e, eval_data))
 
     def eval(self, test_data, device="cpu"):
-        self.irt_net.eval()
+        self.ncdm_net.eval()
         y_pred = []
         y_true = []
         items = []
         for batch_data in tqdm(test_data, "evaluating"):
-            user_id, item_id, _, response = batch_data
+            user_id, item_id, knowledge, response = batch_data
             user_id: torch.Tensor = user_id.to(device)
             item_id: torch.Tensor = item_id.to(device)
-            pred: torch.Tensor = self.irt_net(user_id, item_id)
+            pred: torch.Tensor = self.ncdm_net(user_id, item_id, knowledge)
             y_pred.extend(pred.tolist())
             y_true.extend(response.tolist())
             items.extend(item_id.tolist())
@@ -107,7 +105,7 @@ class IRT(PointIRT):
             ground_truth.append(group_df["score"].values)
             prediction.append(group_df["pred"].values)
 
-        self.irt_net.train()
+        self.ncdm_net.train()
 
         return ranking_report(
             ground_truth,
