@@ -1,4 +1,6 @@
 # Item Response Ranking for Cognitive Diagnosis
+[[Paper]](http://home.ustc.edu.cn/~tongsw/files/IRR.pdf) [[Poster]](http://home.ustc.edu.cn/~tongsw/files/IRR_Poster.pdf) [[Slide]](http://home.ustc.edu.cn/~tongsw/files/IRR_Slide.pdf)
+
 
 Cognitive diagnosis, a fundamental task in education area, aims at providing an approach to reveal the proficiency level of students on knowledge concepts. 
 Actually, **monotonicity is one of the basic conditions in cognitive diagnosis theory**, which assumes that **student's proficiency is monotonic with the probability of giving the right response to a test item**. 
@@ -41,3 +43,5 @@ $$
 min_{\Theta} - \mathop{ln} IRR + \lambda(\Theta),
 $$
 where $\lambda(\Theta)$ is the regularization term and $\lambda$ is a hyper-parameter. We can apply IRR to any fully differentiable CDMs (e.g., MIRT) and train them with Stochastic Gradient Descent.
+
+For more details, please refer to our paper.
