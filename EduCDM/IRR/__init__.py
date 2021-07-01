@@ -3,4 +3,5 @@
 
 from .IRT import IRT
 from .DINA import DINA
+from .MIRT import MIRT
 from .etl import point_etl, pair_etl, extract_item
