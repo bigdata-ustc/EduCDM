@@ -7,7 +7,6 @@ import logging
 from longling.lib.structure import AttrDict
 from longling import set_logging_info
 from EduCDM.IRR import pair_etl as etl, point_etl as vt_etl, extract_item
-from EduCDM.IRR.metrics import result_format
 
 set_logging_info()
 
@@ -36,4 +35,4 @@ cdm.train(
 cdm.save("IRR-IRT.params")
 
 cdm.load("IRR-IRT.params")
-print(result_format(cdm.eval(test_data)))
+print(cdm.eval(test_data))

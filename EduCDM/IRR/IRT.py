@@ -8,7 +8,7 @@ from EduCDM.IRT.GD import IRT as PointIRT
 import numpy as np
 import pandas as pd
 from .loss import PairSCELoss, HarmonicLoss, loss_mask
-from .metrics import ranking_report, result_format
+from longling.ML.metrics import ranking_report
 
 __all__ = ["IRT"]
 
@@ -78,9 +78,9 @@ class IRT(PointIRT):
 
             if test_data is not None:
                 eval_data = self.eval(test_data)
-                print("[Epoch %d]\n%s" % (e, result_format(eval_data)))
+                print("[Epoch %d]\n%s" % (e, eval_data))
 
-    def eval(self, test_data, device="cpu") -> tuple:
+    def eval(self, test_data, device="cpu"):
         self.irt_net.eval()
         y_pred = []
         y_true = []
@@ -112,6 +112,5 @@ class IRT(PointIRT):
         return ranking_report(
             ground_truth,
             y_pred=prediction,
-            # coerce="abandon",
             coerce="padding"
         )
