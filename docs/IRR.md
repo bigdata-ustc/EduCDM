@@ -11,8 +11,9 @@ In fact, IRR is a general framework which can be applied to most of contemporary
 We provide some examples for better illustration:
 
 * [IRR-IRT](../examples/IRR/IRT.ipynb)
-* IRR-DINA (TBA)
-* IRR-NCD (TBA)
+* [IRR-MIRT](../examples/IRR/MIRT.ipynb)
+* [IRR-DINA](../examples/IRR/DINA.ipynb)
+* [IRR-NCDM](../examples/IRR/NCDM.ipynb)
 
 ![Sampling](_static/IRR.png)
 
