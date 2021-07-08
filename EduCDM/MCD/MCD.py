@@ -59,7 +59,7 @@ class MCD(CDM):
             print("[Epoch %d] LogisticLoss: %.6f" % (e, float(np.mean(losses))))
 
             if test_data is not None:
-                auc, accuracy = self.eval(test_data)
+                auc, accuracy = self.eval(test_data, device=device)
                 print("[Epoch %d] auc: %.6f, accuracy: %.6f" % (e, auc, accuracy))
 
     def eval(self, test_data, device="cpu") -> tuple:
