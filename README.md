@@ -1,4 +1,10 @@
+<p align="center">
+  <img width="300" src="docs/_static/EduCDM.png">
+</p>
+
 # EduCDM
+
+
 [![PyPI](https://img.shields.io/pypi/v/EduCDM.svg)](https://pypi.python.org/pypi/EduCDM)
 [![Build Status](https://www.travis-ci.com/bigdata-ustc/EduCDM.svg?branch=main)](https://www.travis-ci.com/bigdata-ustc/EduCDM)
 [![codecov](https://codecov.io/gh/bigdata-ustc/EduCDM/branch/main/graph/badge.svg?token=B7gscOGQLD)](https://codecov.io/gh/bigdata-ustc/EduCDM)
