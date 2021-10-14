@@ -21,13 +21,18 @@ class IRTNet(nn.Module):
         self.a = nn.Embedding(self.item_num, 1)
         self.b = nn.Embedding(self.item_num, 1)
         self.c = nn.Embedding(self.item_num, 1)
+        self.constant = 10
 
     def forward(self, user, item):
         theta = torch.squeeze(self.theta(user), dim=-1)
+        theta = self.constant*(torch.sigmoid(theta)-0.5)
         a = torch.squeeze(self.a(item), dim=-1)
+        a = torch.sigmoid(a)
         b = torch.squeeze(self.b(item), dim=-1)
+        b = self.constant*(torch.sigmoid(b)-0.5)
         c = torch.squeeze(self.c(item), dim=-1)
-        return torch.sigmoid(self.irf(theta, a, b, c, **self.irf_kwargs))
+        c = torch.sigmoid(c)
+        return self.irf(theta, a, b, c, **self.irf_kwargs)
 
     @classmethod
     def irf(cls, theta, a, b, c, **kwargs):
