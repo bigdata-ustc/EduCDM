@@ -29,7 +29,7 @@ train, valid, test = [
 
 logging.getLogger().setLevel(logging.INFO)
 
-cdm = GDIRT(4164, 17747)
+cdm = GDIRT(4164, 17747, 10)
 
 cdm.train(train, valid, epoch=2)
 cdm.save("irt.params")
