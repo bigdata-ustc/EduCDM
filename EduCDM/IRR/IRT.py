@@ -14,8 +14,8 @@ __all__ = ["IRT"]
 
 
 class IRT(PointIRT):
-    def __init__(self, user_num, item_num, knowledge_num, zeta=0.5):
-        super(IRT, self).__init__(user_num, item_num, value_range=10)
+    def __init__(self, user_num, item_num, knowledge_num, value_range=10, zeta=0.5):
+        super(IRT, self).__init__(user_num, item_num, value_range=value_range)
         self.knowledge_num = knowledge_num
         self.zeta = zeta
 
