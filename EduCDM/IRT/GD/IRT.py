@@ -40,7 +40,7 @@ class IRTNet(nn.Module):
 
 
 class IRT(CDM):
-    def __init__(self, user_num, item_num, value_range):
+    def __init__(self, user_num, item_num, value_range=10):
         super(IRT, self).__init__()
         self.irt_net = IRTNet(user_num, item_num, value_range)
 
