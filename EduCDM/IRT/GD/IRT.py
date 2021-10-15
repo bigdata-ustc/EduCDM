@@ -12,7 +12,7 @@ from sklearn.metrics import roc_auc_score, accuracy_score
 
 
 class IRTNet(nn.Module):
-    def __init__(self, user_num, item_num, irf_kwargs=None):
+    def __init__(self, user_num, item_num, value_range, irf_kwargs=None):
         super(IRTNet, self).__init__()
         self.user_num = user_num
         self.item_num = item_num
@@ -21,13 +21,18 @@ class IRTNet(nn.Module):
         self.a = nn.Embedding(self.item_num, 1)
         self.b = nn.Embedding(self.item_num, 1)
         self.c = nn.Embedding(self.item_num, 1)
+        self.value_range = value_range
 
     def forward(self, user, item):
         theta = torch.squeeze(self.theta(user), dim=-1)
+        theta = self.value_range * (torch.sigmoid(theta) - 0.5)
         a = torch.squeeze(self.a(item), dim=-1)
+        a = torch.sigmoid(a)
         b = torch.squeeze(self.b(item), dim=-1)
+        b = self.value_range * (torch.sigmoid(b) - 0.5)
         c = torch.squeeze(self.c(item), dim=-1)
-        return torch.sigmoid(self.irf(theta, a, b, c, **self.irf_kwargs))
+        c = torch.sigmoid(c)
+        return self.irf(theta, a, b, c, **self.irf_kwargs)
 
     @classmethod
     def irf(cls, theta, a, b, c, **kwargs):
@@ -35,9 +40,9 @@ class IRTNet(nn.Module):
 
 
 class IRT(CDM):
-    def __init__(self, user_num, item_num):
+    def __init__(self, user_num, item_num, value_range=10):
         super(IRT, self).__init__()
-        self.irt_net = IRTNet(user_num, item_num)
+        self.irt_net = IRTNet(user_num, item_num, value_range)
 
     def train(self, train_data, test_data=None, *, epoch: int, device="cpu", lr=0.001) -> ...:
         loss_function = nn.BCELoss()

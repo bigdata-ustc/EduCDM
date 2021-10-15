@@ -54,7 +54,7 @@ class MIRTNet(nn.Module):
         theta = torch.squeeze(self.theta(user), dim=-1)
         a = torch.squeeze(self.a(item), dim=-1)
         b = torch.squeeze(self.b(item), dim=-1)
-        return torch.sigmoid(self.irf(theta, a, b, **self.irf_kwargs))
+        return self.irf(theta, a, b, **self.irf_kwargs)
 
     @classmethod
     def irf(cls, theta, a, b, **kwargs):
