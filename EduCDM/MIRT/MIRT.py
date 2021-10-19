@@ -7,6 +7,7 @@ import numpy as np
 import torch
 from EduCDM import CDM
 from torch import nn
+import torch.nn.functional as F
 from tqdm import tqdm
 from sklearn.metrics import roc_auc_score, accuracy_score
 
@@ -41,7 +42,7 @@ def irt2pl(theta, a, b, *, F=np):
 
 
 class MIRTNet(nn.Module):
-    def __init__(self, user_num, item_num, latent_dim, value_range, irf_kwargs=None):
+    def __init__(self, user_num, item_num, latent_dim, irf_kwargs=None):
         super(MIRTNet, self).__init__()
         self.user_num = user_num
         self.item_num = item_num
@@ -49,17 +50,13 @@ class MIRTNet(nn.Module):
         self.theta = nn.Embedding(self.user_num, latent_dim)
         self.a = nn.Embedding(self.item_num, latent_dim)
         self.b = nn.Embedding(self.item_num, 1)
-        self.value_range = value_range
 
     def forward(self, user, item):
         theta = torch.squeeze(self.theta(user), dim=-1)
         a = torch.squeeze(self.a(item), dim=-1)
-        a = torch.sigmoid(a)
+        a = F.softplus(a)
         b = torch.squeeze(self.b(item), dim=-1)
-        if self.value_range is not None:
-            a = self.value_range * a
-            if torch.max(theta != theta) or torch.max(a != a) or torch.max(b != b):
-                raise Exception('Error:theta,a,b may contains nan!  The value_range is too large.')
+
         return self.irf(theta, a, b, **self.irf_kwargs)
 
     @classmethod
@@ -68,9 +65,9 @@ class MIRTNet(nn.Module):
 
 
 class MIRT(CDM):
-    def __init__(self, user_num, item_num, latent_dim, value_range=None):
+    def __init__(self, user_num, item_num, latent_dim):
         super(MIRT, self).__init__()
-        self.irt_net = MIRTNet(user_num, item_num, latent_dim, value_range)
+        self.irt_net = MIRTNet(user_num, item_num, latent_dim)
 
     def train(self, train_data, test_data=None, *, epoch: int, device="cpu", lr=0.001) -> ...:
         loss_function = nn.BCELoss()

@@ -6,6 +6,7 @@ import numpy as np
 import torch
 from EduCDM import CDM
 from torch import nn
+import torch.nn.functional as F
 from tqdm import tqdm
 from ..irt import irt3pl
 from sklearn.metrics import roc_auc_score, accuracy_score
@@ -27,14 +28,13 @@ class IRTNet(nn.Module):
         theta = torch.squeeze(self.theta(user), dim=-1)
         theta = torch.sigmoid(theta) - 0.5
         a = torch.squeeze(self.a(item), dim=-1)
-        a = torch.sigmoid(a)
+        a = F.softplus(a)
         b = torch.squeeze(self.b(item), dim=-1)
         b = torch.sigmoid(b) - 0.5
         c = torch.squeeze(self.c(item), dim=-1)
         c = torch.sigmoid(c)
         if self.value_range is not None:
             theta = self.value_range * theta
-            a = self.value_range * a
             b = self.value_range * b
             if torch.max(theta != theta) or torch.max(a != a) or torch.max(b != b):
                 raise Exception('Error:theta,a,b may contains nan!  The value_range is too large.')
