@@ -38,7 +38,6 @@ class IRTNet(nn.Module):
             b = self.value_range * b
             if torch.max(theta != theta) or torch.max(a != a) or torch.max(b != b):
                 raise Exception('Error:theta,a,b may contains nan!  The value_range is too large.')
-            
         return self.irf(theta, a, b, c, **self.irf_kwargs)
 
     @classmethod
