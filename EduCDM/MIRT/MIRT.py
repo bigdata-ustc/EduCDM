@@ -56,7 +56,7 @@ class MIRTNet(nn.Module):
         theta = torch.squeeze(self.theta(user), dim=-1)
         a = torch.squeeze(self.a(item), dim=-1)
         if self.a_range is not None:
-            a = self.a_range * torch.sigmoid(a) 
+            a = self.a_range * torch.sigmoid(a)
         else:
             a = F.softplus(a)
         b = torch.squeeze(self.b(item), dim=-1)

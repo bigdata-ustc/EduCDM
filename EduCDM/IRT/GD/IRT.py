@@ -34,14 +34,12 @@ class IRTNet(nn.Module):
         if self.value_range is not None:
             theta = self.value_range * (torch.sigmoid(theta) - 0.5)
             b = self.value_range * (torch.sigmoid(b) - 0.5)
-            
         if self.a_range is not None:
             a = self.a_range * torch.sigmoid(a)
         else:
             a = F.softplus(a)
-
         if torch.max(theta != theta) or torch.max(a != a) or torch.max(b != b):
-                raise Exception('Error:theta,a,b may contains nan!  The value_range or a_range is too large.')
+            raise Exception('Error:theta,a,b may contains nan!  The value_range or a_range is too large.')
         return self.irf(theta, a, b, c, **self.irf_kwargs)
 
     @classmethod
