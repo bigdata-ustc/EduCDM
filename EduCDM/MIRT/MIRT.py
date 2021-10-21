@@ -42,7 +42,7 @@ def irt2pl(theta, a, b, *, F=np):
 
 
 class MIRTNet(nn.Module):
-    def __init__(self, user_num, item_num, latent_dim, irf_kwargs=None):
+    def __init__(self, user_num, item_num, latent_dim, a_range, irf_kwargs=None):
         super(MIRTNet, self).__init__()
         self.user_num = user_num
         self.item_num = item_num
@@ -50,11 +50,15 @@ class MIRTNet(nn.Module):
         self.theta = nn.Embedding(self.user_num, latent_dim)
         self.a = nn.Embedding(self.item_num, latent_dim)
         self.b = nn.Embedding(self.item_num, 1)
+        self.a_range = a_range
 
     def forward(self, user, item):
         theta = torch.squeeze(self.theta(user), dim=-1)
         a = torch.squeeze(self.a(item), dim=-1)
-        a = F.softplus(a)
+        if self.a_range is not None:
+            a = self.a_range * torch.sigmoid(a) 
+        else:
+            a = F.softplus(a)
         b = torch.squeeze(self.b(item), dim=-1)
 
         return self.irf(theta, a, b, **self.irf_kwargs)
@@ -65,9 +69,9 @@ class MIRTNet(nn.Module):
 
 
 class MIRT(CDM):
-    def __init__(self, user_num, item_num, latent_dim):
+    def __init__(self, user_num, item_num, latent_dim, a_range=None):
         super(MIRT, self).__init__()
-        self.irt_net = MIRTNet(user_num, item_num, latent_dim)
+        self.irt_net = MIRTNet(user_num, item_num, latent_dim, a_range)
 
     def train(self, train_data, test_data=None, *, epoch: int, device="cpu", lr=0.001) -> ...:
         loss_function = nn.BCELoss()
