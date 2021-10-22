@@ -14,7 +14,7 @@ def test_train(data, conf, tmp_path):
     cdm.load(filepath)
 
 
-def test_raises(data, conf, tmp_path):
+def test_exception(data, conf, tmp_path):
     try:
         user_num, item_num = conf
         cdm = GDIRT(user_num, item_num, value_range=10, a_range=100)

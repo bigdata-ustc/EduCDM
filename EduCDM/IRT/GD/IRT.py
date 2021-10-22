@@ -9,7 +9,7 @@ from torch import nn
 import torch.nn.functional as F
 from tqdm import tqdm
 from ..irt import irt3pl
-from sklearn.metrics import roc_auc_score, accuracy_score, classification_report
+from sklearn.metrics import roc_auc_score, accuracy_score
 
 
 class IRTNet(nn.Module):
