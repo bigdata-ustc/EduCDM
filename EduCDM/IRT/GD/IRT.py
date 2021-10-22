@@ -39,6 +39,7 @@ class IRTNet(nn.Module):
         else:
             a = F.softplus(a)
         if torch.max(theta != theta) or torch.max(a != a) or torch.max(b != b):
+            # pragma: no cover
             raise ValueError('ValueError:theta,a,b may contains nan!  The value_range or a_range is too large.')
         return self.irf(theta, a, b, c, **self.irf_kwargs)
 

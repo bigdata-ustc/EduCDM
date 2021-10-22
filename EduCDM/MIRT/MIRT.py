@@ -61,6 +61,7 @@ class MIRTNet(nn.Module):
             a = F.softplus(a)
         b = torch.squeeze(self.b(item), dim=-1)
         if torch.max(theta != theta) or torch.max(a != a) or torch.max(b != b):
+            # pragma: no cover
             raise ValueError('ValueError:theta,a,b may contains nan!  The a_range is too large.')
         return self.irf(theta, a, b, **self.irf_kwargs)
 
