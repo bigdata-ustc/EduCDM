@@ -85,6 +85,7 @@ class DINA(CDM):
             self.dina_net = DINANet(user_num, item_num, hidden_dim)
 
     def train(self, train_data, test_data=None, *, epoch: int, device="cpu", lr=0.001) -> ...:
+        self.dina_net = self.dina_net.to(device)
         loss_function = nn.BCELoss()
 
         trainer = torch.optim.Adam(self.dina_net.parameters(), lr)
@@ -109,10 +110,11 @@ class DINA(CDM):
             print("[Epoch %d] LogisticLoss: %.6f" % (e, float(np.mean(losses))))
 
             if test_data is not None:
-                auc, accuracy = self.eval(test_data)
+                auc, accuracy = self.eval(test_data, device=device)
                 print("[Epoch %d] auc: %.6f, accuracy: %.6f" % (e, auc, accuracy))
 
     def eval(self, test_data, device="cpu") -> tuple:
+        self.dina_net = self.dina_net.to(device)
         self.dina_net.eval()
         y_pred = []
         y_true = []

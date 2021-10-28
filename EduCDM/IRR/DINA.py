@@ -17,6 +17,7 @@ class DINA(GDDINA):
         self.zeta = zeta
 
     def train(self, train_data, test_data=None, *, epoch: int, device="cpu", lr=0.001) -> ...:
+        self.dina_net = self.dina_net.to(device)
         point_loss_function = nn.BCELoss()
         pair_loss_function = PairSCELoss()
         loss_function = HarmonicLoss(self.zeta)
@@ -32,6 +33,7 @@ class DINA(GDDINA):
                 user_id: torch.Tensor = user_id.to(device)
                 item_id: torch.Tensor = item_id.to(device)
                 knowledge: torch.Tensor = knowledge.to(device)
+                n_samples: torch.Tensor = n_samples.to(device)
                 predicted_pos_score: torch.Tensor = self.dina_net(user_id, item_id, knowledge)
                 score: torch.Tensor = score.to(device)
                 neg_score = 1 - score
@@ -40,6 +42,7 @@ class DINA(GDDINA):
                 predicted_neg_scores = []
                 if neg_users:
                     for neg_user in neg_users:
+                        neg_user: torch.Tensor = neg_user.to(device)
                         predicted_neg_score = self.dina_net(neg_user, item_id, knowledge)
                         predicted_neg_scores.append(predicted_neg_score)
 
@@ -75,10 +78,11 @@ class DINA(GDDINA):
             )
 
             if test_data is not None:
-                eval_data = self.eval(test_data)
+                eval_data = self.eval(test_data, device=device)
                 print("[Epoch %d]\n%s" % (e, eval_data))
 
     def eval(self, test_data, device="cpu"):
+        self.dina_net = self.dina_net.to(device)
         self.dina_net.eval()
         y_pred = []
         y_true = []
@@ -87,6 +91,7 @@ class DINA(GDDINA):
             user_id, item_id, knowledge, response = batch_data
             user_id: torch.Tensor = user_id.to(device)
             item_id: torch.Tensor = item_id.to(device)
+            knowledge: torch.Tensor = knowledge.to(device)
             pred: torch.Tensor = self.dina_net(user_id, item_id, knowledge)
             y_pred.extend(pred.tolist())
             y_true.extend(response.tolist())

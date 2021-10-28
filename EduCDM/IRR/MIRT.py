@@ -22,6 +22,7 @@ class MIRT(PointMIRT):
         self.zeta = zeta
 
     def train(self, train_data, test_data=None, *, epoch: int, device="cpu", lr=0.001) -> ...:
+        self.irt_net = self.irt_net.to(device)
         point_loss_function = nn.BCELoss()
         pair_loss_function = PairSCELoss()
         loss_function = HarmonicLoss(self.zeta)
@@ -36,6 +37,7 @@ class MIRT(PointMIRT):
                 user_id, item_id, _, score, n_samples, *neg_users = batch_data
                 user_id: torch.Tensor = user_id.to(device)
                 item_id: torch.Tensor = item_id.to(device)
+                n_samples: torch.Tensor = n_samples.to(device)
                 predicted_pos_score: torch.Tensor = self.irt_net(user_id, item_id)
                 score: torch.Tensor = score.to(device)
                 neg_score = 1 - score
@@ -44,6 +46,7 @@ class MIRT(PointMIRT):
                 predicted_neg_scores = []
                 if neg_users:
                     for neg_user in neg_users:
+                        neg_user: torch.Tensor = neg_user.to(device)
                         predicted_neg_score = self.irt_net(neg_user, item_id)
                         predicted_neg_scores.append(predicted_neg_score)
 
@@ -79,10 +82,11 @@ class MIRT(PointMIRT):
             )
 
             if test_data is not None:
-                eval_data = self.eval(test_data)
+                eval_data = self.eval(test_data, device=device)
                 print("[Epoch %d]\n%s" % (e, eval_data))
 
     def eval(self, test_data, device="cpu"):
+        self.irt_net = self.irt_net.to(device)
         self.irt_net.eval()
         y_pred = []
         y_true = []

@@ -75,6 +75,7 @@ class MIRT(CDM):
         self.irt_net = MIRTNet(user_num, item_num, latent_dim, a_range)
 
     def train(self, train_data, test_data=None, *, epoch: int, device="cpu", lr=0.001) -> ...:
+        self.irt_net = self.irt_net.to(device)
         loss_function = nn.BCELoss()
 
         trainer = torch.optim.Adam(self.irt_net.parameters(), lr)
@@ -98,10 +99,11 @@ class MIRT(CDM):
             print("[Epoch %d] LogisticLoss: %.6f" % (e, float(np.mean(losses))))
 
             if test_data is not None:
-                auc, accuracy = self.eval(test_data)
+                auc, accuracy = self.eval(test_data,device=device)
                 print("[Epoch %d] auc: %.6f, accuracy: %.6f" % (e, auc, accuracy))
 
     def eval(self, test_data, device="cpu") -> tuple:
+        self.irt_net = self.irt_net.to(device)
         self.irt_net.eval()
         y_pred = []
         y_true = []

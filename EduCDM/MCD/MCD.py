@@ -36,6 +36,8 @@ class MCD(CDM):
         self.mf_net = MFNet(user_num, item_num, latent_dim)
 
     def train(self, train_data, test_data=None, *, epoch: int, device="cpu", lr=0.001) -> ...:
+        self.mf_net = self.mf_net.to(device)
+        
         loss_function = nn.BCELoss()
 
         trainer = torch.optim.Adam(self.mf_net.parameters(), lr)
@@ -63,6 +65,7 @@ class MCD(CDM):
                 print("[Epoch %d] auc: %.6f, accuracy: %.6f" % (e, auc, accuracy))
 
     def eval(self, test_data, device="cpu") -> tuple:
+        self.mf_net = self.mf_net.to(device)
         self.mf_net.eval()
         y_pred = []
         y_true = []
