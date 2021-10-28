@@ -37,7 +37,6 @@ class MCD(CDM):
 
     def train(self, train_data, test_data=None, *, epoch: int, device="cpu", lr=0.001) -> ...:
         self.mf_net = self.mf_net.to(device)
-        
         loss_function = nn.BCELoss()
 
         trainer = torch.optim.Adam(self.mf_net.parameters(), lr)
