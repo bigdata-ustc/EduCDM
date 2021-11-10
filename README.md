@@ -91,3 +91,11 @@ If this repository is helpful for you, please cite our work
   howpublished = {\url{https://github.com/bigdata-ustc/EduCDM}},
 }
 ```
+
+## Reference
+
+[1] Liu Q, Wu R, Chen E, et al. Fuzzy cognitive diagnosis for modelling examinee performance[J]. ACM Transactions on Intelligent Systems and Technology (TIST), 2018, 9(4): 1-26.
+
+[2] Wang F, Liu Q, Chen E, et al. Neural cognitive diagnosis for intelligent education systems[C]//Proceedings of the AAAI Conference on Artificial Intelligence. 2020, 34(04): 6153-6161.
+
+[3] Tong S, Liu Q, Yu R, et al. Item response ranking for cognitive diagnosis[C]. IJCAI, 2021.
