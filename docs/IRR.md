@@ -47,3 +47,14 @@ $$
 where $\lambda(\Theta)$ is the regularization term and $\lambda$ is a hyper-parameter. We can apply IRR to any fully differentiable CDMs (e.g., MIRT) and train them with Stochastic Gradient Descent.
 
 For more details, please refer to our paper.
+
+## Citation
+
+```
+@inproceedings{tong2021item,
+  title={Item response ranking for cognitive diagnosis},
+  author={Tong, Shiwei and Liu, Qi and Yu, Runlong and Huang, Wei and Huang, Zhenya and Pardos, Zachary and Jiang, Weijie},
+  year={2021},
+  organization={IJCAI}
+}
+```
