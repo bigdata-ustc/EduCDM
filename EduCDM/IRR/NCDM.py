@@ -17,6 +17,7 @@ class NCDM(PointNCDM):
         self.zeta = zeta
 
     def train(self, train_data, test_data=None, epoch=10, device="cpu", lr=0.002, silence=False) -> ...:
+        self.ncdm_net = self.ncdm_net.to(device)
         point_loss_function = nn.BCELoss()
         pair_loss_function = PairSCELoss()
         loss_function = HarmonicLoss(self.zeta)
@@ -32,6 +33,7 @@ class NCDM(PointNCDM):
                 user_id: torch.Tensor = user_id.to(device)
                 item_id: torch.Tensor = item_id.to(device)
                 knowledge: torch.Tensor = knowledge.to(device)
+                n_samples: torch.Tensor = n_samples.to(device)
                 predicted_pos_score: torch.Tensor = self.ncdm_net(user_id, item_id, knowledge)
                 score: torch.Tensor = score.to(device)
                 neg_score = 1 - score
@@ -40,6 +42,7 @@ class NCDM(PointNCDM):
                 predicted_neg_scores = []
                 if neg_users:
                     for neg_user in neg_users:
+                        neg_user: torch.Tensor = neg_user.to(device)
                         predicted_neg_score = self.ncdm_net(neg_user, item_id, knowledge)
                         predicted_neg_scores.append(predicted_neg_score)
 
@@ -75,10 +78,11 @@ class NCDM(PointNCDM):
             )
 
             if test_data is not None:
-                eval_data = self.eval(test_data)
+                eval_data = self.eval(test_data, device=device)
                 print("[Epoch %d]\n%s" % (e, eval_data))
 
     def eval(self, test_data, device="cpu"):
+        self.ncdm_net = self.ncdm_net.to(device)
         self.ncdm_net.eval()
         y_pred = []
         y_true = []
@@ -87,6 +91,7 @@ class NCDM(PointNCDM):
             user_id, item_id, knowledge, response = batch_data
             user_id: torch.Tensor = user_id.to(device)
             item_id: torch.Tensor = item_id.to(device)
+            knowledge: torch.Tensor = knowledge.to(device)
             pred: torch.Tensor = self.ncdm_net(user_id, item_id, knowledge)
             y_pred.extend(pred.tolist())
             y_true.extend(response.tolist())
