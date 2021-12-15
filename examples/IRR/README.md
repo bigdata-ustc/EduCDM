@@ -1,6 +1,6 @@
 # Item Response Ranking for Cognitive Diagnosis
 
 * [IRR-IRT](IRT.ipynb)
-* IRR-DINA
-* IRR-NCD
+* [IRR-DINA](DINA.ipynb)
+* [IRR-NCD](NCDMipynb)
 
