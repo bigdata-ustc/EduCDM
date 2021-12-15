@@ -2,5 +2,5 @@
 
 * [IRR-IRT](IRT.ipynb)
 * [IRR-DINA](DINA.ipynb)
-* [IRR-NCD](NCDMipynb)
+* [IRR-NCD](NCDM.ipynb)
 
