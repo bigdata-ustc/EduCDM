@@ -1,5 +1,5 @@
 # Item Response Ranking for Cognitive Diagnosis
-[[Paper]](http://home.ustc.edu.cn/~tongsw/files/IRR.pdf)
+[[Paper]](https://www.ijcai.org/proceedings/2021/0241.pdf)
 [[Poster]](http://home.ustc.edu.cn/~tongsw/files/IRR_Poster.pdf)
 [[Slide]](http://home.ustc.edu.cn/~tongsw/files/IRR_Slide.pdf)
 [[Code]](../EduCDM/IRR)
