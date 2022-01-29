@@ -8,7 +8,7 @@ test_deps = [
 
 setup(
     name='EduCDM',
-    version='0.0.12',
+    version='0.0.13',
     extras_require={
         'test': test_deps,
     },
@@ -19,7 +19,7 @@ setup(
         "numpy>=1.16.5",
         "scikit-learn",
         "pandas",
-        "longling>=1.3.23"
+        "longling>=1.3.33"
     ],  # And any other dependencies for needs
     entry_points={
     },
