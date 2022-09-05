@@ -1,0 +1,16 @@
+authorName: default
+experimentName: Beta
+trialConcurrency: 4
+maxExecDuration: 24h
+maxTrialNum: 1000
+trainingServicePlatform: local
+# 搜索空间文件
+searchSpacePath: _search_space.json
+useAnnotation: false
+tuner:
+  builtinTunerName: GridSearch
+# 运行的命令，以及 Trial 代码的路径
+trial:
+  command: python3.6 stream_run.py --ctx "cuda:0"
+  codeDir: .
+  gpuNum: 1

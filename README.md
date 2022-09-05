@@ -12,7 +12,7 @@
 [![License](https://img.shields.io/github/license/bigdata-ustc/EduCDM)](LICENSE)
 [![DOI](https://zenodo.org/badge/348569904.svg)](https://zenodo.org/badge/latestdoi/348569904)
 
-The Model Zoo of Cognitive Diagnosis Models, including classic Item Response Ranking (**IRT**), Multidimensional Item Response Ranking (**MIRT**), Deterministic Input, Noisy "And" model(**DINA**), and advanced Fuzzy Cognitive Diagnosis Framework (**FuzzyCDF**), Neural Cognitive Diagnosis Model (**NCDM**) and Item Response Ranking framework (**IRR**).
+The Model Zoo of Cognitive Diagnosis Models, including classic Item Response Ranking (**IRT**), Multidimensional Item Response Ranking (**MIRT**), Deterministic Input, Noisy "And" model(**DINA**), and advanced Fuzzy Cognitive Diagnosis Framework (**FuzzyCDF**), Neural Cognitive Diagnosis Model (**NCDM**), Item Response Ranking framework (**IRR**) and Incremental Cognitive Diagnosis (**ICD**).
 
 ## Brief introduction to CDM
 
@@ -37,6 +37,7 @@ More recent researches about CDMs:
 - [FuzzyCDF](http://staff.ustc.edu.cn/~qiliuql/files/Publications/Qi-Liu-TIST2018.pdf): fuzzy cognitive diagnosis framework, a continuous multidimensional CDM for students' cognitive modeling with both objective and subjective items.
 - [NeuralCD](http://staff.ustc.edu.cn/~cheneh/paper_pdf/2020/Fei-Wang-AAAI.pdf): neural cognitive diagnosis framework, a neural-network-based general cognitive diagnosis framework. In this repository we provide the basic implementation NCDM.
 - [IRR](http://home.ustc.edu.cn/~tongsw/files/IRR.pdf): item response ranking framework, a pairwise cognitive diagnosis framework. In this repository we provide the several implementations for most of CDMs.
+- [ICD]: Incremental Cognitive Diagnosis, a framework that tailor cognitive diagnosis into the online scenario of intelligent education. In this repository we provide the several implementations for most of CDMs.
 
 ## List of models
 
@@ -55,7 +56,7 @@ More recent researches about CDMs:
   * [IRR-MIRT](examples/IRR/MIRT.ipynb)
   * [IRR-DINA](examples/IRR/DINA.ipynb)
   * [IRR-IRT](examples/IRR/IRT.ipynb)
-
+* [ICD](EduCDM/ICD) [[doc]](docs/ICD.md) 
 ## Installation
 
 Git and install with `pip`:

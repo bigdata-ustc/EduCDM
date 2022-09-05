@@ -1,0 +1,28 @@
+,precision,recall,f1,support
+0.0,0.585,0.541,0.562,14587.0
+1.0,0.77,0.8,0.785,28001.0
+macro_avg,0.677,0.67,0.673,42588.0
+,accuracy,macro_auc,doa,macro_aupoc,doa_know_support,doa_z_support
+ ,0.711,0.74,0.6,0.829,115.0,70303.0
+ ,,,,,,
+,precision,recall,f1,support
+0.0,0.599,0.534,0.565,14587.0
+1.0,0.77,0.814,0.791,28001.0
+macro_avg,0.685,0.674,0.678,42588.0
+,accuracy,macro_auc,doa,macro_aupoc,doa_know_support,doa_z_support
+ ,0.718,0.745,0.599,0.833,115.0,70303.0
+ ,,,,,,
+,precision,recall,f1,support
+0.0,0.573,0.545,0.559,3636.0
+1.0,0.765,0.784,0.775,6866.0
+macro_avg,0.669,0.665,0.667,10502.0
+,accuracy,macro_auc,doa,macro_aupoc,doa_know_support,doa_z_support
+ ,0.702,0.738,0.57,0.826,112.0,16961.0
+ ,,,,,,
+,delta,delta_ave,support
+theta,2384.058,0.008,2493.0
+a,0.0,0.0,13615.0
+b,0.0,0.0,13615.0
+,macro ave,micro ave
+ ,0.003,0.001
+ ,,
