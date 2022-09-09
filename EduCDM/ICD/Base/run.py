@@ -53,10 +53,9 @@ def run(user_n,
         rand_num=str(int(random.random() * 10000)))
     print(scenario, '\n', inc_type)
     print(cfg)
-    csv_path = f"{path_prefix}ICD/Base/" + cdm+"_" + \
-        scenario+"_"+inc_type+'_lr' + \
-        str(cfg.optimizer_params['lr'])+'_epoch' + \
-        str(cfg.end_epoch)+"_"+cfg.rand_num+".csv"
+    csv_path = f"{path_prefix}ICD/Base/{cdm}_\
+        {scenario}_{inc_type}_lr{cfg.optimizer_params['lr']}\
+            _epoch{cfg.end_epoch}_{cfg.rand_num}.csv"
 
     item2know = "%sitem.csv" % dataset_dir
     path_format = "%s{}.csv" % data_dir

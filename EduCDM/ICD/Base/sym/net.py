@@ -66,8 +66,8 @@ class EmbedMIRTNet(_EmbedMIRTNet):
         print("save item profiles to %s" % os.path.abspath(filepath))
 
     def u_theta(self, user):
-        return (torch.sigmoid(torch.squeeze(self.theta(user), dim=-1)) -
-                0.5) * 6
+        theta = torch.sigmoid(torch.squeeze(self.theta(user), dim=-1))
+        return (theta - 0.5) * 6
 
     def i_difficulty(self, item):
         return (torch.sigmoid(torch.squeeze(self.b(item), dim=-1)) - 0.5) * 6
@@ -133,8 +133,8 @@ class EmbedIRTNet(_EmbedIRTNet):
         print("save item profiles to %s" % os.path.abspath(filepath))
 
     def u_theta(self, user):
-        return (torch.sigmoid(torch.squeeze(self.theta(user), dim=-1)) -
-                0.5) * 6
+        theta = torch.sigmoid(torch.squeeze(self.theta(user), dim=-1))
+        return (theta - 0.5) * 6
 
     def i_difficulty(self, item):
         return (torch.sigmoid(torch.squeeze(self.b(item), dim=-1)) - 0.5) * 6
@@ -173,9 +173,9 @@ class EmbedDINANet(_EmbedDINANet):
             t, self.step = max(
                 (np.sin(2 * np.pi * self.step / self.max_step) + 1) / 2 * 100,
                 1e-6), self.step + 1 if self.step < self.max_step else 0
-            return torch.sum(torch.stack([1 - slip, guess]).T * torch.softmax(
+            tmp = torch.stack([1 - slip, guess]).T * torch.softmax(
                 torch.stack([n, torch.zeros_like(n)]).T / t, dim=-1),
-                             dim=1)
+            return torch.sum(tmp, dim=1)
         else:
             # 评估
             n = torch.prod(knowledge * (theta >= 0) + (1 - knowledge), dim=1)

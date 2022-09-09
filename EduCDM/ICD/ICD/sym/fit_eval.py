@@ -170,13 +170,13 @@ def turning_point(net: (torch.nn.DataParallel, ICD),
     loss_r = []
     loss_f = set_device(torch.nn.BCELoss(reduction='none'), ctx)
     u_dim = v_dim = None
-    for uid, iid, ks, rs in tqdm(
-            DataLoader(TensorDataset(
-                torch.tensor(emb_icd.user_id2idx(users), dtype=torch.int64),
-                torch.tensor(emb_icd.item_id2idx(items), dtype=torch.int64),
-                torch.tensor(know, dtype=torch.int64),
-                torch.tensor(scores, dtype=torch.float32)),
-                       batch_size=1024), "preparing tp features"):
+    data_loader = DataLoader(TensorDataset(
+        torch.tensor(emb_icd.user_id2idx(users), dtype=torch.int64),
+        torch.tensor(emb_icd.item_id2idx(items), dtype=torch.int64),
+        torch.tensor(know, dtype=torch.int64),
+        torch.tensor(scores, dtype=torch.float32)),
+                             batch_size=1024)
+    for uid, iid, ks, rs in tqdm(data_loader, "preparing tp features"):
         pred_emb_icd.zero_grad()
         loss_f.zero_grad()
         _pred_r, theta, a, b = pred_emb_icd(uid, iid, ks)

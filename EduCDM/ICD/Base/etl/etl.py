@@ -14,8 +14,8 @@ def transform(logs_df, i2k, kn, batch_size, user_set=None, item_set=None):
     response = []
     for u, i, r in zip(logs_df['user_id'].tolist(),
                        logs_df['item_id'].tolist(), logs_df['score'].tolist()):
-        if (user_set and u not in user_set) or (item_set
-                                                and i not in item_set):
+        if (user_set and u not in user_set) \
+                or (item_set and i not in item_set):
             continue
         user.append(u)
         item.append(i)
