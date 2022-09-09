@@ -8,7 +8,7 @@ import torch.nn.functional as F
 from EduCDM.MIRT.MIRT import MIRTNet as _EmbedMIRTNet
 from EduCDM.IRT.GD.IRT import IRTNet as _EmbedIRTNet
 from EduCDM.DINA.GD.DINA import DINANet as _EmbedDINANet
-from baize.torch import loss_dict2tmt_torch_loss, save_params
+from baize.torch import loss_dict2tmt_torch_loss
 from longling.ML.PytorchHelper import set_device
 from EduCDM.ICD.sym import PosLinear
 
@@ -33,9 +33,8 @@ class EmbedMIRTNet(_EmbedMIRTNet):
         b = self.i_difficulty(item)
         if torch.max(theta != theta) or torch.max(a != a) or torch.max(
                 b != b):  # pragma: no cover
-            raise ValueError(
-                'ValueError:theta,a,b may contains nan!  The a_range is too large.'
-            )
+            raise ValueError('ValueError:theta,a,b may contains nan!\
+                    The a_range is too large.')
         return self.irf(theta, a, b, **self.irf_kwargs)
 
     def get_user_profiles(self, user):
@@ -99,9 +98,8 @@ class EmbedIRTNet(_EmbedIRTNet):
         c = self.i_guess(item)
         if torch.max(theta != theta) or torch.max(a != a) or torch.max(
                 b != b):  # pragma: no cover
-            raise ValueError(
-                'ValueError:theta,a,b may contains nan!  The a_range is too large.'
-            )
+            raise ValueError('ValueError:theta,a,b may contains nan!\
+                    The a_range is too large.')
         # return self.irf(theta, a, b, **self.irf_kwargs)
         return self.irf(theta, a, b, c, **self.irf_kwargs)
 

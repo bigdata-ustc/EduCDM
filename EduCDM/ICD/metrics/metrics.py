@@ -1,10 +1,7 @@
 # coding: utf-8
 # 2022/2/1 @ tongshiwei
-import torch
-from torch.nn import MSELoss
 import pandas as pd
 from longling.ML.metrics import POrderedDict
-from baize.metrics import classification_report
 import numpy as np
 from tqdm import tqdm
 
@@ -28,9 +25,10 @@ def doa_report(user, item, know, score, theta):
     knowledge_user = []
     knowledge_truth = []
     knowledge_theta = []
-    for user, item, score, theta, knowledge in tqdm(df[["user_id", "item_id", "score", "theta", "knowledge"]].values,
-                                                    "formatting knowledge df"):
-        if isinstance(theta,list):                                                 
+    for user, item, score, theta, knowledge in tqdm(
+            df[["user_id", "item_id", "score", "theta", "knowledge"]].values,
+            "formatting knowledge df"):
+        if isinstance(theta, list):
             for i, (theta_i, knowledge_i) in enumerate(zip(theta, knowledge)):
                 if knowledge_i == 1:
                     knowledges.append(i)
@@ -91,7 +89,8 @@ def doa_eval(y_true, y_pred):
     doa = []
     doa_support = 0
     z_support = 0
-    for knowledge_label, knowledge_pred in tqdm(zip(y_true, y_pred), "doa metrics"):
+    for knowledge_label, knowledge_pred in tqdm(zip(y_true, y_pred),
+                                                "doa metrics"):
         _doa = 0
         _z = 0
         for label, pred in zip(knowledge_label, knowledge_pred):
@@ -140,12 +139,18 @@ def stableness_report(traits: list, new_traits: list, keys: list):
 
     ret["user"] = ret["theta"]
     ret["item"] = {
-        "delta": ret["a"]["delta"] + ret["b"]["delta"],
-        "delta_ave": (ret["a"]["delta_ave"] * a_dim + ret["b"]["delta_ave"] * b_dim) / (a_dim + b_dim),
-        "support": ret["a"]["support"],
+        "delta":
+        ret["a"]["delta"] + ret["b"]["delta"],
+        "delta_ave":
+        (ret["a"]["delta_ave"] * a_dim + ret["b"]["delta_ave"] * b_dim) /
+        (a_dim + b_dim),
+        "support":
+        ret["a"]["support"],
     }
     macro = ret["user"]["delta_ave"] + ret["item"]["delta_ave"]
-    micro = ret["user"]["support"] * ret["user"]["delta_ave"] + ret["item"]["support"] * ret["item"]["delta_ave"]
+    micro = ret["user"]["support"] * ret["user"]["delta_ave"] + ret["item"][
+        "support"] * ret["item"]["delta_ave"]
     ret["macro_ave"] = macro / 2
-    ret["micro_ave"] = micro / (ret["user"]["support"] + ret["item"]["support"])
+    ret["micro_ave"] = micro / (ret["user"]["support"] +
+                                ret["item"]["support"])
     return POrderedDict(ret)

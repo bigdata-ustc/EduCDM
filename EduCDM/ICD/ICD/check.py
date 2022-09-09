@@ -1,14 +1,9 @@
 # coding: utf-8
 import torch
-import pandas as pd
 from baize.torch import Configuration
-from baize.torch import light_module as lm
-from baize.torch import save_params
-from longling import build_dir
 
-from EduCDM.ICD.etl import inc_stream, extract, transform, etl, item2knowledge
-from .sym import fit_f, eval_f, get_loss, get_net, stableness_eval
-from longling.ML.PytorchHelper.toolkit.trainer import collect_params, get_trainer
+from .sym import get_net
+from longling.ML.PytorchHelper.toolkit.trainer import get_trainer
 
 
 def run(user_n,
@@ -23,8 +18,8 @@ def run(user_n,
         **kwargs):
     torch.manual_seed(0)
 
-    dataset_dir = "../../data/%s/" % dataset
-    data_dir = dataset_dir + "%s/" % scenario
+    # dataset_dir = "../../data/%s/" % dataset
+    # data_dir = dataset_dir + "%s/" % scenario
 
     cfg = Configuration(
         model_name="%s" % cdm,
@@ -45,16 +40,16 @@ def run(user_n,
         ctx=kwargs.get("ctx", "cuda: 3"))
     print(cfg)
 
-    item2know = "%s/item.csv" % dataset_dir
-    path_format = "%s/{}.csv" % data_dir
+    # item2know = "%s/item.csv" % dataset_dir
+    # path_format = "%s/{}.csv" % data_dir
 
-    stat_train_data_path = path_format.format("stat_train")
-    stat_valid_data_path = path_format.format("stat_valid")
-    stat_test_data_path = path_format.format("stat_test")
+    # stat_train_data_path = path_format.format("stat_train")
+    # stat_valid_data_path = path_format.format("stat_valid")
+    # stat_test_data_path = path_format.format("stat_test")
 
-    inc_train_data_path = path_format.format("inc_train")
-    inc_valid_data_path = path_format.format("inc_valid")
-    inc_test_data_path = path_format.format("inc_test")
+    # inc_train_data_path = path_format.format("inc_train")
+    # inc_valid_data_path = path_format.format("inc_valid")
+    # inc_test_data_path = path_format.format("inc_test")
 
     net = get_net(ctx=cfg.ctx, **cfg.hyper_params)
     print([name for name, _ in net.named_parameters()])

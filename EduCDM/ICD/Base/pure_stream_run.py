@@ -9,7 +9,7 @@ from baize.torch import Configuration
 from baize.torch import light_module as lm
 from longling.lib.stream import to_io_group, close_io
 from EduCDM.ICD.etl import inc_stream
-from .etl import extract, transform, etl, item2knowledge
+from .etl import extract, transform, item2knowledge
 from .sym import fit_f, eval_f, get_loss, get_net, stableness_eval
 from baize import config_logging
 from EduCDM.ICD.utils import output_metrics
@@ -91,8 +91,8 @@ def run(user_n,
         pre_net = deepcopy(net)
         inc_user = set(inc_train_df["user_id"].tolist())
         inc_item = set(inc_train_df["item_id"].tolist())
-        new_user = inc_user - user
-        new_item = inc_item - item
+        # new_user = inc_user - user
+        # new_item = inc_item - item
         user |= inc_user
         item |= inc_item
 
@@ -253,7 +253,6 @@ def run(user_n,
                                     item_traits), wfs, "inc_trait", logger)
 
 
-# def main(dataset="a0910", cdm="irt", inc_type="inc", ctx="cuda:1", log_file="log", warmup_ratio=0.1,lr=0.002, savename=None):
 def main(dataset="a0910",
          cdm="ncd",
          inc_type="inc",

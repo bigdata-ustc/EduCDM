@@ -8,8 +8,10 @@ from baize.torch import light_module as lm, load_net
 from baize.metrics import POrderedDict
 from longling.ML.PytorchHelper import set_device
 
-from EduCDM.ICD.etl import extract, transform, test_etl, merge_dict, inc_stream, user2items, item2users, dict_etl, Dict2
-from .sym import fit_f, eval_f, get_loss, get_net, DualICD, get_dual_loss, dual_fit_f, stableness_eval, turning_point
+from EduCDM.ICD.etl import extract, transform, \
+    test_etl, merge_dict, inc_stream, user2items, item2users, dict_etl, Dict2
+from .sym import fit_f, eval_f, get_loss, get_net,\
+    DualICD, get_dual_loss, dual_fit_f, stableness_eval, turning_point
 
 from longling.ML.toolkit.hyper_search import prepare_hyper_search
 from longling.lib.stream import to_io_group, close_io
@@ -99,7 +101,7 @@ def run(cdm,
     stat_test_data_path = path_format.format("stat_test")
 
     inc_train_data_path = path_format.format("inc_train")
-    inc_valid_data_path = path_format.format("inc_valid")
+    # inc_valid_data_path = path_format.format("inc_valid")
     inc_test_data_path = path_format.format("inc_test")
 
     dict2 = Dict2()
@@ -269,19 +271,6 @@ def run(cdm,
         dict2.merge_u2i_r(inc_dict2)
         dict2.merge_i2u_r(inc_dict2)
         if i % max(round(len(inc_train_df_list) // 10), 1) == 0:
-            # stat_valid_data = list(test_etl(stat_valid_data_path, u2i, i2u, i2k, know_n, cfg.batch_size))
-            # inc_valid_data = list(test_etl(inc_valid_data_path, u2i, i2u, i2k, know_n, cfg.batch_size))
-            #
-            # print("=============== Inc. ===================")
-            #
-            # print("Ori.")
-            # print(eval_f(net, stat_valid_data))
-            #
-            # print("Inc.")
-            # print(eval_f(net, inc_valid_data))
-            #
-            # print("Trait")
-            # print(stableness_eval(net, users, items, u2i, i2u, user_traits, item_traits, cfg.batch_size))
 
             stat_valid_data = list(
                 test_etl(stat_test_data_path,

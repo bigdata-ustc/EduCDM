@@ -37,7 +37,12 @@ def run(user_n,
             "item_num": item_n,
             "know_n": know_n
         },
-        # train_select={".*int_fc.*": {'weight_decay': 0}, "^(?!.*int_fc)": {}},
+        # train_select={
+        #     ".*int_fc.*": {
+        #         'weight_decay': 0
+        #     },
+        #     "^(?!.*int_fc)": {}
+        # },
         optimizer_params={
             'lr': kwargs.get("lr", 0.002),
             # 'weight_decay': 0.0001,
@@ -48,7 +53,8 @@ def run(user_n,
         rand_num=str(int(random.random() * 10000)))
     print(scenario, '\n', inc_type)
     print(cfg)
-    csv_path = f"{path_prefix}ICD/Base/" + cdm+"_" + scenario+"_"+inc_type+'_lr' + \
+    csv_path = f"{path_prefix}ICD/Base/" + cdm+"_" + \
+        scenario+"_"+inc_type+'_lr' + \
         str(cfg.optimizer_params['lr'])+'_epoch' + \
         str(cfg.end_epoch)+"_"+cfg.rand_num+".csv"
 
