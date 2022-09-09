@@ -2,12 +2,12 @@
 
 import torch
 
-from sym import ICD
+from .sym import ICD
 from baize.utils import pad_sequence
 from baize.torch import Configuration, load_net, light_module as lm, fit_wrapper, loss_dict2tmt_torch_loss, save_params
 from tqdm import tqdm
-from ICD.etl import extract, test_etl
-from sym import eval_f
+from EduCDM.ICD.etl import extract, test_etl
+from .sym import eval_f
 
 
 def user_etl(user_obj, u2i, batch_size):
@@ -88,24 +88,40 @@ def item_fit_f(_net, batch_data, loss_function, *args, **kwargs):
     return sum(loss)
 
 
-def run(cdm, user_n, item_n, know_n, dataset, scenario, max_u2i=None, max_i2u=None, *args, **kwargs):
+def run(cdm,
+        user_n,
+        item_n,
+        know_n,
+        dataset,
+        scenario,
+        max_u2i=None,
+        max_i2u=None,
+        *args,
+        **kwargs):
     torch.manual_seed(0)
 
     dataset_dir = "../../data/%s/" % dataset
     data_dir = dataset_dir + "%s/" % scenario
     model_dir = data_dir + "model/"
 
-    cfg = Configuration(
-        model_name="icd_%s" % cdm,
-        model_dir="icd_%s" % cdm,
-        end_epoch=5,
-        batch_size=32,
-        hyper_params={"user_n": user_n, "item_n": item_n, "know_n": know_n, "cdm": cdm},
-        optimizer_params={'lr': kwargs.get("lr", 0.002), 'weight_decay': 0.0001},
-        ctx=kwargs.get("ctx", "cuda: 0")
-    )
+    cfg = Configuration(model_name="icd_%s" % cdm,
+                        model_dir="icd_%s" % cdm,
+                        end_epoch=5,
+                        batch_size=32,
+                        hyper_params={
+                            "user_n": user_n,
+                            "item_n": item_n,
+                            "know_n": know_n,
+                            "cdm": cdm
+                        },
+                        optimizer_params={
+                            'lr': kwargs.get("lr", 0.002),
+                            'weight_decay': 0.0001
+                        },
+                        ctx=kwargs.get("ctx", "cuda: 0"))
 
-    _, u2i, i2u, i2k = extract(data_dir + "stat_train.csv", dataset_dir + "item.csv")
+    _, u2i, i2u, i2k = extract(data_dir + "stat_train.csv",
+                               dataset_dir + "item.csv")
 
     user_profiles = model_dir + "%s/user.pt" % cdm
     item_profiles = model_dir + "%s/item.pt" % cdm
@@ -149,7 +165,9 @@ def run(cdm, user_n, item_n, know_n, dataset, scenario, max_u2i=None, max_i2u=No
         initial_net=False,
     )
 
-    stat_test_data = list(test_etl(data_dir + "stat_test.csv", u2i, i2u, i2k, know_n, cfg.batch_size))
+    stat_test_data = list(
+        test_etl(data_dir + "stat_test.csv", u2i, i2u, i2k, know_n,
+                 cfg.batch_size))
     print(eval_f(icd, stat_test_data))
 
     params_path = model_dir + "%s/icd_%s_init.params" % (cdm, cdm)
@@ -159,7 +177,8 @@ def run(cdm, user_n, item_n, know_n, dataset, scenario, max_u2i=None, max_i2u=No
 
 if __name__ == '__main__':
     dataset_config = {
-        "a0910": dict(
+        "a0910":
+        dict(
             user_n=4129,
             item_n=17747,
             know_n=123,
@@ -170,4 +189,9 @@ if __name__ == '__main__':
     dataset = "a0910"
     scenario = "new_item"
 
-    run(cdm="ncd", scenario=scenario, dataset=dataset, lr=0.002, ctx="cuda: 0", **dataset_config[dataset])
+    run(cdm="ncd",
+        scenario=scenario,
+        dataset=dataset,
+        lr=0.002,
+        ctx="cuda: 0",
+        **dataset_config[dataset])

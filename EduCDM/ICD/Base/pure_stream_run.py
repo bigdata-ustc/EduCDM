@@ -8,20 +8,35 @@ import pandas as pd
 from baize.torch import Configuration
 from baize.torch import light_module as lm
 from longling.lib.stream import to_io_group, close_io
-from ICD.etl import inc_stream
-from etl import extract, transform, etl, item2knowledge
-from sym import fit_f, eval_f, get_loss, get_net, stableness_eval
+from EduCDM.ICD.etl import inc_stream
+from .etl import extract, transform, etl, item2knowledge
+from .sym import fit_f, eval_f, get_loss, get_net, stableness_eval
 from baize import config_logging
-from ICD.utils import output_metrics
-from ICD.constant import path_prefix
+from EduCDM.ICD.utils import output_metrics
+from EduCDM.ICD.constant import path_prefix
 
-def run(user_n, item_n, know_n, dataset, cdm, inc_type=None, stream_num=50, wfs=None, logger=logging,
-        log_file="log", warmup_ratio=0.1, weight_decay=0, vector_numbers=None, inner_metrics=False,
-        vector_path_format=None, *args, **kwargs):
+
+def run(user_n,
+        item_n,
+        know_n,
+        dataset,
+        cdm,
+        inc_type=None,
+        stream_num=50,
+        wfs=None,
+        logger=logging,
+        log_file="log",
+        warmup_ratio=0.1,
+        weight_decay=0,
+        vector_numbers=None,
+        inner_metrics=False,
+        vector_path_format=None,
+        *args,
+        **kwargs):
 
     torch.manual_seed(0)
 
-    dataset_dir = "%s/data/%s/"%(path_prefix,dataset)
+    dataset_dir = "%s/data/%s/" % (path_prefix, dataset)
     data_dir = dataset_dir
 
     cfg = Configuration(
@@ -29,15 +44,18 @@ def run(user_n, item_n, know_n, dataset, cdm, inc_type=None, stream_num=50, wfs=
         model_dir="%s" % cdm,
         end_epoch=1,
         batch_size=32,
-        hyper_params={"user_num": user_n, "item_num": item_n, "know_n": know_n},
+        hyper_params={
+            "user_num": user_n,
+            "item_num": item_n,
+            "know_n": know_n
+        },
         # train_select={".*int.*": {'weight_decay': 0}, "^(?!.*int)": {}},
         optimizer_params={
             'lr': kwargs.get("lr", 0.002),
             'weight_decay': weight_decay
         },
         ctx=kwargs.get("ctx", "cuda: 3"),
-        time_digital=True
-    )
+        time_digital=True)
     logger.info(cfg)
 
     item2know = "%sitem.csv" % dataset_dir
@@ -50,9 +68,11 @@ def run(user_n, item_n, know_n, dataset, cdm, inc_type=None, stream_num=50, wfs=
     net = get_net(ctx=cfg.ctx, cdm=cdm, **cfg.hyper_params)
     loss_f = get_loss(ctx=cfg.ctx)
 
-        # stream inc
+    # stream inc
     inc_train_df = extract(inc_train_data_path)
-    inc_train_df_list = list(inc_stream(inc_train_df, stream_size=int(len(inc_train_df) // stream_num)))
+    inc_train_df_list = list(
+        inc_stream(inc_train_df,
+                   stream_size=int(len(inc_train_df) // stream_num)))
 
     vector_user = None
     vector_item = None
@@ -80,14 +100,16 @@ def run(user_n, item_n, know_n, dataset, cdm, inc_type=None, stream_num=50, wfs=
             vector_user = list(user)
             vector_item = list(item)
 
-        logger.info("============= Stream[%s/%s] =============" % (i, len(inc_train_df_list)))
+        logger.info("============= Stream[%s/%s] =============" %
+                    (i, len(inc_train_df_list)))
 
         train_df = pd.concat([train_df, inc_train_df])
         if inc_type == "global" or i < warmup:
             inc_train_data = transform(train_df, i2k, know_n, cfg.batch_size)
         else:
-            inc_train_data = transform(inc_train_df, i2k, know_n, cfg.batch_size)
-        
+            inc_train_data = transform(inc_train_df, i2k, know_n,
+                                       cfg.batch_size)
+
         # if i>46 or i+2 ==len(inc_train_df_list):
         #     inc_test_data=transform(
         #         inc_train_df_list[i+1],
@@ -121,11 +143,12 @@ def run(user_n, item_n, know_n, dataset, cdm, inc_type=None, stream_num=50, wfs=
         # 最后两轮开始训练 global
         if i + 2 == len(inc_train_df_list) or inner_metrics:
 
-            inc_test_data = transform(
-                inc_train_df_list[i + 1],
-                i2k, know_n, cfg.batch_size,
-                user_set=user, item_set=item
-            )
+            inc_test_data = transform(inc_train_df_list[i + 1],
+                                      i2k,
+                                      know_n,
+                                      cfg.batch_size,
+                                      user_set=user,
+                                      item_set=item)
             # inc_user_test_data = transform(
             #     inc_train_df_list[i + 1],
             #     i2k, know_n, cfg.batch_size,
@@ -152,7 +175,9 @@ def run(user_n, item_n, know_n, dataset, cdm, inc_type=None, stream_num=50, wfs=
             #     user_set=new_user, item_set=new_item
             # )
 
-            logger.info("===================== %s valid ======================" % inc_type)
+            logger.info(
+                "===================== %s valid ======================" %
+                inc_type)
             # if inc_user_test_data:
             #     output_metrics(
             #         i,
@@ -194,16 +219,12 @@ def run(user_n, item_n, know_n, dataset, cdm, inc_type=None, stream_num=50, wfs=
             #         logger
             #     )
             if inc_test_data:
-                output_metrics(
-                    i,
-                    eval_f(net, inc_test_data),
-                    wfs,
-                    "metrics",
-                    logger
-                )
+                output_metrics(i, eval_f(net, inc_test_data), wfs, "metrics",
+                               logger)
 
             if vector_numbers and i in vector_numbers:
-                trait_net = net.module if isinstance(net, torch.nn.DataParallel) else net
+                trait_net = net.module if isinstance(
+                    net, torch.nn.DataParallel) else net
                 vector_user_traits = trait_net.get_user_profiles(vector_user)
                 vector_item_traits = trait_net.get_item_profiles(vector_item)
                 vector_path = vector_path_format.format("user", i)
@@ -214,49 +235,52 @@ def run(user_n, item_n, know_n, dataset, cdm, inc_type=None, stream_num=50, wfs=
                 torch.save(vector_item_traits, vector_path)
 
             if i > 0:
-                eval_net = pre_net.module if isinstance(pre_net, torch.nn.DataParallel) else pre_net
+                eval_net = pre_net.module if isinstance(
+                    pre_net, torch.nn.DataParallel) else pre_net
                 user_traits = eval_net.get_user_profiles(pre_user)
                 item_traits = eval_net.get_item_profiles(pre_item)
                 output_metrics(
                     i,
-                    stableness_eval(net, pre_user, pre_item, user_traits, item_traits),
-                    wfs,
-                    "trait",
-                    logger
-                )
+                    stableness_eval(net, pre_user, pre_item, user_traits,
+                                    item_traits), wfs, "trait", logger)
                 inc_user = list(inc_user)
                 inc_item = list(inc_item)
                 user_traits = eval_net.get_user_profiles(inc_user)
                 item_traits = eval_net.get_item_profiles(inc_item)
                 output_metrics(
                     i,
-                    stableness_eval(net, inc_user, inc_item, user_traits, item_traits),
-                    wfs,
-                    "inc_trait",
-                    logger
-                )
+                    stableness_eval(net, inc_user, inc_item, user_traits,
+                                    item_traits), wfs, "inc_trait", logger)
 
 
 # def main(dataset="a0910", cdm="irt", inc_type="inc", ctx="cuda:1", log_file="log", warmup_ratio=0.1,lr=0.002, savename=None):
-def main(dataset="a0910", cdm="ncd", inc_type="inc", ctx="cuda:1", log_file="log", warmup_ratio=0.1, lr=0.002,savename=None,
+def main(dataset="a0910",
+         cdm="ncd",
+         inc_type="inc",
+         ctx="cuda:1",
+         log_file="log",
+         warmup_ratio=0.1,
+         lr=0.002,
+         savename=None,
          vector_numbers=None):
 
     if savename:
-        # /home/yutingh/icd/data/a0910
-        dataset_dir = "/home/yutingh/icd/data/%s/" % dataset
+        dataset_dir = "f{path_prefix}data/%s/" % dataset
         data_dir = dataset_dir
         model_dir = data_dir + "model/%s/%s/" % (cdm, savename)
         keys = [
-            "metrics",
-            "inc_user", "inc_item",
-            "new_user", "new_item", "new_both",
-            "trait", "inc_trait"
+            "metrics", "inc_user", "inc_item", "new_user", "new_item",
+            "new_both", "trait", "inc_trait"
         ]
         path_format = model_dir + "{}.json"
-        wfs = dict(zip(keys, to_io_group(
-            *[path_format.format(key) for key in keys], mode="w"
-        ) if savename else None))
-        logger = config_logging(model_dir + "log.txt", logger="Base", console_log_level="info")
+        wfs = dict(
+            zip(
+                keys,
+                to_io_group(*[path_format.format(key) for key in keys],
+                            mode="w") if savename else None))
+        logger = config_logging(model_dir + "log.txt",
+                                logger="Base",
+                                console_log_level="info")
         logger.info({
             "dataset": dataset,
             "cdm": cdm,
@@ -272,7 +296,8 @@ def main(dataset="a0910", cdm="ncd", inc_type="inc", ctx="cuda:1", log_file="log
         vector_path_format = None
 
     dataset_config = {
-        "a0910": dict(
+        "a0910":
+        dict(
             user_n=4129,
             item_n=17747,
             know_n=123,
@@ -280,9 +305,10 @@ def main(dataset="a0910", cdm="ncd", inc_type="inc", ctx="cuda:1", log_file="log
             # max_u2i=64,
             # max_i2u=32
         ),
-        "a0910_1": dict(
-            user_n=4163+1,
-            item_n=17751+1,
+        "a0910_1":
+        dict(
+            user_n=4163 + 1,
+            item_n=17751 + 1,
             know_n=123,
             stream_num=50,
         ),
@@ -294,11 +320,12 @@ def main(dataset="a0910", cdm="ncd", inc_type="inc", ctx="cuda:1", log_file="log
         #     # max_u2i=128,
         #     max_i2u=512,
         # ),
-        "xunfei": dict(
+        "xunfei":
+        dict(
             # user_n=10269+1,
             # item_n=2507+1,
-            user_n=6820 +1,
-            item_n= 1196+1,
+            user_n=6820 + 1,
+            item_n=1196 + 1,
             know_n=497,
             stream_num=50,
             max_u2i=128,
@@ -309,10 +336,11 @@ def main(dataset="a0910", cdm="ncd", inc_type="inc", ctx="cuda:1", log_file="log
         "ncd": {},
         "irt": {},
         "dina": {},
-        "mirt": {"weight_decay": 1e-4}
+        "mirt": {
+            "weight_decay": 1e-4
+        }
     }
-    run(
-        cdm=cdm,
+    run(cdm=cdm,
         dataset=dataset,
         inc_type=inc_type,
         ctx=ctx,
@@ -322,8 +350,7 @@ def main(dataset="a0910", cdm="ncd", inc_type="inc", ctx="cuda:1", log_file="log
         warmup_ratio=warmup_ratio,
         lr=lr,
         **cdm_config[cdm],
-        **dataset_config[dataset.split("_")[0]]
-    )
+        **dataset_config[dataset.split("_")[0]])
     if wfs:
         close_io(list(wfs.values()))
 

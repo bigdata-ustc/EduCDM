@@ -6,15 +6,24 @@ from baize.torch import Configuration
 from baize.torch import light_module as lm
 from longling import build_dir
 
-from etl import extract, transform, etl, item2knowledge
-from sym import fit_f, eval_f, get_loss, get_net, stableness_eval
+from .etl import extract, transform, etl, item2knowledge
+from .sym import fit_f, eval_f, get_loss, get_net, stableness_eval
+from EduCDM.ICD.constant import path_prefix
 
 
-def run(user_n, item_n, know_n, dataset, scenario, cdm, inc_type=None, *args, **kwargs):
+def run(user_n,
+        item_n,
+        know_n,
+        dataset,
+        scenario,
+        cdm,
+        inc_type=None,
+        *args,
+        **kwargs):
     torch.manual_seed(0)
 
     dataset_dir = "../../data/%s/" % dataset
-    dataset_dir = "/home/yutingh/icd/data/%s/" % dataset
+    dataset_dir = f"{path_prefix}data/%s/" % dataset
 
     data_dir = dataset_dir + "%s/" % scenario
 
@@ -23,8 +32,11 @@ def run(user_n, item_n, know_n, dataset, scenario, cdm, inc_type=None, *args, **
         model_dir="%s" % cdm,
         end_epoch=4,
         batch_size=32,
-        hyper_params={"user_num": user_n,
-                      "item_num": item_n, "know_n": know_n},
+        hyper_params={
+            "user_num": user_n,
+            "item_num": item_n,
+            "know_n": know_n
+        },
         # train_select={".*int_fc.*": {'weight_decay': 0}, "^(?!.*int_fc)": {}},
         optimizer_params={
             'lr': kwargs.get("lr", 0.002),
@@ -33,11 +45,10 @@ def run(user_n, item_n, know_n, dataset, scenario, cdm, inc_type=None, *args, **
         },
         ctx=kwargs.get("ctx", "cuda: 3"),
         time_digital=True,
-        rand_num=str(int(random.random()*10000))
-    )
+        rand_num=str(int(random.random() * 10000)))
     print(scenario, '\n', inc_type)
     print(cfg)
-    csv_path = "/home/yutingh/icd/ICD/Base/" + cdm+"_" + scenario+"_"+inc_type+'_lr' + \
+    csv_path = f"{path_prefix}ICD/Base/" + cdm+"_" + scenario+"_"+inc_type+'_lr' + \
         str(cfg.optimizer_params['lr'])+'_epoch' + \
         str(cfg.end_epoch)+"_"+cfg.rand_num+".csv"
 
@@ -98,8 +109,8 @@ def run(user_n, item_n, know_n, dataset, scenario, cdm, inc_type=None, *args, **
     inc_test_data = etl(inc_test_data_path, i2k, know_n, cfg.batch_size)
 
     if inc_type == "global":
-        inc_train_data = transform(
-            pd.concat([train_df, inc_train_df]), i2k, know_n, cfg.batch_size)
+        inc_train_data = transform(pd.concat([train_df, inc_train_df]), i2k,
+                                   know_n, cfg.batch_size)
     else:
         inc_train_data = transform(inc_train_df, i2k, know_n, cfg.batch_size)
 
@@ -122,8 +133,9 @@ def run(user_n, item_n, know_n, dataset, scenario, cdm, inc_type=None, *args, **
     print("Inc.")
     save_report_to_csv(eval_f(net, inc_test_data), csv_path)
     print("Trait")
-    df = pd.DataFrame(stableness_eval(net, user, item,
-                                      user_traits, item_traits)).transpose()
+    df = pd.DataFrame(
+        stableness_eval(net, user, item, user_traits,
+                        item_traits)).transpose()
     print(df)
     df = df.round(3)
     df1 = df.loc[['macro ave', 'micro ave']].transpose()
@@ -138,8 +150,10 @@ def run(user_n, item_n, know_n, dataset, scenario, cdm, inc_type=None, *args, **
 def save_report_to_csv(df, csv_path):
     df = pd.DataFrame(df).transpose()
     df = df.round(3)
-    df1 = df.loc[['accuracy', 'macro_auc', 'doa', 'macro_aupoc',
-                  'doa_know_support', 'doa_z_support']].transpose()
+    df1 = df.loc[[
+        'accuracy', 'macro_auc', 'doa', 'macro_aupoc', 'doa_know_support',
+        'doa_z_support'
+    ]].transpose()
     df = df.reindex(['0.0', '1.0', 'macro_avg'])
     # df1 = df1[['accuracy', 'macro_auc', 'macro_aupoc',
     #            'doa', 'doa_know_support', 'doa_z_support']]
@@ -152,14 +166,16 @@ def save_report_to_csv(df, csv_path):
 
 if __name__ == '__main__':
     dataset_config = {
-        "a0910": dict(
+        "a0910":
+        dict(
             user_n=4129,
             item_n=17747,
             know_n=123,
             # max_u2i=64,
             # max_i2u=32
         ),
-        "math": dict(
+        "math":
+        dict(
             user_n=10269,
             item_n=17747,
             know_n=1488,
@@ -176,10 +192,11 @@ if __name__ == '__main__':
     run(
         # cdm="mirt",
         cdm="ncd",
-        scenario=scenario, dataset=dataset,
+        scenario=scenario,
+        dataset=dataset,
         inc_type="global",
         lr=0.01,
         # ctx="cpu",
-        inc_type="inc", ctx="cuda:0",
-        **dataset_config[dataset]
-    )
+        # inc_type="inc",
+        ctx="cuda:0",
+        **dataset_config[dataset])

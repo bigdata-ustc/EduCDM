@@ -10,34 +10,39 @@ from EduCDM.IRT.GD.IRT import IRTNet as _EmbedIRTNet
 from EduCDM.DINA.GD.DINA import DINANet as _EmbedDINANet
 from baize.torch import loss_dict2tmt_torch_loss, save_params
 from longling.ML.PytorchHelper import set_device
-from ICD.sym import PosLinear
+from EduCDM.ICD.sym import PosLinear
 
 
 def get_loss(ctx, *args, **kwargs):
     return loss_dict2tmt_torch_loss(
-        {"cross entropy": set_device(torch.nn.BCELoss(*args, **kwargs), ctx)}
-    )
+        {"cross entropy": set_device(torch.nn.BCELoss(*args, **kwargs), ctx)})
 
 
 class EmbedMIRTNet(_EmbedMIRTNet):
     def __init__(self, user_num, item_num, know_n, *args, **kwargs):
-        super(EmbedMIRTNet, self).__init__(user_num, item_num, know_n, a_range=1, *args, **kwargs)
+        super(EmbedMIRTNet, self).__init__(user_num,
+                                           item_num,
+                                           know_n,
+                                           a_range=1,
+                                           *args,
+                                           **kwargs)
 
     def forward(self, user, item, *args):
         theta = self.u_theta(user)
         a = self.i_discrimination(item)
         b = self.i_difficulty(item)
-        if torch.max(theta != theta) or torch.max(a != a) or torch.max(b != b):  # pragma: no cover
-            raise ValueError('ValueError:theta,a,b may contains nan!  The a_range is too large.')
+        if torch.max(theta != theta) or torch.max(a != a) or torch.max(
+                b != b):  # pragma: no cover
+            raise ValueError(
+                'ValueError:theta,a,b may contains nan!  The a_range is too large.'
+            )
         return self.irf(theta, a, b, **self.irf_kwargs)
 
     def get_user_profiles(self, user):
         user = torch.tensor(user, dtype=torch.int64).to(
-            self.theta.weight.device) if not isinstance(user, torch.Tensor) else user
-        obj = {
-            "uid": user,
-            "u_trait": self.u_theta(user)
-        }
+            self.theta.weight.device) if not isinstance(user,
+                                                        torch.Tensor) else user
+        obj = {"uid": user, "u_trait": self.u_theta(user)}
         return obj
 
     def save_user_profiles(self, user, filepath):
@@ -47,7 +52,8 @@ class EmbedMIRTNet(_EmbedMIRTNet):
 
     def get_item_profiles(self, item):
         item = torch.tensor(item, dtype=torch.int64).to(
-            self.a.weight.device) if not isinstance(item, torch.Tensor) else item
+            self.a.weight.device) if not isinstance(item,
+                                                    torch.Tensor) else item
         obj = {
             "iid": item,
             "ib": self.i_difficulty(item),
@@ -61,7 +67,8 @@ class EmbedMIRTNet(_EmbedMIRTNet):
         print("save item profiles to %s" % os.path.abspath(filepath))
 
     def u_theta(self, user):
-        return (torch.sigmoid(torch.squeeze(self.theta(user), dim=-1)) - 0.5) * 6
+        return (torch.sigmoid(torch.squeeze(self.theta(user), dim=-1)) -
+                0.5) * 6
 
     def i_difficulty(self, item):
         return (torch.sigmoid(torch.squeeze(self.b(item), dim=-1)) - 0.5) * 6
@@ -74,8 +81,15 @@ class EmbedMIRTNet(_EmbedMIRTNet):
             a = F.softplus(a)
         return a
 
+
 class EmbedIRTNet(_EmbedIRTNet):
-    def __init__(self, user_num, item_num,know_n, value_range=6, a_range=1, irf_kwargs=None):
+    def __init__(self,
+                 user_num,
+                 item_num,
+                 know_n,
+                 value_range=6,
+                 a_range=1,
+                 irf_kwargs=None):
         super().__init__(user_num, item_num, value_range, a_range, irf_kwargs)
 
     def forward(self, user, item, *args):
@@ -83,18 +97,19 @@ class EmbedIRTNet(_EmbedIRTNet):
         a = self.i_discrimination(item)
         b = self.i_difficulty(item)
         c = self.i_guess(item)
-        if torch.max(theta != theta) or torch.max(a != a) or torch.max(b != b):  # pragma: no cover
-            raise ValueError('ValueError:theta,a,b may contains nan!  The a_range is too large.')
+        if torch.max(theta != theta) or torch.max(a != a) or torch.max(
+                b != b):  # pragma: no cover
+            raise ValueError(
+                'ValueError:theta,a,b may contains nan!  The a_range is too large.'
+            )
         # return self.irf(theta, a, b, **self.irf_kwargs)
         return self.irf(theta, a, b, c, **self.irf_kwargs)
 
     def get_user_profiles(self, user):
         user = torch.tensor(user, dtype=torch.int64).to(
-            self.theta.weight.device) if not isinstance(user, torch.Tensor) else user
-        obj = {
-            "uid": user,
-            "u_trait": self.u_theta(user)
-        }
+            self.theta.weight.device) if not isinstance(user,
+                                                        torch.Tensor) else user
+        obj = {"uid": user, "u_trait": self.u_theta(user)}
         return obj
 
     def save_user_profiles(self, user, filepath):
@@ -104,7 +119,8 @@ class EmbedIRTNet(_EmbedIRTNet):
 
     def get_item_profiles(self, item):
         item = torch.tensor(item, dtype=torch.int64).to(
-            self.a.weight.device) if not isinstance(item, torch.Tensor) else item
+            self.a.weight.device) if not isinstance(item,
+                                                    torch.Tensor) else item
         obj = {
             "iid": item,
             "ib": self.i_difficulty(item),
@@ -119,11 +135,12 @@ class EmbedIRTNet(_EmbedIRTNet):
         print("save item profiles to %s" % os.path.abspath(filepath))
 
     def u_theta(self, user):
-        return (torch.sigmoid(torch.squeeze(self.theta(user), dim=-1)) - 0.5) * 6
+        return (torch.sigmoid(torch.squeeze(self.theta(user), dim=-1)) -
+                0.5) * 6
 
     def i_difficulty(self, item):
         return (torch.sigmoid(torch.squeeze(self.b(item), dim=-1)) - 0.5) * 6
-    
+
     def i_guess(self, item):
         return torch.sigmoid(torch.squeeze(self.c(item), dim=-1))
 
@@ -135,9 +152,18 @@ class EmbedIRTNet(_EmbedIRTNet):
             a = F.softplus(a)
         return a
 
+
 class EmbedDINANet(_EmbedDINANet):
-    def __init__(self, user_num, item_num, know_n, max_slip=0.4, max_guess=0.4, *args, **kwargs):
-        super().__init__(user_num, item_num, know_n, max_slip, max_guess, *args, **kwargs)
+    def __init__(self,
+                 user_num,
+                 item_num,
+                 know_n,
+                 max_slip=0.4,
+                 max_guess=0.4,
+                 *args,
+                 **kwargs):
+        super().__init__(user_num, item_num, know_n, max_slip, max_guess,
+                         *args, **kwargs)
 
     def forward(self, user, item, knowledge, *args):
         theta = self.u_theta(user)
@@ -146,25 +172,23 @@ class EmbedDINANet(_EmbedDINANet):
         if self.training:
             # 训练
             n = torch.sum(knowledge * (torch.sigmoid(theta) - 0.5), dim=1)
-            t, self.step = max((np.sin(2 * np.pi * self.step / self.max_step) + 1) / 2 * 100,
-                               1e-6), self.step + 1 if self.step < self.max_step else 0
-            return torch.sum(
-                torch.stack([1 - slip, guess]).T * torch.softmax(torch.stack([n, torch.zeros_like(n)]).T / t, dim=-1),
-                dim=1
-            )
+            t, self.step = max(
+                (np.sin(2 * np.pi * self.step / self.max_step) + 1) / 2 * 100,
+                1e-6), self.step + 1 if self.step < self.max_step else 0
+            return torch.sum(torch.stack([1 - slip, guess]).T * torch.softmax(
+                torch.stack([n, torch.zeros_like(n)]).T / t, dim=-1),
+                             dim=1)
         else:
             # 评估
             n = torch.prod(knowledge * (theta >= 0) + (1 - knowledge), dim=1)
             # student i 对 exercise 的潜在作答情况
-            return (1 - slip) ** n * guess ** (1 - n)
+            return (1 - slip)**n * guess**(1 - n)
 
     def get_user_profiles(self, user):
         user = torch.tensor(user, dtype=torch.int64).to(
-            self.theta.weight.device) if not isinstance(user, torch.Tensor) else user
-        obj = {
-            "uid": user,
-            "u_trait": self.u_theta(user)
-        }
+            self.theta.weight.device) if not isinstance(user,
+                                                        torch.Tensor) else user
+        obj = {"uid": user, "u_trait": self.u_theta(user)}
         return obj
 
     def save_user_profiles(self, user, filepath):
@@ -174,7 +198,8 @@ class EmbedDINANet(_EmbedDINANet):
 
     def get_item_profiles(self, item):
         item = torch.tensor(item, dtype=torch.int64).to(
-            self.guess.weight.device) if not isinstance(item, torch.Tensor) else item
+            self.guess.weight.device) if not isinstance(item,
+                                                        torch.Tensor) else item
         obj = {
             "iid": item,
             "ia": self.i_guess(item),
@@ -192,7 +217,7 @@ class EmbedDINANet(_EmbedDINANet):
 
     def i_slip(self, item):
         return torch.squeeze(torch.sigmoid(self.slip(item)) * self.max_slip)
-    
+
     def i_guess(self, item):
         return torch.squeeze(torch.sigmoid(self.guess(item)) * self.max_guess)
 
@@ -208,23 +233,16 @@ class EmbedNCDMNet(nn.Module):
         self.kd_emb = nn.Embedding(item_num, self.prednet_input_len)
         self.ed_emb = nn.Embedding(item_num, self.prednet_input_len)
         self.int_fc = nn.Sequential(
-            PosLinear(self.prednet_input_len, self.prednet_len1),
-            nn.Sigmoid(),
-            nn.Dropout(p=0.5),
-            PosLinear(self.prednet_len1, self.prednet_len2),
-            nn.Sigmoid(),
-            nn.Dropout(p=0.5),
-            PosLinear(self.prednet_len2, 1),
-            nn.Sigmoid()
-        )
+            PosLinear(self.prednet_input_len, self.prednet_len1), nn.Sigmoid(),
+            nn.Dropout(p=0.5), PosLinear(self.prednet_len1, self.prednet_len2),
+            nn.Sigmoid(), nn.Dropout(p=0.5), PosLinear(self.prednet_len2, 1),
+            nn.Sigmoid())
 
     def get_user_profiles(self, user):
         user = torch.tensor(user, dtype=torch.int64).to(
-            self.theta_emb.weight.device) if not isinstance(user, torch.Tensor) else user
-        obj = {
-            "uid": user,
-            "u_trait": self.u_theta(user)
-        }
+            self.theta_emb.weight.device) if not isinstance(
+                user, torch.Tensor) else user
+        obj = {"uid": user, "u_trait": self.u_theta(user)}
         return obj
 
     def save_user_profiles(self, user, filepath):
@@ -234,7 +252,8 @@ class EmbedNCDMNet(nn.Module):
 
     def get_item_profiles(self, item):
         item = torch.tensor(item, dtype=torch.int64).to(
-            self.kd_emb.weight.device) if not isinstance(item, torch.Tensor) else item
+            self.kd_emb.weight.device) if not isinstance(
+                item, torch.Tensor) else item
         obj = {
             "iid": item,
             "ib": self.i_difficulty(item),

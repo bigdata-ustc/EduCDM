@@ -1,1 +1,1 @@
-path_prefix = '/home/yutingh/icd_github'
+path_prefix = '/home/yutingh/EduCDM/ICD/'

@@ -6,13 +6,21 @@ from baize.torch import light_module as lm
 from baize.torch import save_params
 from longling import build_dir
 
-from ICD.etl import inc_stream
-from etl import extract, transform, etl, item2knowledge
-from sym import fit_f, eval_f, get_loss, get_net, stableness_eval
+from EduCDM.ICD.etl import inc_stream, extract, transform, etl, item2knowledge
+from .sym import fit_f, eval_f, get_loss, get_net, stableness_eval
 from longling.ML.PytorchHelper.toolkit.trainer import collect_params, get_trainer
 
 
-def run(user_n, item_n, know_n, dataset, scenario, cdm, inc_type=None, stream_size=2048, *args, **kwargs):
+def run(user_n,
+        item_n,
+        know_n,
+        dataset,
+        scenario,
+        cdm,
+        inc_type=None,
+        stream_size=2048,
+        *args,
+        **kwargs):
     torch.manual_seed(0)
 
     dataset_dir = "../../data/%s/" % dataset
@@ -23,14 +31,18 @@ def run(user_n, item_n, know_n, dataset, scenario, cdm, inc_type=None, stream_si
         model_dir="%s" % cdm,
         end_epoch=3,
         batch_size=32,
-        hyper_params={"user_n": user_n, "item_n": item_n, "know_n": know_n, "cdm": cdm},
+        hyper_params={
+            "user_n": user_n,
+            "item_n": item_n,
+            "know_n": know_n,
+            "cdm": cdm
+        },
         # train_select={".*dtn.*": {}, "^(?!.*dtn)": {'weight_decay': 0}},
         optimizer_params={
             'lr': kwargs.get("lr", 0.002),
             'weight_decay': 0.0001
         },
-        ctx=kwargs.get("ctx", "cuda: 3")
-    )
+        ctx=kwargs.get("ctx", "cuda: 3"))
     print(cfg)
 
     item2know = "%s/item.csv" % dataset_dir
@@ -49,21 +61,33 @@ def run(user_n, item_n, know_n, dataset, scenario, cdm, inc_type=None, stream_si
     import re
     select = ".*dtn.*"
     pattern = re.compile(select)
-    ret = [name for name, value in net.named_parameters() if pattern.match(name)]
+    ret = [
+        name for name, value in net.named_parameters() if pattern.match(name)
+    ]
     print(ret)
     select = "^(?!.*dtn)"
     pattern = re.compile(select)
-    ret = [name for name, value in net.named_parameters() if pattern.match(name)]
+    ret = [
+        name for name, value in net.named_parameters() if pattern.match(name)
+    ]
     print(ret)
 
-    print(get_trainer(net, "Adam", optimizer_params=cfg.optimizer_params,
-                      select={".*dtn.*": {}, "^(?!.*dtn)": {'weight_decay': 0}}))
-
+    print(
+        get_trainer(net,
+                    "Adam",
+                    optimizer_params=cfg.optimizer_params,
+                    select={
+                        ".*dtn.*": {},
+                        "^(?!.*dtn)": {
+                            'weight_decay': 0
+                        }
+                    }))
 
 
 if __name__ == '__main__':
     dataset_config = {
-        "a0910": dict(
+        "a0910":
+        dict(
             user_n=4129,
             item_n=17747,
             know_n=123,
@@ -82,9 +106,9 @@ if __name__ == '__main__':
     run(
         # cdm="mirt",
         cdm="ncd",
-        scenario=scenario, dataset=dataset,
+        scenario=scenario,
+        dataset=dataset,
         inc_type="global",
         # inc_type="inc",
         ctx="cpu",
-        **dataset_config[dataset.split("_")[0]]
-    )
+        **dataset_config[dataset.split("_")[0]])

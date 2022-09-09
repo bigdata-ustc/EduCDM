@@ -3,7 +3,7 @@ from torch import nn
 from tqdm import tqdm
 from baize.metrics import classification_report, POrderedDict
 from baize.torch import fit_wrapper, eval_wrapper
-from ICD.metrics import doa_report, stableness_report
+from EduCDM.ICD.metrics import doa_report, stableness_report
 
 
 @fit_wrapper
@@ -44,7 +44,8 @@ def eval_f(_net, test_data, *args, **kwargs):
         ret = classification_report(y_true, y_label, y_pred)
     except ValueError:
         ret = POrderedDict()
-    ret.update(doa_report(user_id, item_id, item_knowledge, y_true, user_theta))
+    ret.update(doa_report(user_id, item_id, item_knowledge, y_true,
+                          user_theta))
     return ret
 
 
@@ -55,7 +56,7 @@ def stableness_eval(net, user, item, user_traits, item_traits):
     new_item_traits = new_net.get_item_profiles(item)
 
     return stableness_report(
-        [user_traits["u_trait"], item_traits['ia'], item_traits['ib']],
-        [new_user_traits["u_trait"], new_item_traits['ia'], new_item_traits['ib']],
-        ['theta', 'a', 'b']
-    )
+        [user_traits["u_trait"], item_traits['ia'], item_traits['ib']], [
+            new_user_traits["u_trait"], new_item_traits['ia'],
+            new_item_traits['ib']
+        ], ['theta', 'a', 'b'])

@@ -1,7 +1,7 @@
 # coding: utf-8
 import torch
 from torch import nn
-from ICD.sym import PosLinear
+from EduCDM.ICD.sym import PosLinear
 
 
 class NCDMNet(nn.Module):
@@ -15,15 +15,10 @@ class NCDMNet(nn.Module):
         self.i_dtn_kd_fc = nn.Linear(trait_dim, self.prednet_input_len)
         self.i_dtn_ed_fc = nn.Linear(trait_dim, self.prednet_input_len)
         self.int_fc = nn.Sequential(
-            PosLinear(self.prednet_input_len, self.prednet_len1),
-            nn.Sigmoid(),
-            nn.Dropout(p=0.5),
-            PosLinear(self.prednet_len1, self.prednet_len2),
-            nn.Sigmoid(),
-            nn.Dropout(p=0.5),
-            PosLinear(self.prednet_len2, 1),
-            nn.Sigmoid()
-        )
+            PosLinear(self.prednet_input_len, self.prednet_len1), nn.Sigmoid(),
+            nn.Dropout(p=0.5), PosLinear(self.prednet_len1, self.prednet_len2),
+            nn.Sigmoid(), nn.Dropout(p=0.5), PosLinear(self.prednet_len2, 1),
+            nn.Sigmoid())
 
     def u_theta(self, u_trait):
         return torch.sigmoid(self.l_dtn_theta_fc(u_trait))

@@ -8,8 +8,8 @@ from baize.torch import light_module as lm, load_net
 from baize.metrics import POrderedDict
 from longling.ML.PytorchHelper import set_device
 
-from ICD.etl import extract, transform, test_etl, merge_dict, inc_stream, user2items, item2users, dict_etl, Dict2
-from sym import fit_f, eval_f, get_loss, get_net, DualICD, get_dual_loss, dual_fit_f, stableness_eval, turning_point
+from EduCDM.ICD.etl import extract, transform, test_etl, merge_dict, inc_stream, user2items, item2users, dict_etl, Dict2
+from .sym import fit_f, eval_f, get_loss, get_net, DualICD, get_dual_loss, dual_fit_f, stableness_eval, turning_point
 
 from longling.ML.toolkit.hyper_search import prepare_hyper_search
 from longling.lib.stream import to_io_group, close_io
@@ -18,12 +18,20 @@ from longling.lib.stream import to_io_group, close_io
 def format_metrics_result(_id, ori_met, inc_met=None, dt=0):
     ret = {
         "id": _id,
-        "ori": {"accuracy": ori_met["accuracy"], "auc": ori_met["macro_auc"], "doa": ori_met["doa"], "deltaT": dt},
-
+        "ori": {
+            "accuracy": ori_met["accuracy"],
+            "auc": ori_met["macro_auc"],
+            "doa": ori_met["doa"],
+            "deltaT": dt
+        },
     }
     if inc_met is not None:
         ret.update({
-            "inc": {"accuracy": inc_met["accuracy"], "auc": inc_met["macro_auc"], "doa": inc_met["doa"]}
+            "inc": {
+                "accuracy": inc_met["accuracy"],
+                "auc": inc_met["macro_auc"],
+                "doa": inc_met["doa"]
+            }
         })
     return POrderedDict(ret)
 
@@ -35,10 +43,26 @@ def output_metrics(metrics, wfs):
         print(json.dumps(metrics), file=wfs[1], flush=True)
 
 
-def run(cdm, user_n, item_n, know_n, dataset, scenario, max_u2i=None, max_i2u=None, pretrained=False,
-        stream_size=2048, alpha=0.999, beta=0.95, tolerance=1e-3,
-        reporthook=None, final_reporthook=None, hyper_tag=False, epoch=3, wfs=None,
-        *args, **kwargs):
+def run(cdm,
+        user_n,
+        item_n,
+        know_n,
+        dataset,
+        scenario,
+        max_u2i=None,
+        max_i2u=None,
+        pretrained=False,
+        stream_size=2048,
+        alpha=0.999,
+        beta=0.95,
+        tolerance=1e-3,
+        reporthook=None,
+        final_reporthook=None,
+        hyper_tag=False,
+        epoch=3,
+        wfs=None,
+        *args,
+        **kwargs):
     torch.manual_seed(0)
 
     dataset_dir = "../../data/%s/" % dataset
@@ -49,7 +73,12 @@ def run(cdm, user_n, item_n, know_n, dataset, scenario, max_u2i=None, max_i2u=No
         model_dir="icd_%s" % cdm,
         end_epoch=epoch,
         batch_size=32,
-        hyper_params={"user_n": user_n, "item_n": item_n, "know_n": know_n, "cdm": cdm},
+        hyper_params={
+            "user_n": user_n,
+            "item_n": item_n,
+            "know_n": know_n,
+            "cdm": cdm
+        },
         # train_select={".*dtn.*": {}, "^(?!.*dtn)": {'weight_decay': 0}},
         optimizer_params={
             'lr': kwargs.get("lr", 0.002),
@@ -78,12 +107,19 @@ def run(cdm, user_n, item_n, know_n, dataset, scenario, max_u2i=None, max_i2u=No
     dict2.u2i = u2i
     dict2.i2u = i2u
 
-    stat_train_data = transform(
-        train_df, u2i, i2u, i2k, know_n, cfg.batch_size,
-        max_u2i=max_u2i, max_i2u=max_i2u, silent=True
-    )
-    stat_valid_data = list(test_etl(stat_valid_data_path, u2i, i2u, i2k, know_n, cfg.batch_size))
-    stat_test_data = list(test_etl(stat_test_data_path, u2i, i2u, i2k, know_n, cfg.batch_size))
+    stat_train_data = transform(train_df,
+                                u2i,
+                                i2u,
+                                i2k,
+                                know_n,
+                                cfg.batch_size,
+                                max_u2i=max_u2i,
+                                max_i2u=max_i2u,
+                                silent=True)
+    stat_valid_data = list(
+        test_etl(stat_valid_data_path, u2i, i2u, i2k, know_n, cfg.batch_size))
+    stat_test_data = list(
+        test_etl(stat_test_data_path, u2i, i2u, i2k, know_n, cfg.batch_size))
 
     net = get_net(**cfg.hyper_params)
     loss_f = get_loss(ctx=cfg.ctx)
@@ -101,7 +137,8 @@ def run(cdm, user_n, item_n, know_n, dataset, scenario, max_u2i=None, max_i2u=No
             print("finetune int fc")
             # cfg.train_select = ".*int.*"
             # cfg.optimizer_params["lr"] = 0.0001
-            cfg.end_epoch, end_epoch = kwargs.get("pre_epoch", epoch), cfg.end_epoch
+            cfg.end_epoch, end_epoch = kwargs.get("pre_epoch",
+                                                  epoch), cfg.end_epoch
             print(cfg)
             lm.train(
                 net=net,
@@ -116,10 +153,8 @@ def run(cdm, user_n, item_n, know_n, dataset, scenario, max_u2i=None, max_i2u=No
             )
             cfg.end_epoch = end_epoch
             print("Ori.")
-            after_metrics = format_metrics_result(
-                "after pretrained",
-                eval_f(net, stat_test_data)
-            )
+            after_metrics = format_metrics_result("after pretrained",
+                                                  eval_f(net, stat_test_data))
             output_metrics(after_metrics, wfs)
     else:
         net = set_device(net, cfg.ctx)
@@ -142,7 +177,9 @@ def run(cdm, user_n, item_n, know_n, dataset, scenario, max_u2i=None, max_i2u=No
     inc_train_df, inc_u2i, inc_i2u, _ = extract(inc_train_data_path, item2know)
     merge_dict(stat_inc_u2i, inc_u2i)
     merge_dict(stat_inc_i2u, inc_i2u)
-    inc_test_data = list(test_etl(inc_test_data_path, stat_inc_u2i, stat_inc_i2u, i2k, know_n, cfg.batch_size))
+    inc_test_data = list(
+        test_etl(inc_test_data_path, stat_inc_u2i, stat_inc_i2u, i2k, know_n,
+                 cfg.batch_size))
     inc_train_df_list = list(inc_stream(inc_train_df, stream_size=stream_size))
 
     print("=============== Stat. ===================")
@@ -164,8 +201,10 @@ def run(cdm, user_n, item_n, know_n, dataset, scenario, max_u2i=None, max_i2u=No
 
     users = list(u2i.keys())
     items = list(i2u.keys())
-    user_traits = stat_net.get_user_profiles(dict_etl(users, u2i, batch_size=cfg.batch_size))
-    item_traits = stat_net.get_item_profiles(dict_etl(items, i2u, batch_size=cfg.batch_size))
+    user_traits = stat_net.get_user_profiles(
+        dict_etl(users, u2i, batch_size=cfg.batch_size))
+    item_traits = stat_net.get_item_profiles(
+        dict_etl(items, i2u, batch_size=cfg.batch_size))
 
     # cfg.train_select = ".*dtn.*"
     cfg.end_epoch = kwargs.get("inc_epoch", cfg.end_epoch)
@@ -180,20 +219,32 @@ def run(cdm, user_n, item_n, know_n, dataset, scenario, max_u2i=None, max_i2u=No
         inc_u2i = user2items(inc_train_df, inc_dict2)
         inc_i2u = item2users(inc_train_df, inc_dict2)
 
-        print("============= Stream[%s/%s/%s] =============" % (i, len(tps), len(inc_train_df_list)))
+        print("============= Stream[%s/%s/%s] =============" %
+              (i, len(tps), len(inc_train_df_list)))
 
-        if turning_point(net, inc_train_df, dict2, inc_dict2, i2k, know_n, cfg.batch_size, ctx=cfg.ctx,
+        if turning_point(net,
+                         inc_train_df,
+                         dict2,
+                         inc_dict2,
+                         i2k,
+                         know_n,
+                         cfg.batch_size,
+                         ctx=cfg.ctx,
                          tolerance=tolerance):
             print("**** Turning Point ****")
             tps.append(i)
 
             dict2.merge_u2i(inc_u2i)
             dict2.merge_i2u(inc_i2u)
-            inc_train_data = transform(
-                inc_train_df, u2i, i2u, i2k, know_n,
-                max_u2i=max_u2i, max_i2u=max_i2u,
-                batch_size=cfg.batch_size, silent=True
-            )
+            inc_train_data = transform(inc_train_df,
+                                       u2i,
+                                       i2u,
+                                       i2k,
+                                       know_n,
+                                       max_u2i=max_u2i,
+                                       max_i2u=max_i2u,
+                                       batch_size=cfg.batch_size,
+                                       silent=True)
 
             stat_net.eval()
             pre_net = deepcopy(net)
@@ -233,9 +284,21 @@ def run(cdm, user_n, item_n, know_n, dataset, scenario, max_u2i=None, max_i2u=No
             # print(stableness_eval(net, users, items, u2i, i2u, user_traits, item_traits, cfg.batch_size))
 
             stat_valid_data = list(
-                test_etl(stat_test_data_path, u2i, i2u, i2k, know_n, cfg.batch_size, allow_missing=True))
+                test_etl(stat_test_data_path,
+                         u2i,
+                         i2u,
+                         i2k,
+                         know_n,
+                         cfg.batch_size,
+                         allow_missing=True))
             inc_valid_data = list(
-                test_etl(inc_test_data_path, u2i, i2u, i2k, know_n, cfg.batch_size, allow_missing=True))
+                test_etl(inc_test_data_path,
+                         u2i,
+                         i2u,
+                         i2k,
+                         know_n,
+                         cfg.batch_size,
+                         allow_missing=True))
 
             print("=============== Inc. ===================")
 
@@ -248,16 +311,20 @@ def run(cdm, user_n, item_n, know_n, dataset, scenario, max_u2i=None, max_i2u=No
             print(inc_met)
 
             print("Trait")
-            sta_met = stableness_eval(net, users, items, u2i, i2u, user_traits, item_traits, cfg.batch_size)
+            sta_met = stableness_eval(net, users, items, u2i, i2u, user_traits,
+                                      item_traits, cfg.batch_size)
             print(sta_met)
 
-            inner_metrics = format_metrics_result(i + 1, ori_met, inc_met, sta_met["micro_ave"])
+            inner_metrics = format_metrics_result(i + 1, ori_met, inc_met,
+                                                  sta_met["micro_ave"])
             if hyper_tag:
                 reporthook(inner_metrics)
             output_metrics(inner_metrics, wfs)
 
-    inc_test_data = list(test_etl(inc_test_data_path, u2i, i2u, i2k, know_n, cfg.batch_size))
-    stat_test_data = list(test_etl(stat_test_data_path, u2i, i2u, i2k, know_n, cfg.batch_size))
+    inc_test_data = list(
+        test_etl(inc_test_data_path, u2i, i2u, i2k, know_n, cfg.batch_size))
+    stat_test_data = list(
+        test_etl(stat_test_data_path, u2i, i2u, i2k, know_n, cfg.batch_size))
 
     print("=============== Inc. ===================")
 
@@ -270,31 +337,42 @@ def run(cdm, user_n, item_n, know_n, dataset, scenario, max_u2i=None, max_i2u=No
     print(inc_met)
 
     print("Trait")
-    sta_met = stableness_eval(net, users, items, u2i, i2u, user_traits, item_traits, cfg.batch_size)
+    sta_met = stableness_eval(net, users, items, u2i, i2u, user_traits,
+                              item_traits, cfg.batch_size)
     print(sta_met)
 
-    final_metrics = format_metrics_result(len(inc_train_df_list), ori_met, inc_met, sta_met["micro_ave"])
+    final_metrics = format_metrics_result(len(inc_train_df_list), ori_met,
+                                          inc_met, sta_met["micro_ave"])
     if hyper_tag:
         final_reporthook(final_metrics)
     output_metrics(final_metrics, wfs)
 
     print("TP %s/%s" % (len(tps), len(inc_train_df_list)))
     if wfs is not None:
-        print("TP %s/%s" % (len(tps), len(inc_train_df_list)), file=wfs[0], flush=True)
+        print("TP %s/%s" % (len(tps), len(inc_train_df_list)),
+              file=wfs[0],
+              flush=True)
         print("TP: %s" % tps, file=wfs[0], flush=True)
 
 
-def main(dataset="a0910", scenario="new_user", ctx="cuda: 3", cdm="ncd",
-         stream_size=2048, alpha=0.999, beta=0.95, tolerance=1e-2, epoch=3, pretrained=False, filename=None,
+def main(dataset="a0910",
+         scenario="new_user",
+         ctx="cuda: 3",
+         cdm="ncd",
+         stream_size=2048,
+         alpha=0.999,
+         beta=0.95,
+         tolerance=1e-2,
+         epoch=3,
+         pretrained=False,
+         filename=None,
          inc_epoch=None):
     dataset_dir = "../../data/%s/" % dataset
     data_dir = dataset_dir + "%s/" % scenario
     model_dir = data_dir + "model/%s/" % cdm
-    wfs = to_io_group(
-        model_dir + filename + ".log",
-        model_dir + filename + ".json",
-        mode="w"
-    ) if filename else None
+    wfs = to_io_group(model_dir + filename + ".log",
+                      model_dir + filename + ".json",
+                      mode="w") if filename else None
 
     # if wfs is not None:
     #     close_io(wfs)
@@ -304,18 +382,16 @@ def main(dataset="a0910", scenario="new_user", ctx="cuda: 3", cdm="ncd",
     #     mode="a"
     # ) if filename else None
 
-    config = dict(
-        dataset=dataset,
-        scenario=scenario,
-        cdm=cdm,
-        stream_size=stream_size,
-        alpha=alpha,
-        beta=beta,
-        tolerance=tolerance,
-        ctx=ctx,
-        epoch=epoch,
-        inc_epoch=inc_epoch
-    )
+    config = dict(dataset=dataset,
+                  scenario=scenario,
+                  cdm=cdm,
+                  stream_size=stream_size,
+                  alpha=alpha,
+                  beta=beta,
+                  tolerance=tolerance,
+                  ctx=ctx,
+                  epoch=epoch,
+                  inc_epoch=inc_epoch)
     config, reporthook, final_reporthook, tag = prepare_hyper_search(
         config,
         primary_key="ori:accuracy",
@@ -326,14 +402,16 @@ def main(dataset="a0910", scenario="new_user", ctx="cuda: 3", cdm="ncd",
         print("logs to %s" % model_dir + filename + ".log")
         print(config, file=wfs[0], flush=True)
     dataset_config = {
-        "a0910": dict(
+        "a0910":
+        dict(
             user_n=4129,
             item_n=17747,
             know_n=123,
             # max_u2i=128,
             # max_i2u=64,
         ),
-        "math": dict(
+        "math":
+        dict(
             user_n=10269,
             item_n=17747,
             know_n=1488,
@@ -351,8 +429,7 @@ def main(dataset="a0910", scenario="new_user", ctx="cuda: 3", cdm="ncd",
         hyper_tag=tag,
         wfs=wfs,
         **config,
-        **dataset_config[dataset.split("_")[0]]
-    )
+        **dataset_config[dataset.split("_")[0]])
     if wfs is not None:
         close_io(wfs)
 
