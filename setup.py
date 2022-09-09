@@ -14,13 +14,8 @@ setup(
     },
     packages=find_packages(),
     install_requires=[
-        "torch",
-        "tqdm",
-        "numpy>=1.16.5",
-        "scikit-learn",
-        "pandas",
-        "longling>=1.3.33"
+        "torch", "tqdm", "numpy>=1.16.5", "scikit-learn", "pandas",
+        "longling>=1.3.33", 'PyBaize>=0.0.7', 'fire'
     ],  # And any other dependencies for needs
-    entry_points={
-    },
+    entry_points={},
 )
