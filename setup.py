@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 test_deps = [
     'pytest>=4',
     'pytest-cov>=2.6.0',
-    'pytest-flake8<5.0.0',
+    'pytest-flake8==4.0.1',
 ]
 
 setup(
