@@ -20,14 +20,10 @@ cd EduCDM/EduCDM/ICD/ICD
 ```
 Replace path_prefix by your project_url in ICD/constant.py.
 
-Run baseline
-```
-python project_url/ICD/Base/pure_stream_run.py --dataset a0910 --cdm mirt --ctx cuda:2    --savename global --inc_type global
-```
 
 Run incremental method
 ```
-python project_url/ICD/ICD/pure_stream_inc_run.py --dataset a0910 --cdm ncd --ctx cuda:3 --savename icd_v0 --alpha 0.2 --beta 0.9 --tolerance 0.2 --inner_metrics True --warmup_ratio 0
+python examles/ICD/ICD.py
 ```
 
 ## Citation

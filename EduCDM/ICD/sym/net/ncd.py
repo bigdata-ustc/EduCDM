@@ -1,7 +1,7 @@
 # coding: utf-8
 import torch
 from torch import nn
-from EduCDM.ICD.sym import PosLinear
+from ..pos_linear import PosLinear
 
 
 class NCDMNet(nn.Module):
