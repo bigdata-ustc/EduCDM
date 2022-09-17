@@ -209,57 +209,6 @@ def inc_stream(logs_df: pd.DataFrame, stream_size):
             yield logs_df[i:i + stream_size]
 
 
-def inc_etl(logs_df: pd.DataFrame,
-            stream_size,
-            u2i,
-            i2u,
-            i2k,
-            kn,
-            batch_size,
-            max_u2i=None,
-            max_i2u=None,
-            silent=False):
-    for stream_data in inc_stream(logs_df, stream_size):
-        yield inc_stream_transform(stream_data, u2i, i2u, i2k, kn, batch_size,
-                                   max_u2i, max_i2u, silent)
-
-
-@iterwrap()
-def inc_stream_transform(logs_df,
-                         u2i,
-                         i2u,
-                         i2k,
-                         kn,
-                         batch_size,
-                         max_u2i=None,
-                         max_i2u=None,
-                         silent=False):
-    random_state = np.random.default_rng(0)
-    batch = []
-    for logs in tqdm(logs_df, "batchify", disable=silent):
-        user_id, item_id, score = logs["user_id"], logs["item_id"], logs[
-            "score"]
-        _u2i = u2i.get(user_id, [0])
-        _i2u = i2u.get(item_id, [0])
-        batch.append([
-            user_id, _u2i if max_u2i is None else random_state.choice(
-                _u2i, max_u2i).tolist(),
-            item_id, _i2u if max_i2u is None else random_state.choice(
-                _i2u, max_i2u).tolist(),
-            multi_hot(i2k[item_id], kn), score
-        ])
-        if len(batch) == batch_size:
-            yield pack_batch(batch)
-            # batch_data.append(pack_batch(batch))
-            batch = []
-
-    if batch:
-        yield pack_batch(batch)
-    #     batch_data.append(pack_batch(batch))
-    #
-    # return batch_data
-
-
 def dict_etl(keys, obj: dict, batch_size, silent=True):
     def pack_batch(_batch):
         __id, __records = zip(*_batch)

@@ -15,25 +15,6 @@ from EduCDM.ICD.etl import dict_etl, Dict2, multi_hot
 from .net import ICD, EmbICD
 
 
-@fit_wrapper
-def fit_f(_net, batch_data, loss_function, *args, **kwargs):
-    (
-        _,
-        u2i,
-        u_mask,
-        _,
-        i2u,
-        i_mask,
-        i2k,
-        r,
-    ) = batch_data
-    out, *_ = _net(u2i, u_mask, i2u, i_mask, i2k)
-    loss = []
-    for _f in loss_function.values():
-        loss.append(_f(out, r))
-    return sum(loss)
-
-
 @eval_wrapper
 def eval_f(_net, test_data, *args, **kwargs):
     y_true = []
@@ -157,7 +138,10 @@ def turning_point(net: (torch.nn.DataParallel, ICD),
     item_traits: dict = net.get_item_profiles(
         dict_etl(set(items), dict2.i2u, batch_size=batch_size))
 
-    emb_icd = EmbICD(net.cdm.int_f, net.cdm_name, user_traits, item_traits)
+    emb_icd = EmbICD(
+        net.cdm.int_f,
+        [user_traits["u_trait"], item_traits["ia"], item_traits["ib"]])
+    # emb_icd = EmbICD(net.cdm.int_f, net.cdm_name, user_traits, item_traits)
     emb_icd.build_user_id2idx(user_traits["uid"].tolist())
     emb_icd.build_item_id2idx(item_traits["iid"].tolist())
 

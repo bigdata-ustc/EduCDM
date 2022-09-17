@@ -45,7 +45,7 @@ def run(cdm,
     inc_train_df_list = list(
         inc_stream(inc_train_df,
                    stream_size=int(len(inc_train_df) // stream_num)))
-    ICDNet = ICD(cdm, epoch, user_n, item_n, know_n, weight_decay,
+    ICDNet = ICD(cdm, user_n, item_n, know_n, epoch, weight_decay,
                  inner_metrics, logger, alpha, ctx)
     ICDNet.train(inc_train_df_list, i2k, beta, warmup_ratio, tolerance,
                  max_u2i, max_i2u, hyper_tag, vector_numbers,

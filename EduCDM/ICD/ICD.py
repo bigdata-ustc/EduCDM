@@ -1,3 +1,4 @@
+import logging
 from EduCDM import CDM
 import pandas as pd
 from copy import deepcopy
@@ -11,8 +12,18 @@ from EduCDM.ICD.utils import output_metrics
 
 
 class ICD(CDM):
-    def __init__(self, cdm, epoch, user_n, item_n, know_n, weight_decay,
-                 inner_metrics, logger, alpha, ctx, **kwargs):
+    def __init__(self,
+                 cdm,
+                 user_n,
+                 item_n,
+                 know_n,
+                 epoch=1,
+                 weight_decay=0.1,
+                 inner_metrics=True,
+                 logger=logging,
+                 alpha=0.9,
+                 ctx='cpu',
+                 **kwargs):
         super(ICD, self).__init__()
         torch.manual_seed(0)
         self.cfg = Configuration(
@@ -40,9 +51,18 @@ class ICD(CDM):
         self.dual_net = DualICD(deepcopy(self.net), self.net, alpha=alpha)
         self.inner_metrics = inner_metrics
 
-    def train(self, inc_train_df_list, i2k, beta, warmup_ratio, tolerance,
-              max_u2i, max_i2u, hyper_tag, vector_numbers, vector_path_format,
-              wfs):
+    def train(self,
+              inc_train_df_list,
+              i2k,
+              beta=0.95,
+              warmup_ratio=0.1,
+              tolerance=1e-3,
+              max_u2i=None,
+              max_i2u=None,
+              hyper_tag=False,
+              vector_numbers=None,
+              vector_path_format=None,
+              wfs=None):
         vector_user = None
         vector_item = None
         dict2 = Dict2()
@@ -75,7 +95,7 @@ class ICD(CDM):
                                            dict2,
                                            inc_dict2,
                                            i2k,
-                                           self.cfg.hyper_params.know_n,
+                                           self.cfg.hyper_params['know_n'],
                                            self.cfg.batch_size,
                                            ctx=self.cfg.ctx,
                                            tolerance=tolerance,
@@ -195,8 +215,8 @@ class ICD(CDM):
             "total": len(inc_train_df_list) - 1
         }, wfs, "tp", self.logger)
 
-    def save():
+    def save(self):
         pass
 
-    def load():
+    def load(self):
         pass

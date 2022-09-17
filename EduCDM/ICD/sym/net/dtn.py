@@ -11,10 +11,9 @@ class DTN(nn.Module):
         self.fea_dim = 64
 
         super(DTN, self).__init__()
-        self.emb = nn.Sequential(
-            nn.Embedding(self.input_dim, self.fea_dim),
-            # nn.Dropout(p=0.5),
-        )
+        self.emb = nn.Sequential(nn.Embedding(self.input_dim, self.fea_dim),
+                                 # nn.Dropout(p=0.5),
+                                 )
         # self.feature_net = nn.Sequential(
         #     # nn.Dropout(p=0.2),
         #     nn.Linear(self.know_dim, self.know_dim),
@@ -25,18 +24,7 @@ class DTN(nn.Module):
         self.feature_net = nn.Sequential(
             # nn.ReLU(),
             # nn.Dropout(p=0.5),
-            nn.Linear(self.fea_dim, self.know_dim)
-        )
-
-    def max_pool(self, data):
-        # batch_num * emb_dim * max_len => batch_num * emb_dim * 1
-        rs = torch.max(data, dim=-1)
-        return rs
-
-    def min_pool(self, data):
-        # batch_num * emb_dim * max_len => batch_num * emb_dim * 1
-        rs = torch.min(data, dim=-1)
-        return rs
+            nn.Linear(self.fea_dim, self.know_dim))
 
     def avg_pool(self, data, mask: torch.Tensor):
         # batch_num * emb_dim * max_len => batch_num * emb_dim * 1

@@ -17,6 +17,7 @@ class ICD(nn.Module):
         super(ICD, self).__init__()
         self.l_dtn = DTN(2 * item_n + 1, know_n)
         self.i_dtn = DTN(2 * user_n + 1, know_n)
+        self.cdm_name = cdm
         if cdm == "ncd":
             self.cdm = NCDMNet(know_n, know_n)
         elif cdm == "mirt":
@@ -39,12 +40,12 @@ class ICD(nn.Module):
         traits = []
         for _id, records, r_mask in tqdm(batches, "getting user profiles"):
             ids.append(_id.to("cpu"))
-            traits.append(self.cdm.u_theta(self.l_dtn(records.to(device), r_mask.to(device))).to("cpu"))
+            traits.append(
+                self.cdm.u_theta(
+                    self.l_dtn(records.to(device),
+                               r_mask.to(device))).to("cpu"))
 
-        obj = {
-            "uid": torch.cat(ids),
-            "u_trait": torch.cat(traits)
-        }
+        obj = {"uid": torch.cat(ids), "u_trait": torch.cat(traits)}
         return obj
 
     def get_item_profiles(self, batches):
@@ -57,11 +58,7 @@ class ICD(nn.Module):
             ids.append(_id.cpu())
             a.append(self.cdm.i_discrimination(v_trait).to("cpu"))
             b.append(self.cdm.i_difficulty(v_trait).to("cpu"))
-        obj = {
-            "iid": torch.cat(ids),
-            "ia": torch.cat(a),
-            "ib": torch.cat(b)
-        }
+        obj = {"iid": torch.cat(ids), "ia": torch.cat(a), "ib": torch.cat(b)}
         return obj
 
 
@@ -79,11 +76,13 @@ class DualICD(nn.Module):
         pre_net_params = collect_params(pre_net, train_select)
         net_params = collect_params(self.net, train_select)
         for param_pre, param_now in zip(pre_net_params, net_params):
-            param_now.data = param_pre.data * self.alpha + param_now.data * (1. - self.alpha)
+            param_now.data = param_pre.data * self.alpha + param_now.data * (
+                1. - self.alpha)
 
     def forward(self, u2i, u_mask, i2u, i_mask, i2k):
         output, theta, a, b = self.net(u2i, u_mask, i2u, i_mask, i2k)
-        _, stat_theta, stat_a, stat_b = self.stat_net(u2i, u_mask, i2u, i_mask, i2k)
+        _, stat_theta, stat_a, stat_b = self.stat_net(u2i, u_mask, i2u, i_mask,
+                                                      i2k)
         return output, theta, a, b, stat_theta, stat_a, stat_b
 
 
@@ -93,7 +92,9 @@ class EmbICD(nn.Module):
         self.theta_emb = nn.Embedding(*weights[0].size(), _weight=weights[0])
         self.a_emb = nn.Embedding(*weights[1].size(), _weight=weights[1])
         if len(weights[2].size()) == 1:
-            self.b_emb = nn.Embedding(weights[2].size()[0], 1, _weight=torch.unsqueeze(weights[2], 1))
+            self.b_emb = nn.Embedding(weights[2].size()[0],
+                                      1,
+                                      _weight=torch.unsqueeze(weights[2], 1))
         else:
             self.b_emb = nn.Embedding(*weights[2].size(), _weight=weights[2])
         self.int_fc = int_fc
@@ -135,7 +136,8 @@ class EmbICD(nn.Module):
         a.requires_grad_(True)
         b.requires_grad_(True)
 
-        return self.int_fc(theta, a, torch.squeeze(b), know).view(-1), theta, a, b
+        return self.int_fc(theta, a, torch.squeeze(b),
+                           know).view(-1), theta, a, b
 
 
 class DeltaTraitLoss(nn.Module):
@@ -144,7 +146,8 @@ class DeltaTraitLoss(nn.Module):
         self.mse_loss = nn.MSELoss()
 
     def forward(self, theta, a, b, stat_theta, stat_a, stat_b):
-        return self.mse_loss(theta, stat_theta) + self.mse_loss(a, stat_a) + self.mse_loss(b, stat_b)
+        return self.mse_loss(theta, stat_theta) + self.mse_loss(
+            a, stat_a) + self.mse_loss(b, stat_b)
 
 
 class DualLoss(nn.Module):
@@ -155,23 +158,25 @@ class DualLoss(nn.Module):
         self.delta_trait = DeltaTraitLoss()
 
     def forward(self, pred, truth, theta, a, b, stat_theta, stat_a, stat_b):
-        return self.beta * self.bce(pred, truth) + (1. - self.beta) * self.delta_trait(
-            theta, a, b, stat_theta, stat_a, stat_b
-        )
+        return self.beta * self.bce(
+            pred, truth) + (1. - self.beta) * self.delta_trait(
+                theta, a, b, stat_theta, stat_a, stat_b)
 
 
 def get_dual_loss(ctx, beta=0.95, *args, **kwargs):
     return loss_dict2tmt_torch_loss({
-        "Loss": set_device(DualLoss(beta, *args, **kwargs), ctx),
-        "BCE": set_device(torch.nn.BCELoss(*args, **kwargs), ctx),
-        "DTL": set_device(DeltaTraitLoss(), ctx),
+        "Loss":
+        set_device(DualLoss(beta, *args, **kwargs), ctx),
+        "BCE":
+        set_device(torch.nn.BCELoss(*args, **kwargs), ctx),
+        "DTL":
+        set_device(DeltaTraitLoss(), ctx),
     })
 
 
 def get_loss(ctx, *args, **kwargs):
     return loss_dict2tmt_torch_loss(
-        {"cross entropy": set_device(torch.nn.BCELoss(*args, **kwargs), ctx)}
-    )
+        {"cross entropy": set_device(torch.nn.BCELoss(*args, **kwargs), ctx)})
 
 
 def get_net(ctx=None, *args, **kwargs):
