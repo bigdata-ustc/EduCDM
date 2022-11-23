@@ -36,7 +36,7 @@ def doa_report(user, item, know, score, theta):
                     knowledge_user.append(user)
                     knowledge_truth.append(score)
                     knowledge_theta.append(theta_i)
-        else:
+        else:  # pragma: no cover
             for i, knowledge_i in enumerate(knowledge):
                 if knowledge_i == 1:
                     knowledges.append(i)

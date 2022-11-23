@@ -44,6 +44,6 @@ class MIRTNet(nn.Module):
         a = torch.squeeze(self.i_dtn_a(v_trait), dim=-1)
         if self.a_range is not None:
             a = self.a_range * torch.sigmoid(a)
-        else:
+        else:  # pragma: no cover
             a = F.softplus(a)
         return a

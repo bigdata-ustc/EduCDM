@@ -77,7 +77,7 @@ class Dict2(object):
             self.i2u_r_dis[iid][1] += inc_dict2.i2u_r_dis[iid][1]
 
 
-def item2knowledge(filepath, k_offset=1):
+def item2knowledge(filepath, k_offset=1):  # pragma: no cover
     df_item = pd.read_csv(filepath)
     item2knowledge = {}
     knowledge_set = set()
@@ -152,8 +152,8 @@ def transform(logs_df: pd.DataFrame,
         if (user_set
                 and user_id not in user_set) or (item_set
                                                  and item_id not in item_set):
-            continue
-        if user_id not in u2i or item_id not in i2u:
+            continue  # pragma: no cover
+        if user_id not in u2i or item_id not in i2u:  # pragma: no cover
             if allow_missing == "skip":
                 continue
             elif allow_missing is False:
@@ -183,7 +183,9 @@ def transform(logs_df: pd.DataFrame,
     # return batch_data
 
 
-def extract(filepath, item2know_filepath, dict2: Dict2 = None):
+def extract(filepath,
+            item2know_filepath,
+            dict2: Dict2 = None):  # pragma: no cover
     df = pd.read_csv(filepath)
     i2k = item2knowledge(item2know_filepath)
     u2i = user2items(df, dict2)
@@ -191,7 +193,13 @@ def extract(filepath, item2know_filepath, dict2: Dict2 = None):
     return df, u2i, i2u, i2k
 
 
-def test_etl(filepath, u2i, i2u, i2k, kn, batch_size, allow_missing=True):
+def test_etl(filepath,
+             u2i,
+             i2u,
+             i2k,
+             kn,
+             batch_size,
+             allow_missing=True):  # pragma: no cover
     logs_df = pd.read_csv(filepath)
     return transform(logs_df,
                      u2i,

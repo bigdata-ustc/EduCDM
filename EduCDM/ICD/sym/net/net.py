@@ -22,7 +22,7 @@ class ICD(nn.Module):
             self.cdm = NCDMNet(know_n, know_n)
         elif cdm == "mirt":
             self.cdm = MIRTNet(know_n)
-        else:
+        else:  # pragma: no cover
             raise ValueError()
 
         for name, param in self.named_parameters():
@@ -174,12 +174,12 @@ def get_dual_loss(ctx, beta=0.95, *args, **kwargs):
     })
 
 
-def get_loss(ctx, *args, **kwargs):
+def get_loss(ctx, *args, **kwargs):  # pragma: no cover
     return loss_dict2tmt_torch_loss(
         {"cross entropy": set_device(torch.nn.BCELoss(*args, **kwargs), ctx)})
 
 
 def get_net(ctx=None, *args, **kwargs):
-    if ctx is None:
+    if ctx is None:  # pragma: no cover
         return ICD(*args, **kwargs)
     return set_device(ICD(*args, **kwargs), ctx)

@@ -46,11 +46,11 @@ def eval_f(_net, test_data, *args, **kwargs):
         user_theta.extend(theta.tolist())
         item_knowledge.extend(i2k.tolist())
 
-    try:
+    try:  # pragma: no cover
         if not y_true:
             raise ValueError()
         ret = classification_report(y_true, y_label, y_pred)
-    except ValueError:
+    except ValueError:  # pragma: no cover
         ret = POrderedDict()
     ret.update(doa_report(user_id, item_id, item_knowledge, y_true,
                           user_theta))
@@ -118,7 +118,7 @@ def turning_point(net: (torch.nn.DataParallel, ICD),
         set(inc_train_df["item_id"].tolist()) & set(dict2.i2u.keys()))
 
     if not (valid_inc_items and valid_inc_items):
-        return False
+        return False  # pragma: no cover
 
     users = []
     items = []
@@ -209,7 +209,8 @@ def turning_point(net: (torch.nn.DataParallel, ICD),
         h_delta_r = entropy(delta_r_distribution)
 
         if not ((delta_r_pos / n_i * r_neg / m_i)**2 +
-                (delta_r_neg / n_i * r_pos / m_i)**2) or not beta:
+                (delta_r_neg / n_i * r_pos / m_i)**2) \
+                or not beta:  # pragma: no cover
             if entropy(delta_r_distribution, [r_pos, r_neg]) > 0:
                 logger.info(
                     "################# user %s inf exceed ##################" %
@@ -255,13 +256,14 @@ def turning_point(net: (torch.nn.DataParallel, ICD),
 
         if not (delta_r_pos / n_j * r_neg / m_j +
                 delta_r_neg / n_j * r_pos / m_j) or not beta:
-            if entropy(delta_r_distribution, [r_pos, r_neg]) > 0:
+            if entropy(delta_r_distribution,
+                       [r_pos, r_neg]) > 0:  # pragma: no cover
                 logger.info(
                     "################# item %s inf exceed ##################" %
                     item)
                 logger.info(delta_r_pos, delta_r_neg, r_pos, r_neg)
                 return True
-            else:
+            else:  # pragma: no cover
                 continue
 
         delta_item.append(delta * (kl + h_delta_r - loss_item_r -
