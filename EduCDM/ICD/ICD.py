@@ -144,7 +144,7 @@ class ICD(CDM):
                 vector_user = list(dict2.u2i.keys())
                 vector_item = list(dict2.i2u.keys())
 
-            if vector_numbers and i in vector_numbers:
+            if vector_numbers and i in vector_numbers:  # pragma: no cover
                 _net = self.dual_net.net
                 trait_net = _net.module if isinstance(
                     _net, torch.nn.DataParallel) else _net
