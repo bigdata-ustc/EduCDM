@@ -2,12 +2,13 @@
 
 import logging
 from baize import config_logging
-
+import os
 from EduCDM.ICD.etl import extract, inc_stream
 from longling import build_dir
 from longling.lib.stream import to_io_group, close_io
-from EduCDM.ICD.constant import path_prefix
 from EduCDM.ICD.ICD import ICD
+
+path_prefix = os.path.abspath('.')
 
 
 def run(cdm,
