@@ -107,7 +107,7 @@ class KaNCD(CDM):
         mf_type = kwargs['mf_type'] if 'mf_type' in kwargs else 'gmf'
         self.net = Net(kwargs['exer_n'], kwargs['student_n'], kwargs['knowledge_n'], mf_type, kwargs['dim'])
 
-    def train(self, train_set, valid_set, lr=0.02, device='cpu', epoch_n=15):
+    def train(self, train_set, valid_set, lr=0.002, device='cpu', epoch_n=15):
         logging.info("traing... (lr={})".format(lr))
         self.net = self.net.to(device)
         loss_function = nn.BCELoss()
