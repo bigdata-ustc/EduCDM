@@ -107,7 +107,7 @@ class KaNCD(CDM):
         mf_type = kwargs['mf_type'] if 'mf_type' in kwargs else 'gmf'
         self.net = Net(kwargs['exer_n'], kwargs['student_n'], kwargs['knowledge_n'], mf_type, kwargs['dim'])
 
-    def train(self, train_set, valid_set, test_set, stage=1, lr=0.02, device='cpu', epoch_n=15):
+    def train(self, train_set, valid_set, lr=0.02, device='cpu', epoch_n=15):
         logging.info("traing... (lr={})".format(lr))
         self.net = self.net.to(device)
         loss_function = nn.BCELoss()
@@ -116,7 +116,7 @@ class KaNCD(CDM):
             self.net.train()
             epoch_losses = []
             batch_count = 0
-            for batch_data in tqdm(train_set, "Epoch %s, Stage %d" % (epoch_i, stage)):
+            for batch_data in tqdm(train_set, "Epoch %s" % epoch_i):
                 batch_count += 1
                 user_info, item_info, knowledge_emb, y = batch_data
                 user_info: torch.Tensor = user_info.to(device)
@@ -124,7 +124,7 @@ class KaNCD(CDM):
                 knowledge_emb: torch.Tensor = knowledge_emb.to(device)
                 y: torch.Tensor = y.to(device)
                 pred = self.net(user_info, item_info, knowledge_emb)
-                loss = loss_function(pred, y)  # 答题预测，交叉熵
+                loss = loss_function(pred, y)
                 optimizer.zero_grad()
                 loss.backward()
                 optimizer.step()
@@ -133,13 +133,13 @@ class KaNCD(CDM):
 
             print("[Epoch %d] average loss: %.6f" % (epoch_i, float(np.mean(epoch_losses))))
             logging.info("[Epoch %d] average loss: %.6f" % (epoch_i, float(np.mean(epoch_losses))))
-            auc, acc = self.eval(test_set, device, stage)
-            print("[Epoch %d, Stage %d] auc: %.6f, acc: %.6f" % (epoch_i, stage, auc, acc))
-            logging.info("[Epoch %d, Stage %d] auc: %.6f, acc: %.6f" % (epoch_i, stage, auc, acc))
+            auc, acc = self.eval(valid_set, device)
+            print("[Epoch %d] auc: %.6f, acc: %.6f" % (epoch_i, auc, acc))
+            logging.info("[Epoch %d] auc: %.6f, acc: %.6f" % (epoch_i, auc, acc))
 
         return auc, acc
 
-    def eval(self, test_data, device="cpu", stage=1):
+    def eval(self, test_data, device="cpu"):
         logging.info('eval ... ')
         self.net = self.net.to(device)
         self.net.eval()
