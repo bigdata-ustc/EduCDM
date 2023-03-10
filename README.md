@@ -12,7 +12,7 @@
 [![License](https://img.shields.io/github/license/bigdata-ustc/EduCDM)](LICENSE)
 [![DOI](https://zenodo.org/badge/348569904.svg)](https://zenodo.org/badge/latestdoi/348569904)
 
-The Model Zoo of Cognitive Diagnosis Models, including classic Item Response Ranking (**IRT**), Multidimensional Item Response Ranking (**MIRT**), Deterministic Input, Noisy "And" model(**DINA**), and advanced Fuzzy Cognitive Diagnosis Framework (**FuzzyCDF**), Neural Cognitive Diagnosis Model (**NCDM**), Item Response Ranking framework (**IRR**) and Incremental Cognitive Diagnosis (**ICD**).
+The Model Zoo of Cognitive Diagnosis Models, including classic Item Response Ranking (**IRT**), Multidimensional Item Response Ranking (**MIRT**), Deterministic Input, Noisy "And" model(**DINA**), and advanced Fuzzy Cognitive Diagnosis Framework (**FuzzyCDF**), Neural Cognitive Diagnosis Model (**NCDM**), Item Response Ranking framework (**IRR**), Incremental Cognitive Diagnosis (**ICD**) and Knowledge-association baesd extension of NeuralCD (**KaNCD**).
 
 ## Brief introduction to CDM
 
@@ -38,6 +38,7 @@ More recent researches about CDMs:
 - [NeuralCD](http://staff.ustc.edu.cn/~cheneh/paper_pdf/2020/Fei-Wang-AAAI.pdf): neural cognitive diagnosis framework, a neural-network-based general cognitive diagnosis framework. In this repository we provide the basic implementation NCDM.
 - [IRR](http://home.ustc.edu.cn/~tongsw/files/IRR.pdf): item response ranking framework, a pairwise cognitive diagnosis framework. In this repository we provide the several implementations for most of CDMs.
 - [ICD]: Incremental Cognitive Diagnosis, a framework that tailor cognitive diagnosis into the online scenario of intelligent education. In this repository we provide the several implementations for most of CDMs.
+- [KaNCD](https://ieeexplore.ieee.org/abstract/document/9865139): extended from the NeuralCD framework. We use high-order latent traits of students, exercises and knowledge concepts to capture latent associations among knowledge concepts. 
 
 ## List of models
 
@@ -57,6 +58,7 @@ More recent researches about CDMs:
   * [IRR-DINA](examples/IRR/DINA.ipynb)
   * [IRR-IRT](examples/IRR/IRT.ipynb)
 * [ICD](EduCDM/ICD) [[doc]](docs/ICD.md) 
+* [KaNCD](EduCDM/KaNCD) [[doc\]](docs/KaNCD.md) [[example\]](examples/KaNCD)
 ## Installation
 
 Git and install with `pip`:
@@ -100,3 +102,5 @@ If this repository is helpful for you, please cite our work
 [2] Wang F, Liu Q, Chen E, et al. Neural cognitive diagnosis for intelligent education systems[C]//Proceedings of the AAAI Conference on Artificial Intelligence. 2020, 34(04): 6153-6161.
 
 [3] Tong S, Liu Q, Yu R, et al. Item response ranking for cognitive diagnosis[C]. IJCAI, 2021.
+
+[4] Wang F, Liu Q, Chen E, et al. NeuralCD: A General Framework for Cognitive Diagnosis. IEEE Transactions on Knowledge and Data Engineering (IEEE TKDE), accepted, 2022.
