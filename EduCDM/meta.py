@@ -21,10 +21,13 @@ class CDM(object):
     def __init__(self, *args, **kwargs) -> ...:
         pass
 
-    def train(self, *args, **kwargs) -> ...:
+    def fit(self, *args, **kwargs) -> ...:
         raise NotImplementedError
 
-    def eval(self, *args, **kwargs) -> ...:
+    def predict(self, *args, **kwargs) -> ...:
+        raise NotImplementedError
+
+    def predict_proba(self, *args, **kwargs) -> ...:
         raise NotImplementedError
 
     def save(self, *args, **kwargs) -> ...:
