@@ -2,6 +2,7 @@
 # 2023/11/4 @ Fei Wang
 
 from typing import List
+import pandas as pd
 
 
 def etl(*args, **kwargs) -> ...:  # pragma: no cover
@@ -26,10 +27,10 @@ class CDM(object):
     def fit(self, *args, **kwargs) -> None:
         raise NotImplementedError
 
-    def predict(self, *args, **kwargs) -> List[float]:
+    def predict(self, *args, **kwargs) -> pd.DataFrame:
         raise NotImplementedError
 
-    def predict_proba(self, *args, **kwargs) -> List[float]:
+    def predict_proba(self, *args, **kwargs) -> pd.DataFrame:
         raise NotImplementedError
 
     def save(self, *args, **kwargs) -> ...:
