@@ -13,7 +13,7 @@ def meta():
 
 
 @pytest.fixture(scope="package")
-def data(conf):
+def data(meta):
     meta_data = meta
     item_skills = []
     skll_n = len(meta_data['skill'])
