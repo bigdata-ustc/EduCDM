@@ -19,7 +19,7 @@ def data(meta):
     skll_n = len(meta_data['skill'])
     for itemid in meta_data['itemId']:
         item_skills.append(meta['skill'][random.randint(0, skll_n - 1)])
-    userIds, itemIds, skills, responses = []
+    userIds, itemIds, skills, responses = [], [], [], []
     for user in meta_data['userId']:
         for i, item in enumerate(meta_data['itemId']):
             userIds.append(user)
