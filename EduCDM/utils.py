@@ -10,10 +10,11 @@ def re_index(meta_data):
     Args:
         meta_data: dict
     Return:
-        a dict with the same keys as meta_data, where the values are replaced with dicts that project
-         original values to new indexes
+        tuple (ret_val2index, ret_index2val). Two dictionaries with the same keys as meta_data, where ret_val2index
+         replaces the original values with dicts that map original values to new indexes. ret_index2val stores the
+         reverse mapping.
     """
-    ret = {}
+    ret_val2index, ret_index2val = {}, {}
     for key in meta_data.keys():
         val_arr = meta_data[key]
         if isinstance(val_arr, list):
@@ -21,5 +22,7 @@ def re_index(meta_data):
         assert len(val_arr.shape) == 1
         val_arr = np.unique(val_arr)
         val2index = {val: i for i, val in enumerate(val_arr)}
-        ret[key] = val2index
-    return ret
+        index2val = {i: val for i, val in enumerate(val_arr)}
+        ret_val2index[key] = val2index
+        ret_index2val[key] = index2val
+    return ret_val2index, ret_index2val

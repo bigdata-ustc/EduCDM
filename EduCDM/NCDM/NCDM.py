@@ -79,7 +79,7 @@ class NCDM(CDM):
 
     def __init__(self, meta_data: dict, hidd_dim1=512, hidd_dim2=256):
         super(NCDM, self).__init__()
-        self.id_reindex = re_index(meta_data)
+        self.id_reindex, _ = re_index(meta_data)
         self.student_n = len(self.id_reindex['userId'])
         self.exer_n = len(self.id_reindex['itemId'])
         self.knowledge_n = len(self.id_reindex['skill'])
