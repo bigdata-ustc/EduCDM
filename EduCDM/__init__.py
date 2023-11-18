@@ -12,5 +12,3 @@ from .NCDM import NCDM
 # from .IRT import EMIRT, GDIRT
 # from .MIRT import MIRT
 # from .KaNCD import KaNCD
-
-

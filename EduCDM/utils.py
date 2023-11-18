@@ -23,4 +23,3 @@ def re_index(meta_data):
         val2index = {val: i for i, val in enumerate(val_arr)}
         ret[key] = val2index
     return ret
-
