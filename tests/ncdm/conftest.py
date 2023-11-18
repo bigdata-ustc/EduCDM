@@ -24,7 +24,7 @@ def data(meta):
         for i, item in enumerate(meta_data['itemId']):
             userIds.append(user)
             itemIds.append(item)
-            skills.append(item_skills[i])
+            skills.append(str([item_skills[i]]))
             responses.append(random.randint(0, 1))
 
     df_data = pd.DataFrame({'userId': userIds, 'itemId': itemIds, 'skill': skills, 'response': responses})
