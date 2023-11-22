@@ -1,7 +1,7 @@
 # coding: utf-8
-# 2023/11/5 @ WangFei
+# 2023/11/22 @ WangFei
 import logging
-from EduCDM import NCDM
+from EduCDM import KaNCD
 import torch
 from torch.utils.data import TensorDataset, DataLoader
 import pandas as pd
@@ -31,17 +31,17 @@ test_data = pd.merge(test_data, df_item, how='left', on='item_id').rename(column
 # model training
 batch_size = 32
 logging.getLogger().setLevel(logging.INFO)
-cdm = NCDM(meta_data)
+cdm = KaNCD(meta_data)
 cdm.fit(train_data, epoch=1, val_data=valid_data, device="cuda")
 
 # predict using the trained model
 print(cdm.predict(test_data))
 
 # save model
-cdm.save("ncdm.snapshot")
+cdm.save("kancd.snapshot")
 
 # load model and evaluate it on the test set
-cdm.load("ncdm.snapshot")
+cdm.load("kancd.snapshot")
 auc, accuracy = cdm.eval(test_data)
 print("auc: %.6f, accuracy: %.6f" % (auc, accuracy))
 
