@@ -122,14 +122,14 @@ class KaNCD(CDM):
         meta_data = {'userId': ['001', '002', '003'], 'itemId': ['adf', 'w5'], 'skill': ['skill1', 'skill2', 'skill3', 'skill4']}
         model = KaNCD(meta_data, 40, 'gmf', 512, 256)
     '''
-    def __init__(self, meta_data: dict, dim: int=40, mf_type: str='gmf', layer_dim1: int=512, layer_dim2: int=256):
+    def __init__(self, meta_data: dict, dim: int = 40, mf_type: str = 'gmf', layer_dim1: int = 512, layer_dim2: int = 256):
         super(KaNCD, self).__init__()
         assert mf_type in ['mf', 'gmf', 'ncf1', 'ncf2']
         self.id_reindex, _ = re_index(meta_data)
         self.student_n = len(self.id_reindex['userId'])
         self.exer_n = len(self.id_reindex['itemId'])
         self.knowledge_n = len(self.id_reindex['skill'])
-        self.net = Net(self.exer_n, self.student_n, self.knowledge_n, mf_type, dim,  layer_dim1, layer_dim2)
+        self.net = Net(self.exer_n, self.student_n, self.knowledge_n, mf_type, dim, layer_dim1, layer_dim2)
 
     def transform__(self, df_data: pd.DataFrame, batch_size: int, shuffle):
         users = [self.id_reindex['userId'][userId] for userId in df_data['userId'].values]

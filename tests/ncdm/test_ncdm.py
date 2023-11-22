@@ -11,4 +11,5 @@ def test_train(data, meta, tmp_path):
     filepath = tmp_path / "ncdm.params"
     cdm.save(filepath)
     cdm.load(filepath)
+    cdm.predict(df_data)
     cdm.eval(df_data)
