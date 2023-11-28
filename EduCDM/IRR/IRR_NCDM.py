@@ -34,6 +34,7 @@ class NCDM(PointNCDM):
 
                 # TODO: where does n_samples and *neg_users come from?
                 # Fxxk the shit mountain.
+
                 user_id, item_id, knowledge, score, n_samples, *neg_users = batch_data
                 user_id: torch.Tensor = user_id.to(device)
                 item_id: torch.Tensor = item_id.to(device)
