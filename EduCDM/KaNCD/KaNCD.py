@@ -197,13 +197,16 @@ class KaNCD(CDM):
         r'''
         Output the predicted probabilities that the users would provide correct answers using test_data.
         The probabilities are within (0, 1).
+
         Args:
             test_data: a dataframe containing testing userIds and itemIds.
             device: device on which the model is trained. Default: 'cpu'. If you want to run it on your
                     GPU, e.g., the first cuda gpu on your machine, you can change it to 'cuda:0'.
+
         Return:
             a dataframe containing the userIds, itemIds, and proba (predicted probabilities).
         '''
+
         self.net = self.net.to(device)
         self.net.eval()
         test_loader = self.transform__(test_data, batch_size=64, shuffle=False)
@@ -222,13 +225,16 @@ class KaNCD(CDM):
     def predict(self, test_data: pd.DataFrame, device="cpu") -> pd.DataFrame:
         r'''
         Output the predicted responses using test_data. The responses are either 0 or 1.
+
         Args:
             test_data: a dataframe containing testing userIds and itemIds.
             device: device on which the model is trained. Default: 'cpu'. If you want to run it on your
                     GPU, e.g., the first cuda gpu on your machine, you can change it to 'cuda:0'.
+
         Return:
             a dataframe containing the userIds, itemIds, and predicted responses.
         '''
+
         df_proba = self.predict_proba(test_data, device)
         y_pred = [1.0 if proba >= 0.5 else 0 for proba in df_proba['proba'].values]
         df_pred = pd.DataFrame({'userId': df_proba['userId'], 'itemId': df_proba['itemId'], 'proba': y_pred})
@@ -238,22 +244,45 @@ class KaNCD(CDM):
     def eval(self, val_data: pd.DataFrame, device="cpu") -> Tuple[float, float]:
         r'''
         Output the AUC and accuracy using the val_data.
+
         Args:
             val_data: a dataframe containing testing userIds and itemIds.
             device: device on which the model is trained. Default: 'cpu'. If you want to run it on your
                     GPU, e.g., the first cuda gpu on your machine, you can change it to 'cuda:0'.
+
         Return:
             AUC, accuracy
         '''
+
         y_true = val_data['response'].values
         df_proba = self.predict_proba(val_data, device)
         pred_proba = df_proba['proba'].values
         return roc_auc_score(y_true, pred_proba), accuracy_score(y_true, np.array(pred_proba) >= 0.5)
 
     def save(self, filepath):
+        r'''
+        Save the model. This method is implemented based on the PyTorch's torch.save() method. Only the parameters
+        in self.ncdm_net will be saved. You can save the whole NCDM object using pickle.
+
+        Args:
+            filepath: the path to save the model.
+        '''
+
         torch.save(self.net.state_dict(), filepath)
         logging.info("save parameters to %s" % filepath)
 
     def load(self, filepath):
+        r'''
+        Load the model. This method loads the model saved at filepath into self.ncdm_net. Before loading, the object
+        needs to be properly initialized.
+
+        Args:
+            filepath: the path from which to load the model.
+
+        Examples:
+            model = NCDM(meta_data)  # where meta_data is from the same dataset which is used to train the model at filepath
+            model.load('path_to_the_pre-trained_model')
+        '''
+
         self.net.load_state_dict(torch.load(filepath, map_location=lambda s, loc: s))
         logging.info("load parameters from %s" % filepath)

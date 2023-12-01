@@ -7,13 +7,16 @@ import numpy as np
 def re_index(meta_data):
     """
     Reindex the values in meta_data with continuous positive integers starting from 0
+
     Args:
         meta_data: dict
+
     Return:
         tuple (ret_val2index, ret_index2val). Two dictionaries with the same keys as meta_data, where ret_val2index
          replaces the original values with dicts that map original values to new indexes. ret_index2val stores the
          reverse mapping.
     """
+
     ret_val2index, ret_index2val = {}, {}
     for key in meta_data.keys():
         val_arr = meta_data[key]

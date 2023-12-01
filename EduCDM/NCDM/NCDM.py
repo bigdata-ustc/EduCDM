@@ -67,12 +67,13 @@ class Net(nn.Module):
 class NCDM(CDM):
     r'''
     The NeuralCDM model.
+
     Args:
         meta_data: a dictionary containing all the userIds, itemIds, and skills.
         hidd_dim1: the dimension of the first hidden layer. Default: 512
         hidd_dim2: the dimension of the second hidden layer. Default: 256
 
-    Examples::
+    Examples:
         meta_data = {'userId': ['001', '002', '003'], 'itemId': ['adf', 'w5'], 'skill': ['skill1', 'skill2', 'skill3', 'skill4']}
         model = NCDM(meta_data, 512, 256)
     '''
@@ -107,6 +108,7 @@ class NCDM(CDM):
     def fit(self, train_data: pd.DataFrame, epoch: int, val_data=None, device="cpu", lr=0.002, batch_size=64):
         r'''
         Train the model with train_data. If val_data is provided, print the AUC and accuracy on val_data after each epoch.
+
         Args:
             train_data: a dataframe containing training userIds, itemIds and responses.
             epoch: number of training epochs.
@@ -116,6 +118,7 @@ class NCDM(CDM):
             lr: learning rate. Default: 0.002.
             batch_size: the batch size during the training.
         '''
+
         self.ncdm_net = self.ncdm_net.to(device)
         self.ncdm_net.train()
         loss_function = nn.BCELoss()
@@ -151,13 +154,16 @@ class NCDM(CDM):
         r'''
         Output the predicted probabilities that the users would provide correct answers using test_data.
         The probabilities are within (0, 1).
+
         Args:
             test_data: a dataframe containing testing userIds and itemIds.
             device: device on which the model is trained. Default: 'cpu'. If you want to run it on your
                     GPU, e.g., the first cuda gpu on your machine, you can change it to 'cuda:0'.
+
         Return:
             a dataframe containing the userIds, itemIds, and proba (predicted probabilities).
         '''
+
         self.ncdm_net = self.ncdm_net.to(device)
         self.ncdm_net.eval()
         test_loader = self.transform__(test_data, batch_size=64, shuffle=False)
@@ -176,13 +182,16 @@ class NCDM(CDM):
     def predict(self, test_data: pd.DataFrame, device="cpu") -> pd.DataFrame:
         r'''
         Output the predicted responses using test_data. The responses are either 0 or 1.
+
         Args:
             test_data: a dataframe containing testing userIds and itemIds.
             device: device on which the model is trained. Default: 'cpu'. If you want to run it on your
                     GPU, e.g., the first cuda gpu on your machine, you can change it to 'cuda:0'.
+
         Return:
             a dataframe containing the userIds, itemIds, and predicted responses.
         '''
+
         df_proba = self.predict_proba(test_data, device)
         y_pred = [1.0 if proba >= 0.5 else 0 for proba in df_proba['proba'].values]
         df_pred = pd.DataFrame({'userId': df_proba['userId'], 'itemId': df_proba['itemId'], 'proba': y_pred})
@@ -192,13 +201,16 @@ class NCDM(CDM):
     def eval(self, val_data: pd.DataFrame, device="cpu") -> Tuple[float, float]:
         r'''
         Output the AUC and accuracy using the val_data.
+
         Args:
             val_data: a dataframe containing testing userIds and itemIds.
             device: device on which the model is trained. Default: 'cpu'. If you want to run it on your
                     GPU, e.g., the first cuda gpu on your machine, you can change it to 'cuda:0'.
+
         Return:
             AUC, accuracy
         '''
+
         y_true = val_data['response'].values
         df_proba = self.predict_proba(val_data, device)
         pred_proba = df_proba['proba'].values
@@ -208,9 +220,11 @@ class NCDM(CDM):
         r'''
         Save the model. This method is implemented based on the PyTorch's torch.save() method. Only the parameters
         in self.ncdm_net will be saved. You can save the whole NCDM object using pickle.
+
         Args:
             filepath: the path to save the model.
         '''
+
         torch.save(self.ncdm_net.state_dict(), filepath)
         logging.info("save parameters to %s" % filepath)
 
@@ -218,12 +232,14 @@ class NCDM(CDM):
         r'''
         Load the model. This method loads the model saved at filepath into self.ncdm_net. Before loading, the object
         needs to be properly initialized.
+
         Args:
             filepath: the path from which to load the model.
 
-        Examples::
+        Examples:
             model = NCDM(meta_data)  # where meta_data is from the same dataset which is used to train the model at filepath
             model.load('path_to_the_pre-trained_model')
         '''
+
         self.ncdm_net.load_state_dict(torch.load(filepath, map_location=lambda s, loc: s))
         logging.info("load parameters from %s" % filepath)
