@@ -1,0 +1,52 @@
+name: documentation
+
+on: [push, pull_request, workflow_dispatch]
+
+permissions:
+  contents: write
+
+env:
+  REPO_SSH: git@github.com:SWHL/RapidVideOCR.git
+  CLONE_URL: ${{ github.event.repository.clone_url }}
+  USER_NAME: ${{ github.event.repository.owner.name }}
+  USER_EMAIL: ${{ github.event.repository.owner.email }}
+  SUBMMIT_BRANCH: docs
+  PACKAGE_NAME: EduCDM
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+      - name: Set SSH Environment
+        env:
+          DEPLOY_KEYS: ${{ secrets.DEPLOY_KEYS }}
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$DEPLOY_KEYS" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          chmod 700 ~/.ssh && chmod 600 ~/.ssh/*
+          git config --global user.name $USER_NAME
+          git config --global user.email $USER_EMAIL
+      
+      - name: Install dependencies
+        run: |
+          pip install sphinx sphinx_rtd_theme myst_parser
+          pip install .
+      - name: Sphinx build
+        run: |
+          sphinx-quickstart
+          sed -i 's/extensions = \[\]/extensions = \[\'sphinx.ext.napoleon\',\'sphinx.ext.autodoc\',\'sphinx.ext.doctest\',\'sphinx.ext.githubpages\',\]' conf.py
+          sed -i 's/html_theme = \'alabaster\'/html_theme = \'sphinx_rtd_theme\'' conf.py
+          sed -i '/^html_theme/a\autodoc_member_order = \'bysource\'' conf.py
+          sphinx-apidoc -o src EduCDM
+          sphinx-build . _build
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/2.0' }}
+        with:
+          publish_branch: gh-pages
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: _build/
+          force_orphan: true
