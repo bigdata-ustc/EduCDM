@@ -19,16 +19,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v3
-      - name: Set SSH Environment
-        env:
-          DEPLOY_KEYS: ${{ secrets.DEPLOY_KEYS }}
-        run: |
-          mkdir -p ~/.ssh/
-          echo "$DEPLOY_KEYS" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          chmod 700 ~/.ssh && chmod 600 ~/.ssh/*
-          git config --global user.name $USER_NAME
-          git config --global user.email $USER_EMAIL
       
       - name: Install dependencies
         run: |
