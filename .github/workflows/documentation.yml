@@ -31,7 +31,7 @@ jobs:
           pip install -e .
       - name: Sphinx build
         run: |
-          sphinx-quickstart
+          (echo n; echo docs; echo FeiWang; echo v2.0; echo en) | sphinx-quickstart
           sed -i 's/extensions = \[\]/extensions = \[\'sphinx.ext.napoleon\',\'sphinx.ext.autodoc\',\'sphinx.ext.doctest\',\'sphinx.ext.githubpages\',\]' conf.py
           sed -i 's/html_theme = \'alabaster\'/html_theme = \'sphinx_rtd_theme\'' conf.py
           sed -i '/^html_theme/a\autodoc_member_order = \'bysource\'' conf.py
