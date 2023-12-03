@@ -42,6 +42,8 @@ More recent researches about CDMs:
 
 ## List of models
 
+You can refer to [here](https://bigdata-ustc.github.io/EduCDM/) for the API documentation.
+
 * [NCDM](EduCDM/NCDM) [[doc]](docs/NCDM.md) [[example]](examples/NCDM)
 * [FuzzyCDF](EduCDM/FuzzyCDF) [[doc]](docs/FuzzyCDF.md) [[example]](examples/FuzzyCDF)
 * [DINA](EduCDM/DINA) [[doc]](docs/DINA.md) [[example]](examples/DINA)
