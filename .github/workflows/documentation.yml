@@ -23,7 +23,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install sphinx sphinx_rtd_theme myst_parser
-          python setup.py install
+          pip install -e .[documentation]
       - name: Sphinx build
         run: |
           sphinx-quickstart
