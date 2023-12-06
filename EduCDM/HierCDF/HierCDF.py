@@ -359,41 +359,32 @@ class Net(nn.Module):
     def load(self, model_name = './model.pkl'):
         self.load_state_dict(torch.load(model_name))
 
-class HierCDLoss(nn.Module):
-    '''
-    The loss function of HierCDM
-    '''
-    def __init__(self, net: Net, loss_fn: nn.Module, factor = 1.0):
-        super(HierCDLoss, self).__init__()
-        self.net = net
-        self.factor = factor
-        self.loss_fn = loss_fn()
-    def forward(self, y_pred, y_target, user_ids):
-        return self.loss_fn(y_pred, y_target) + self.factor * torch.sum(torch.relu(self.net.condi_n[user_ids,:]-self.net.condi_p[user_ids,:]))
-
-
 class HierCDF(CDM):
-    '''
+    r'''
     The HierCDF model.
+    Args:
+        meta_data: a dictionary containing all the userIds, itemIds, and skills.
+        knowledge_graph: pd.DataFrame, columns = ['source','target'], a data frame containing all directed edge of the knowledge graph (attribute hierarchy). The `source` of each row denotes the name of the source vertex, while the `target` of each row denotes the name of the target vertex.
+
     Examples::
         meta_data = {'userId': ['001', '002', '003'], 'itemId': ['adf', 'w5'], 'skill': ['skill1', 'skill2', 'skill3', 'skill4']}
-        know_graph.columns = ['from','to']
-        model = NCDM(meta_data, 512, 256)
+        model = HierCDF(meta_data, know_graph)
     '''
-    def __init__(self, meta_data: dict, hidden_dim: int = 512, know_graph: pd.DataFrame,\
-        itf_type:str = 'mirt', log_path:str = './log/')
-        super(HierCDF, self).__init__()
-        self.val2index, self.index2val = re_index(meta_data)
+    def __init__(self, meta_data: dict, knowledge_graph:pd.DataFrame, hidd_dim:int):
+        super(HierCDF,self).__init__()
+        self.id_reindex, _ = re_index(meta_data)
         self.student_n = len(self.id_reindex['userId'])
         self.exer_n = len(self.id_reindex['itemId'])
         self.knowledge_n = len(self.id_reindex['skill'])
-        self.know_graph = know_graph.copy()
-        skill_val2index = self.val2index['skill']
-        for id in range(know_graph.shape[0]):
-            self.know_graph.iloc[id,0] = skill_val2index(know_graph.loc[id,0])
-            self.know_graph.iloc[id,1] = skill_val2index(know_graph.loc[id,1])
-        self.hiercdf_net = Net(self.student_n,self.exer_n,self.knowledge_n, \
-            self.know_graph, itf_type, log_path)
+        trans_know_graph = {'source':[],'target':[]}
+        for id, row in knowledge_graph.iterrows():
+            trans_know_graph['source'].append(\
+                self.id_reindex['skill'][row['source']])
+            trans_know_graph['target'].append(\
+                self.id_reindex['skill'][row['target']])
+        trans_know_graph = pd.DataFrame(trans_know_graph)
+        self.hier_net = Net(self.student_n, self.exer_n, \
+            self.knowledge_n, hidd_dim, itf_type = 'mirt')
     
     def transform__(self, df_data: pd.DataFrame, batch_size: int, shuffle):
         users = [self.id_reindex['userId'][userId] for userId in df_data['userId'].values]
@@ -414,9 +405,148 @@ class HierCDF(CDM):
         )
         return DataLoader(data_set, batch_size=batch_size, shuffle=shuffle)
     
-    # TODO: implement `fit` based on train.py and EduCDM.NCDM.fit
-    def fit(self):
-        pass
+    def fit(self, train_data: pd.DataFrame, epoch: int, val_data=None, \
+        device="cpu", lr=0.002, batch_size=64, loss_factor=1.0):
+        self.hier_net = self.hier_net.to(device)
+        self.hier_net.train()
+        loss_function = HierCDLoss(self.hier_net, nn.NLLLoss, loss_factor)
+        optimizer = torch.optim.Adam(params = self.hiernet.parameters(), lr = lr)
+        for epoch_i in range(epoch):
+            self.hier_net.train()
+            epoch_losses = []
+            batch_count = 0
+            for batch_data in tqdm(train_data, "Epoch %s" % epoch_i):
+                batch_count += 1
+                user_id, item_id, knowledge_emb, y_true = batch_data
+                user_id: torch.Tensor = user_id.to(device)
+                item_id: torch.Tensor = item_id.to(device)
+                knowledge_emb: torch.Tensor = knowledge_emb.to(device)
+                y_true: torch.Tensor = y_true.to(device)
+                y_pred: torch.Tensor = self.hier_net.forward(\
+                    user_id,item_id,knowledge_emb,device)
+                y_pred_neg = torch.ones(y_pred.size()).to(device) - y_pred
+                output = torch.cat((y_pred_neg, y_pred),1)
+                loss = loss_function(torch.log(output), y_true, user_ids)
+
+                optimizer.zero_grad()
+                loss.backward()
+                optimizer.step()
+
+                epoch_losses.append(loss.mean().item())
+
+            print("[Epoch %d] average loss: %.6f" % (epoch_i, float(np.mean(epoch_losses))))
+
+            # TODO eval(val_data)
+    
+    def predict_proba(self, test_data: pd.DataFrame, device="cpu") -> pd.DataFrame:
+        r'''
+        Output the predicted probabilities that the users would provide correct answers using test_data.
+        The probabilities are within (0, 1).
+
+        Args:
+            test_data: a dataframe containing testing userIds and itemIds.
+            device: device on which the model is trained. Default: 'cpu'. If you want to run it on your
+                    GPU, e.g., the first cuda gpu on your machine, you can change it to 'cuda:0'.
+
+        Return:
+            a dataframe containing the userIds, itemIds, and proba (predicted probabilities).
+        '''
+
+        self.hier_net = self.hier_net.to(device)
+        self.hier_net.eval()
+        test_loader = self.transform__(test_data, batch_size=64, shuffle=False)
+        pred_proba = []
+        with torch.no_grad():
+            for batch_data in tqdm(test_loader, "Predicting"):
+                user_id, item_id, knowledge_emb, y = batch_data
+                user_id: torch.Tensor = user_id.to(device)
+                item_id: torch.Tensor = item_id.to(device)
+                knowledge_emb: torch.Tensor = knowledge_emb.to(device)
+                pred: torch.Tensor = self.hier_net(user_id, item_id, \
+                    knowledge_emb, device)
+                pred_proba.extend(pred.detach().cpu().tolist())
+        ret = pd.DataFrame({'userId': test_data['userId'], 'itemId': test_data['itemId'], 'proba': pred_proba})
+        return ret
+    
+    def predict(self, test_data: pd.DataFrame, device="cpu") -> pd.DataFrame:
+        r'''
+        Output the predicted responses using test_data. The responses are either 0 or 1.
+
+        Args:
+            test_data: a dataframe containing testing userIds and itemIds.
+            device: device on which the model is trained. Default: 'cpu'. If you want to run it on your
+                    GPU, e.g., the first cuda gpu on your machine, you can change it to 'cuda:0'.
+
+        Return:
+            a dataframe containing the userIds, itemIds, and predicted responses.
+        '''
+
+        df_proba = self.predict_proba(test_data, device)
+        y_pred = [1.0 if proba >= 0.5 else 0 for proba in df_proba['proba'].values]
+        df_pred = pd.DataFrame({'userId': df_proba['userId'], 'itemId': df_proba['itemId'], 'proba': y_pred})
+
+        return df_pred
+    
+    def eval(self, val_data: pd.DataFrame, device="cpu") -> Tuple[float, float]:
+        r'''
+        Output the AUC and accuracy using the val_data.
+
+        Args:
+            val_data: a dataframe containing testing userIds and itemIds.
+            device: device on which the model is trained. Default: 'cpu'. If you want to run it on your
+                    GPU, e.g., the first cuda gpu on your machine, you can change it to 'cuda:0'.
+
+        Return:
+            AUC, accuracy
+        '''
+
+        y_true = val_data['response'].values
+        df_proba = self.predict_proba(val_data, device)
+        pred_proba = df_proba['proba'].values
+        return roc_auc_score(y_true, pred_proba), \
+            accuracy_score(y_true, np.array(pred_proba) >= 0.5)
+    
+    def save(self, filepath: str):
+        r'''
+        Save the model. This method is implemented based on the PyTorch's torch.save() method. Only the parameters
+        in self.ncdm_net will be saved. You can save the whole NCDM object using pickle.
+
+        Args:
+            filepath: the path to save the model.
+        '''
+
+        torch.save(self.hier_net.state_dict(), filepath)
+        logging.info("save parameters to %s" % filepath)
+
+    def load(self, filepath: str):
+        r'''
+        Load the model. This method loads the model saved at filepath into self.ncdm_net. Before loading, the object
+        needs to be properly initialized.
+
+        Args:
+            filepath: the path from which to load the model.
+
+        Examples:
+            model = HierCDF(meta_data, knowledge_graph)  
+                # where meta_data is from the same dataset
+                # which is used to train the model at filepath
+            model.load('path_to_the_pre-trained_model')
+        '''
+
+        self.hier_net.load_state_dict(torch.load(filepath, map_location=lambda s, loc: s))
+        logging.info("load parameters from %s" % filepath)
+
+class HierCDLoss(nn.Module):
+    '''
+    The loss function of HierCDM
+    '''
+    def __init__(self, net: Net, loss_fn: nn.Module, factor = 1.0):
+        super(HierCDLoss, self).__init__()
+        self.net = net
+        self.factor = factor
+        self.loss_fn = loss_fn()
+    def forward(self, y_pred, y_target, user_ids):
+        return self.loss_fn(y_pred, y_target) + self.factor * torch.sum(torch.relu(self.net.condi_n[user_ids,:]-self.net.condi_p[user_ids,:]))
 
 def test(hparams):
     n_user = hparams['n_user']
