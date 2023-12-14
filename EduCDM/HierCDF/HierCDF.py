@@ -10,24 +10,41 @@ import time
 import torch
 import torch.nn as nn
 
-from sklearn.metrics import accuracy_score, \
-    f1_score, roc_auc_score, mean_squared_error
+from sklearn.metrics import accuracy_score, roc_auc_score
 from torch.utils.data import TensorDataset, DataLoader
 from tqdm import tqdm
 from typing import Tuple, List
+from EduCDM import CDM, re_index
 # import warnings
 
 
 
-from config import hparams, DATA_PATH
+# from config import hparams, DATA_PATH
 # from dataloader import TrainDataLoader
-from itf import mirt2pl, sigmoid_dot, dot, itf_dict
+# from itf import mirt2pl, sigmoid_dot, dot, itf_dict
 # from tools import Logger, df_preview, labelize, to_numpy
-
-from EduCDM import CDM, re_index
 
 # warnings.filterwarnings('ignore')
 # torch.set_default_tensor_type(torch.DoubleTensor)
+
+def irt2pl(user_emb: torch.Tensor, item_emb: torch.Tensor, item_offset: torch.Tensor):
+    return 1 / (1 + torch.exp(-1.7*item_offset*(user_emb - item_emb) ))
+
+def mirt2pl(user_emb: torch.Tensor, item_emb: torch.Tensor, item_offset: torch.Tensor):
+    return 1 / (1 + torch.exp(- torch.sum(torch.mul(user_emb, item_emb), axis=1).reshape(-1,1) + item_offset))
+
+def sigmoid_dot(user_emb: torch.Tensor, item_emb: torch.Tensor, item_offset: torch.Tensor):
+    return torch.sigmoid(torch.sum(torch.mul(user_emb, item_emb), axis = -1)).reshape(-1,1)
+
+def dot(user_emb: torch.Tensor, item_emb: torch.Tensor, item_offset: torch.Tensor):
+    return torch.sum(torch.mul(user_emb, item_emb), axis = -1).reshape(-1,1)
+
+itf_dict = {
+    'irt': irt2pl,
+    'mirt': mirt2pl,
+    'mf': dot, 
+    'sigmoid-mf': sigmoid_dot
+}
 
 class Net(nn.Module):
     '''
@@ -76,7 +93,7 @@ class Net(nn.Module):
         self.cross_layer1=nn.Linear(hidden_dim,max(int(hidden_dim/2),1))
         self.cross_layer2=nn.Linear(max(int(hidden_dim/2),1),1)
 
-        # layer for featrue cross module
+        # layer for interaction module
         self.set_itf(itf_type)
 
         # param initialization
@@ -218,73 +235,6 @@ class Net(nn.Module):
         output = self.itf(user_factor, item_factor, item_disc)
 
         return output 
-
-    # def train(self, hparams: dict, train_data: pd.DataFrame, Q_matrix: np.array, valid_data: pd.DataFrame = None):
-    #     lr = hparams.get('lr', 0.01)
-    #     epoch = hparams.get('epoch',5)
-    #     batch_size = hparams.get('batch_size', 64)
-    #     logger_mode = hparams.get('logger_mode','both')
-    #     loss_factor = hparams.get('loss_factor',1.0)
-    #     device = hparams.get('device','cpu')
-    #     batch_show = hparams.get('batch_show',200)
-
-    #     self.logger.write('Before train. hparams = {}'.format(str(hparams)), logger_mode)
-
-    #     self._to_device(device)
-
-    #     loss_fn = HierCDLoss(self, nn.NLLLoss, loss_factor)
-
-    #     dataloader = TrainDataLoader(train_data, Q_matrix, batch_size)
-
-    #     optimizer = torch.optim.Adam(params = self.parameters(), lr = lr)
-
-    #     y_target_all = np.array(train_data.loc[:,'score']).astype(np.int)
-
-
-    #     for step in range(1, epoch + 1):
-    #         dataloader.reset()
-    #         loss_all = 0
-    #         n_batch = 0
-    #         y_pred_all = np.array([])
-    #         loss_all = 0.0
-    #         batch_count = 0
-    #         while not dataloader.is_end():
-    #             batch_count += 1
-    #             optimizer.zero_grad()
-    #             user_ids, item_ids, item_know, y_target = dataloader.next_batch()
-    #             user_ids = user_ids.to(device)
-    #             item_ids = item_ids.to(device)
-    #             item_know = item_know.to(device)
-    #             y_target = y_target.to(device)
-    #             y_pred = self.forward(user_ids, item_ids, item_know, device)
-
-    #             output_1 = y_pred
-    #             output_0 = torch.ones(output_1.size()).to(device) - output_1
-    #             output = torch.cat((output_0, output_1), 1)
-    #             loss = loss_fn(torch.log(output), y_target, user_ids)
-    #             loss.backward()
-    #             optimizer.step()
-
-    #             self.pos_clipper([self.user_contract,self.item_contract])
-    #             self.pos_clipper([self.cross_layer1,self.cross_layer2])
-
-    #             y_pred_batch = labelize(y_pred)
-    #             y_pred_all = np.concatenate([y_pred_all, y_pred_batch], axis = 0)
-
-    #             loss_all += loss.item()
-    #             n_batch += 1
-                
-    #             if batch_count % batch_show == batch_show - 1:
-    #                 self.logger.write('epoch = {}, batch = {}, loss = {}'.format(
-    #                 step, batch_count, loss_all/batch_show), logger_mode)
-    #                 loss_all = 0.0
-
-    #         #train_acc = accuracy_score(y_target_all, y_pred_all)
-    #         train_f1 = f1_score(y_target_all, y_pred_all)
-
-    #         self.logger.write('epoch = {}, train_f1 = {}'.format(step, train_f1),logger_mode)
-    #         if not valid_data is None:
-    #             self.validate(valid_data, Q_matrix, device, logger_mode)
             
     '''
     clip the parameters of each module in the moduleList to nonnegative
@@ -298,54 +248,6 @@ class Net(nn.Module):
         for module in module_list:
             module.weight.data = module.weight.clamp_max(0)
         return
-
-    # def predict(self, data: pd.DataFrame, Q_matrix: np.array, device='cpu')->pd.DataFrame:
-    #     dataloader = TrainDataLoader(data, Q_matrix, 8192)
-    #     dataloader.reset()
-    #     df_pred = pd.DataFrame(columns=['predict_score','predict_label'])
-    #     self._to_device(device)
-    #     while not dataloader.is_end():
-    #         user_ids, item_ids, item_know, _ = dataloader.next_batch()
-    #         user_ids = user_ids.to(device)
-    #         item_ids = item_ids.to(device)
-    #         item_know = item_know.to(device)
-
-    #         z_output = self.forward(user_ids, item_ids, item_know, device = device)
-    #         z_score = to_numpy(z_output).reshape(-1)
-    #         z_label = labelize(z_output).reshape(-1)
-    #         df_batch = pd.DataFrame({
-    #             'predict_score': z_score,
-    #             'predict_label': z_label
-    #         })
-    #         df_pred = df_pred.append(df_batch,ignore_index=True)
-        
-    #     result = data.reset_index().join(df_pred)
-
-    #     return result
-
-    # def validate(self, valid_data: pd.DataFrame, Q_matrix: np.array, device, logger_mode):
-    #     valid_pred = self.predict(valid_data, Q_matrix, device)
-    #     z_true = valid_pred['score'].astype(int).tolist()
-    #     z_score = valid_pred['predict_score'].tolist()
-    #     z_label = valid_pred['predict_label'].tolist()
-
-    #     valid_acc = accuracy_score(z_true, z_label)
-    #     valid_auc = roc_auc_score(z_true, z_score)
-    #     valid_f1 = f1_score(z_true, z_label)
-    #     valid_mse = mean_squared_error(z_true, z_score)
-
-    #     self.logger.write('valid acc = {}'.format(valid_acc),logger_mode)
-    #     self.logger.write('valid f1  = {}'.format(valid_f1),logger_mode)
-    #     self.logger.write('valid auc = {}'.format(valid_auc),logger_mode)
-    #     self.logger.write('valid mse = {}\n'.format(valid_mse),logger_mode)
-
-    #     metrics_dict = {}
-    #     metrics_dict['acc']=(valid_acc)
-    #     metrics_dict['f1']=(valid_f1)
-    #     metrics_dict['auc']=(valid_auc)
-    #     metrics_dict['mse']=(valid_mse)
-
-    #     return metrics_dict
 
     def _to_device(self, device):
         self.priori = nn.Parameter(self.priori.to(device))
@@ -446,6 +348,9 @@ class HierCDF(CDM):
             print("[Epoch %d] average loss: %.6f" % (epoch_i, float(np.mean(epoch_losses))))
 
             # TODO eval(val_data)
+            if val_data is not None:
+                auc, accuracy = self.eval(val_data, device=device)
+                print("[Epoch %d] auc: %.6f, accuracy: %.6f" % (epoch_i, auc, accuracy))
     
     def predict_proba(self, test_data: pd.DataFrame, device="cpu") -> pd.DataFrame:
         r'''
@@ -473,7 +378,8 @@ class HierCDF(CDM):
                 knowledge_emb: torch.Tensor = knowledge_emb.to(device)
                 pred: torch.Tensor = self.hier_net(user_id, item_id, \
                     knowledge_emb, device)
-                pred_proba.extend(pred.detach().cpu().tolist())
+                pred = pred.to('cpu').detach().numpy().reshape(-1,).tolist()
+                pred_proba += pred
         ret = pd.DataFrame({'userId': test_data['userId'], 'itemId': test_data['itemId'], 'proba': pred_proba})
         return ret
     
@@ -518,7 +424,7 @@ class HierCDF(CDM):
     def save(self, filepath: str):
         r'''
         Save the model. This method is implemented based on the PyTorch's torch.save() method. Only the parameters
-        in self.ncdm_net will be saved. You can save the whole NCDM object using pickle.
+        in self.hier_net will be saved. You can save the whole HierCDF object using pickle.
 
         Args:
             filepath: the path to save the model.
@@ -529,7 +435,7 @@ class HierCDF(CDM):
 
     def load(self, filepath: str):
         r'''
-        Load the model. This method loads the model saved at filepath into self.ncdm_net. Before loading, the object
+        Load the model. This method loads the model saved at filepath into self.hier_net. Before loading, the object
         needs to be properly initialized.
 
         Args:
@@ -557,28 +463,10 @@ class HierCDLoss(nn.Module):
     def forward(self, y_pred, y_target, user_ids):
         return self.loss_fn(y_pred, y_target) + self.factor * torch.sum(torch.relu(self.net.condi_n[user_ids,:]-self.net.condi_p[user_ids,:]))
 
-# def test(hparams):
-#     n_user = hparams['n_user']
-#     n_item = hparams['n_item']
-#     n_know = hparams['n_know']
-#     hidden_dim = hparams['hidden_dim']
-
-#     data = pd.read_csv(DATA_PATH+'data_demo.csv',index_col = 0)
-#     data = data.sample(frac=1).reset_index(drop=True)
-#     print(data.head())
-#     know_graph = pd.read_csv(DATA_PATH+'hierarchy_demo.csv',index_col = 0)
-#     Q_matrix = np.loadtxt(DATA_PATH+'Q_matrix_demo.txt', delimiter=' ')
-
-#     net = HierCDM(n_user, n_item, n_know, hidden_dim, know_graph)
-
-#     net.train(hparams = hparams, Q_matrix=Q_matrix, train_data = data)
-
-def test():
-    train_data = pd.read_csv('../tests/data/test_0.8_0.2.csv')
+def _test():
+    train_data = pd.read_csv('../tests/data/train_0.8_0.2.csv')
     know_graph = pd.read_csv('../tests/data/hier.csv')
     q_matrix = np.loadtxt('../tests/data/Q_matrix.txt')
-    # print(train_data.head(3))
-    # print(q_matrix)
     train_data['skill'] = None
     for id in range(train_data.shape[0]):
         item_id = train_data.loc[id,'itemId']
@@ -591,7 +479,7 @@ def test():
     meta_data['skill'] = [i for i in range(q_matrix.shape[1])]
 
     hiercdm = HierCDF(meta_data, know_graph, hidd_dim = 32)
-    hiercdm.fit(train_data,epoch=1)
+    hiercdm.fit(train_data.loc[:1000,:], val_data = train_data.loc[1000:1100,:], epoch=3)
 
 if __name__ == '__main__':
-    test()
+   _test()
