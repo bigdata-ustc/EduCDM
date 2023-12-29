@@ -25,7 +25,7 @@ from EduCDM import CDM, re_index
 def irt2pl(
     user_emb: torch.Tensor, item_emb: torch.Tensor,
         item_offset: torch.Tensor):
-    return 1 / (1 + torch.exp(-1.7*item_offset*(user_emb - item_emb)))
+    return 1 / (1 + torch.exp(-1.7 * item_offset * (user_emb - item_emb)))
 
 
 def mirt2pl(
@@ -34,7 +34,7 @@ def mirt2pl(
     return 1 / (1 + torch.exp(
         -torch.sum(
             torch.mul(
-                user_emb, item_emb), axis=1).reshape(-1, 1)+item_offset))
+                user_emb, item_emb), axis=1).reshape(-1, 1) + item_offset))
 
 
 def sigmoid_dot(
@@ -104,8 +104,8 @@ class Net(nn.Module):
         self.item_contract = nn.Linear(n_know, hidden_dim)
 
         # Neural Interaction Module (used only in ncd)
-        self.cross_layer1 = nn.Linear(hidden_dim, max(int(hidden_dim/2), 1))
-        self.cross_layer2 = nn.Linear(max(int(hidden_dim/2), 1), 1)
+        self.cross_layer1 = nn.Linear(hidden_dim, max(int(hidden_dim / 2), 1))
+        self.cross_layer2 = nn.Linear(max(int(hidden_dim / 2), 1), 1)
 
         # layer for interaction module
         self.set_itf(itf_type)
@@ -121,7 +121,7 @@ class Net(nn.Module):
     def ncd(
         self, user_emb: torch.Tensor, item_emb: torch.Tensor,
             item_offset: torch.Tensor):
-        input_vec = (user_emb-item_emb)*item_offset
+        input_vec = (user_emb - item_emb) * item_offset
         x_vec = torch.sigmoid(self.cross_layer1(input_vec))
         x_vec = torch.sigmoid(self.cross_layer2(x_vec))
         return x_vec
@@ -164,11 +164,11 @@ class Net(nn.Module):
 
             pred_idx = self.know_graph[
                 self.know_graph['target'] == k].sort_values(by='source').index
-            condi_p = torch.pow(batch_condi_p[:, pred_idx], 1/len_p)
-            condi_n = torch.pow(batch_condi_n[:, pred_idx], 1/len_p)
+            condi_p = torch.pow(batch_condi_p[:, pred_idx], 1 / len_p)
+            condi_n = torch.pow(batch_condi_n[:, pred_idx], 1 / len_p)
 
             margin_p = condi_p * priori
-            margin_n = condi_n * (1.0-priori)
+            margin_n = condi_n * (1.0 - priori)
 
             posterior_k = torch.zeros((1, n_batch)).to(device)
 
@@ -178,7 +178,7 @@ class Net(nn.Module):
                 mask = torch.Tensor(
                     np.array(list(mask)).astype(int)).to(device)
 
-                margin = mask * margin_p + (1-mask) * margin_n
+                margin = mask * margin_p + (1 - mask) * margin_n
                 margin = torch.prod(margin, dim=1).unsqueeze(dim=0)
 
                 posterior_k = torch.cat([posterior_k, margin], dim=0)
@@ -206,7 +206,7 @@ class Net(nn.Module):
                 continue
             pred_idx = self.know_graph[
                 self.know_graph['target'] == k].sort_values(by='source').index
-            condi_p = torch.pow(batch_condi_p[:, pred_idx], 1/len_p)
+            condi_p = torch.pow(batch_condi_p[:, pred_idx], 1 / len_p)
             result_tensor[:, k] = torch.prod(condi_p, dim=1).reshape(-1)
 
         return result_tensor
@@ -230,7 +230,7 @@ class Net(nn.Module):
                 continue
             pred_idx = self.know_graph[
                 self.know_graph['target'] == k].sort_values(by='source').index
-            condi_n = torch.pow(batch_condi_n[:, pred_idx], 1/len_p)
+            condi_n = torch.pow(batch_condi_n[:, pred_idx], 1 / len_p)
             result_tensor[:, k] = torch.prod(condi_n, dim=1).reshape(-1)
 
         return result_tensor
@@ -283,7 +283,7 @@ class Net(nn.Module):
         self.cross_layer2 = self.cross_layer2.to(device)
 
     def save(self, model_name='./model.pkl'):
-        path = '/'.join(model_name.split('/')[:-1])+'/'
+        path = '/'.join(model_name.split('/')[:-1]) + '/'
         if not os.path.exists(path):
             os.makedirs(path)
         torch.save(self.state_dict(), model_name)
@@ -531,7 +531,7 @@ class HierCDLoss(nn.Module):
     def forward(self, y_pred, y_target, user_ids):
         return self.loss_fn(y_pred, y_target)
         + self.factor * torch.sum(torch.relu(
-            self.net.condi_n[user_ids, :]-self.net.condi_p[user_ids, :]))
+            self.net.condi_n[user_ids, :] - self.net.condi_p[user_ids, :]))
 
 
 def _test():
