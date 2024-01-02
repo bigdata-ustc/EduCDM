@@ -34,7 +34,7 @@ cdm = EMIRT(meta_data)
 cdm.fit(train_data, lr=0.01)
 
 # predict using the trained model
-print(cdm.predict())
+print(cdm.predict(test_data))
 
 # save model
 cdm.save("emirt.snapshot")

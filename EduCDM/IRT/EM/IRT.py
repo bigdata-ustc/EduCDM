@@ -3,6 +3,7 @@
 import pandas as pd
 import sys
 import logging
+import math 
 from typing import Any
 import numpy as np
 import pickle
@@ -10,7 +11,7 @@ from pandas.core.api import DataFrame as DataFrame
 from tqdm import tqdm
 from scipy import stats
 sys.path.append("..")
-from irt import irt3pl
+from ..irt import irt3pl
 from EduCDM import CDM, re_index
 
 
@@ -203,7 +204,7 @@ class IRT(CDM):
         self.stu_prof = self.Get_stu_ability(R)
 
 
-    def predict_proba(self) -> pd.DataFrame:
+    def predict_proba(self, val_data) -> pd.DataFrame:
         r"""
         calculate the probability
         
@@ -212,11 +213,18 @@ class IRT(CDM):
         Return value:
             pred_score: the probability of students response correctly
         """
-        pred_score = irt3pl(np.sum(self.a * (np.expand_dims(self.stu_prof, axis=1) - self.b), axis=-1), 1, 0, self.c)
-        return pd.DataFrame(pred_score)
+        # pred_score_1 = irt3pl(np.sum(self.a * (np.expand_dims(self.stu_prof, axis=1) - self.b), axis=-1), 1, 0, self.c)
+        userIds, itemIds, responses = [], [], []
+        for index, i in tqdm(val_data.iterrows(), "predicting"):
+            stu, test_id = i['userId'], i['itemId']
+            re_stu_id, re_item_id = self.id_reindex['userId'][stu], self.id_reindex['itemId'][test_id]
+            userIds.append(re_stu_id)
+            itemIds.append(re_item_id)
+            responses.append(irt3pl(np.sum(self.a[re_item_id] * (np.expand_dims(self.stu_prof[re_stu_id], axis=1) - self.b[re_item_id]), axis=-1), 1, 0, self.c[re_item_id]))
+        return pd.DataFrame({'userId': userIds, 'itemId': itemIds, 'response': responses})
         
         
-    def pridict(self) -> pd.DataFrame:
+    def predict(self, val_data) -> pd.DataFrame:
         r"""
         predict the probability
         
@@ -225,10 +233,9 @@ class IRT(CDM):
         Return value:
             df_pred: the probability
         """
-        irt_proba = self.predict_proba()
-        for i in range(self.stu_num):
-            for j in range(self.prob_num):
-                irt_proba[i][j] = 1 if irt_proba[i][j] >= 0.5 else 0
+        irt_proba = self.predict_proba(val_data)
+        irt_proba.loc[irt_proba['response'] < 0.5, 'response'] = 0
+        irt_proba.loc[irt_proba['response'] >= 0.5, 'response'] = 1
         df_pred = pd.DataFrame(irt_proba)
         return df_pred
         
@@ -243,8 +250,8 @@ class IRT(CDM):
             test_rmse: RMSE of test dataset
             test_mae: MAE of test dataset
         """
-        pred_score = self.predict_proba()
-        print(pred_score)
+        pred_score = self.predict_proba(val_data)
+        # print(pred_score)
         test_rmse, test_mae = [], []
         for index, i in tqdm(val_data.iterrows(), "evaluating"):
             stu, test_id, true_score = i['userId'], i['itemId'], i['response']

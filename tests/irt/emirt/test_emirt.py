@@ -7,10 +7,10 @@ def test_train(data, meta, tmp_path):
     meta_data = meta
     cdm = EMIRT(meta_data)
     cdm.fit(train_data=df_data, lr=0.01)
-    filepath = tmp_path + "/emirt.params"
+    filepath = tmp_path / "emirt.params"
     # filepath = tmp_path / "emirt.params"
     print(filepath)
     cdm.save(filepath)
     cdm.load(filepath)
-    cdm.predict()
+    cdm.predict(df_data)
     cdm.eval(df_data)
