@@ -38,10 +38,10 @@ cdm.fit(train_data, epoch=1, val_data=valid_data, device="cpu") # cuda
 print(cdm.predict(test_data))
 
 # save model
-cdm.save("ncdm.snapshot")
+cdm.save("irt.snapshot")
 
 # load model and evaluate it on the test set
-cdm.load("ncdm.snapshot")
+cdm.load("irt.snapshot")
 auc, accuracy = cdm.eval(test_data)
 print("auc: %.6f, accuracy: %.6f" % (auc, accuracy))
 

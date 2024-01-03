@@ -201,7 +201,7 @@ class IRT(CDM):
     def save(self, filepath: str):
         r'''
         Save the model. This method is implemented based on the PyTorch's torch.save() method. Only the parameters
-        in self.ncdm_net will be saved. You can save the whole IRT object using pickle.
+        in self.irt_net will be saved. You can save the whole IRT object using pickle.
 
         Args:
             filepath: the path to save the model.
@@ -212,14 +212,14 @@ class IRT(CDM):
 
     def load(self, filepath: str):
         r'''
-        Load the model. This method loads the model saved at filepath into self.ncdm_net. Before loading, the object
+        Load the model. This method loads the model saved at filepath into self.irt_net. Before loading, the object
         needs to be properly initialized.
 
         Args:
             filepath: the path from which to load the model.
 
         Examples:
-            model = NCDM(meta_data)  # where meta_data is from the same dataset which is used to train the model at filepath
+            model = IRT(meta_data)  # where meta_data is from the same dataset which is used to train the model at filepath
             model.load('path_to_the_pre-trained_model')
         '''
 
