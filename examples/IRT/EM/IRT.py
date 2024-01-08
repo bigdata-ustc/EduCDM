@@ -2,13 +2,12 @@
 # 2023/12/28 @ ChenSiHang
 import logging
 from EduCDM import EMIRT
-import torch
-from torch.utils.data import TensorDataset, DataLoader
+# import torch
+# from torch.utils.data import TensorDataset, DataLoader
 import pandas as pd
-import numpy as np
 from EduData import get_data
 
-# get_data("cdbd-a0910", "../../data")   # Download dataset "cdbd-a0910"
+get_data("cdbd-a0910", "../../data")   # Download dataset "cdbd-a0910"
 
 # load data and transform it to the required format
 train_data = pd.read_csv("../../data/a0910/train.csv")

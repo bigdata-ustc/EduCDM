@@ -2,6 +2,7 @@
 # 2023/11/17 @ WangFei
 from EduCDM import EMIRT
 
+
 def test_train(data, meta, tmp_path):
     df_data = data
     meta_data = meta
