@@ -189,7 +189,7 @@ class IRT(CDM):
             r_ek = np.dot(norm_dis_like, r_1)  # shape = (100, prob_num)
             r_1[np.where(R != self.skip_value)[0], np.where(R != self.skip_value)[1]] = 1
             s_ek = np.dot(norm_dis_like, r_1)  # shape = (100, prob_num)
-            a, b, c = update_irt(a, b, c, self.D, self.prof,  R, r_ek, s_ek, lr, epoch_m, epsilon)
+            a, b, c = update_irt(a, b, c, self.D, self.prof, R, r_ek, s_ek, lr, epoch_m, epsilon)
             change = max(np.max(np.abs(a - a_tmp)), np.max(np.abs(b - b_tmp)), np.max(np.abs(c - c_tmp)),
                          np.max(np.abs(prior_dis_tmp - prior_dis_tmp)))
             if iteration > 20 and change < epsilon:
