@@ -20,9 +20,7 @@ def init_parameters(prob_num, dim):
         dim: the dimension of  student's ability
 
     Return:
-        alpha: Discrimination of the problems
-        beta: Difficulty of the problems
-        gamma: Guess parameters of the problems
+        (alpha, beta, gamma), i.e., the initialized discrimination, difficulty and guess parameters
     """
     alpha = stats.norm.rvs(loc=0.75, scale=0.01, size=(prob_num, dim))
     beta = stats.norm.rvs(size=(prob_num, dim))
@@ -38,8 +36,7 @@ def init_prior_prof_distribution(dim):
         dim: Dimension of student's ability
 
     Return:
-        prof: Uniform distribution from -4 to 4, 100*dim matrix
-        norm_dis: Normalized distribution of student abilities
+        (prof, norm_dis), i.e., the discrete student proficiency levels and their probabilities
     """
     prof = stats.uniform.rvs(loc=-4, scale=8, size=(100, dim))  # shape = (100,dim)
     dis = stats.multivariate_normal.pdf(prof, mean=np.zeros(dim), cov=np.identity(dim))
@@ -58,9 +55,8 @@ def get_Likelihood(a, b, c, prof, R):
         prof: Normalized distribution of student's ability
         R: matrix of item response
 
-    Return value:
-        prof_prob: Probability matrix for 100 ability levels of people answering each question correctly
-        prob_stu: Probability matrix of which ability level a student belongs to
+    Return:
+        (prof_prob, prob_stu)
     """
     stu_num, prob_num = R.shape[0], R.shape[1]
     prof_prob = irt3pl(np.sum(a * (np.expand_dims(prof, axis=1) - b), axis=-1), 1, 0, c)  # shape = (100, prob_num)
@@ -80,8 +76,8 @@ def update_prior(prior_dis, prof_stu_like):
         prof_stu_like: Probability matrix of which ability level a student belongs to
 
     Return:
-        update_prior_dis: updated prior distribution of student abilities
-        norm_dis_like: Normalized distribution of student abilities
+        (update_prior_dis, norm_dis_like), i.e., the updated prior distribution of student abilities
+        and the normalized distribution of student abilities
     """
     dis_like = prof_stu_like * np.expand_dims(prior_dis, axis=1)  # shape = (100, stu_num)
     norm_dis_like = dis_like / np.sum(dis_like, axis=0)  # shape = (100, stu_num)
@@ -107,9 +103,7 @@ def update_irt(a, b, c, D, prof, R, r_ek, s_ek, lr, epoch=10, epsilon=1e-3):
         epsilon: threshold of convergence
 
     Return:
-        a: Discrimination of the problems
-        b: Difficulty of the problems
-        c: Guess parameters of the problems
+        the updated (a, b, c)
     """
     for iteration in range(epoch):
         a_tmp, b_tmp, c_tmp = np.copy(a), np.copy(b), np.copy(c)
@@ -136,10 +130,8 @@ class IRT(CDM):
 
     Args:
         meta_data: a dictionary containing all the userIds, itemIds, and skills.
-        dim: int
-            dimension of student/problem embedding, MIRT for dim > 1
-        skip_value: int
-            Unavailable value in matrix need to be skipped
+        dim (int): the dimension of student/problem embedding, MIRT for dim > 1
+        skip_value (int): the unavailable value in matrix need to be skipped
     """
     def __init__(self, meta_data: dict, dim=1, skip_value=-1):
         super(IRT, self).__init__()
@@ -161,7 +153,7 @@ class IRT(CDM):
             train_data: training dataset
 
         Return:
-            R: matrix of item response
+            the matrix of item response
         """
         R = np.full((self.stu_num, self.prob_num), self.skip_value)
         for index, i in tqdm(train_data.iterrows(), "transforming"):
@@ -248,8 +240,7 @@ class IRT(CDM):
             val_data: a dataframe containing testing userIds and itemIds.
 
         Return:
-            test_rmse: RMSE of test dataset
-            test_mae: MAE of test dataset
+            (test_rmse, test_mae)
         """
         pred_score = self.predict_proba(val_data)
         # print(pred_score)
@@ -305,7 +296,7 @@ class IRT(CDM):
             epsilon: threshold of convergence
 
         Return:
-            stu_prof: student's ability distribution
+            students' ability distributions
         """
         if len(records.shape) == 1:  # one student
             records = np.expand_dims(records, axis=0)
