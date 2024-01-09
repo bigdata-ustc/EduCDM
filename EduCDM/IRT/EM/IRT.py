@@ -13,12 +13,13 @@ from EduCDM import CDM, re_index
 
 def init_parameters(prob_num, dim):
     r"""
-    Purpose:
-        Initialize the parameters of IRT model
+    Initialize the parameters of IRT model
+
     Parameter:
         prob_num: the number of problems
         dim: the dimension of  student's ability
-    Return value:
+
+    Return:
         alpha: Discrimination of the problems
         beta: Difficulty of the problems
         gamma: Guess parameters of the problems
@@ -31,11 +32,12 @@ def init_parameters(prob_num, dim):
 
 def init_prior_prof_distribution(dim):
     r"""
-    Purpose:
-        Initialize the prior distribution of student abilities
+    Initialize the prior distribution of student abilities
+
     Parameter:
         dim: Dimension of student's ability
-    Return value:
+
+    Return:
         prof: Uniform distribution from -4 to 4, 100*dim matrix
         norm_dis: Normalized distribution of student abilities
     """
@@ -47,14 +49,15 @@ def init_prior_prof_distribution(dim):
 
 def get_Likelihood(a, b, c, prof, R):
     r"""
-    Purpose:
-        get the likelihood function
+    get the likelihood function
+
     Parameter:
         a: Discrimination of the problems
         b: Difficulty of the problems
         c: Guess parameters of the problems
         prof: Normalized distribution of student's ability
         R: matrix of item response
+
     Return value:
         prof_prob: Probability matrix for 100 ability levels of people answering each question correctly
         prob_stu: Probability matrix of which ability level a student belongs to
@@ -70,12 +73,13 @@ def get_Likelihood(a, b, c, prof, R):
 
 def update_prior(prior_dis, prof_stu_like):
     r"""
-    Purpose:
-        update the prior distribution of student abilities
+    update the prior distribution of student abilities
+
     Parameter:
         prior_dis: prior distribution of student abilities
         prof_stu_like: Probability matrix of which ability level a student belongs to
-    Return value:
+
+    Return:
         update_prior_dis: updated prior distribution of student abilities
         norm_dis_like: Normalized distribution of student abilities
     """
@@ -87,8 +91,8 @@ def update_prior(prior_dis, prof_stu_like):
 
 def update_irt(a, b, c, D, prof, R, r_ek, s_ek, lr, epoch=10, epsilon=1e-3):
     r"""
-    Purpose:
-        update the parameters of IRT model
+    update the parameters of IRT model
+
     Parameter:
         a: Discrimination of the problems
         b: Difficulty of the problems
@@ -101,7 +105,8 @@ def update_irt(a, b, c, D, prof, R, r_ek, s_ek, lr, epoch=10, epsilon=1e-3):
         lr: learning rate
         epoch: the number of iterations
         epsilon: threshold of convergence
-    Return value:
+
+    Return:
         a: Discrimination of the problems
         b: Difficulty of the problems
         c: Guess parameters of the problems
@@ -128,6 +133,7 @@ def update_irt(a, b, c, D, prof, R, r_ek, s_ek, lr, epoch=10, epsilon=1e-3):
 class IRT(CDM):
     r"""
     IRT model, training (EM) and testing methods
+
     Args:
         meta_data: a dictionary containing all the userIds, itemIds, and skills.
         dim: int
@@ -153,7 +159,8 @@ class IRT(CDM):
 
         Args:
             train_data: training dataset
-        Return value:
+
+        Return:
             R: matrix of item response
         """
         R = np.full((self.stu_num, self.prob_num), self.skip_value)
@@ -170,12 +177,13 @@ class IRT(CDM):
 
         Args:
             train_data: training dataset
-            test_data: test dataset
-            stu_num: the number of students
-            prob_num: the number of problems
-        Return value:
-            R: matrix of item response
-            test_set: test dataset
+            lr: learning rate
+            epoch: the number of iterations in the EM algorithm, default: 10
+            epoch_m: the number of iterations in the M step (update_irt), default: 10
+            epsilon: convergence threshold, default: 1e-3
+
+        Return:
+            None
         """
         R = self.transform__(train_data)
         a, b, c = np.copy(self.a), np.copy(self.b), np.copy(self.c)
@@ -197,17 +205,18 @@ class IRT(CDM):
         self.a, self.b, self.c, self.prior_dis = a, b, c, prior_dis
         self.stu_prof = self.Get_stu_ability(R)
 
-    def predict_proba(self, val_data: pd.DataFrame) -> pd.DataFrame:
+    def predict_proba(self, test_data: pd.DataFrame) -> pd.DataFrame:
         r"""
         calculate the probability
 
         Args:
-            None
-        Return value:
-            pred_score: the probability of students response correctly
+            test_data: a dataframe containing testing userIds and itemIds.
+
+        Return:
+            a dataframe containing the userIds, itemIds, and proba (predicted probabilities).
         """
         userIds, itemIds, responses = [], [], []
-        for index, i in tqdm(val_data.iterrows(), "predicting"):
+        for index, i in tqdm(test_data.iterrows(), "predicting"):
             stu, test_id = i['userId'], i['itemId']
             re_stu_id, re_item_id = self.id_reindex['userId'][stu], self.id_reindex['itemId'][test_id]
             userIds.append(re_stu_id)
@@ -215,16 +224,17 @@ class IRT(CDM):
             responses.append(irt3pl(np.sum(self.a[re_item_id] * (np.expand_dims(self.stu_prof[re_stu_id], axis=1) - self.b[re_item_id]), axis=-1), 1, 0, self.c[re_item_id]))
         return pd.DataFrame({'userId': userIds, 'itemId': itemIds, 'response': responses})
 
-    def predict(self, val_data: pd.DataFrame) -> pd.DataFrame:
+    def predict(self, test_data: pd.DataFrame) -> pd.DataFrame:
         r"""
         predict the probability
 
         Args:
-            None
-        Return value:
-            df_pred: the probability
+            test_data: a dataframe containing testing userIds and itemIds.
+
+        Return:
+            a dataframe containing the userIds, itemIds, and predicted responses.
         """
-        irt_proba = self.predict_proba(val_data)
+        irt_proba = self.predict_proba(test_data)
         irt_proba.loc[irt_proba['response'] < 0.5, 'response'] = 0
         irt_proba.loc[irt_proba['response'] >= 0.5, 'response'] = 1
         df_pred = pd.DataFrame(irt_proba)
@@ -235,8 +245,9 @@ class IRT(CDM):
         Evaluate the IRT model
 
         Args:
-            val_data: validation dataset
-        Return value:
+            val_data: a dataframe containing testing userIds and itemIds.
+
+        Return:
             test_rmse: RMSE of test dataset
             test_mae: MAE of test dataset
         """
@@ -259,7 +270,8 @@ class IRT(CDM):
 
         Args:
             filepath: the path of file
-        Return value:
+
+        Return:
             None
         """
         with open(filepath, 'wb') as file:
@@ -272,7 +284,8 @@ class IRT(CDM):
 
         Args:
             filepath: the path of file
-        Return value:
+
+        Return:
             None
         """
         with open(filepath, 'rb') as file:
@@ -290,7 +303,8 @@ class IRT(CDM):
             lr: learning rate
             epoch: the number of iterations
             epsilon: threshold of convergence
-        Return value:
+
+        Return:
             stu_prof: student's ability distribution
         """
         if len(records.shape) == 1:  # one student
