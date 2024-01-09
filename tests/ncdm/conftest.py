@@ -25,7 +25,8 @@ def data(meta):
             userIds.append(user)
             itemIds.append(item)
             skills.append(str([item_skills[i]]))
-            responses.append(random.randint(0, 1))
+            # responses.append(random.randint(0, 1))
+    responses = [0, 1, 0, 1, 0, 0]
 
     df_data = pd.DataFrame({'userId': userIds, 'itemId': itemIds, 'skill': skills, 'response': responses})
     return df_data

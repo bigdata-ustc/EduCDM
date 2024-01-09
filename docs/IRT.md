@@ -2,32 +2,36 @@
 
 If the reader wants to know the details of EMIRT, please refer to the paper: *[Estimation for Item Response Models using the EM Algorithm for Finite Mixtures](https://files.eric.ed.gov/fulltext/ED405356.pdf)*.
 
+If this code helps you, please cite our work
+
 ```bibtex
-@article{woodruff1996estimation,
-  title={Estimation of Item Response Models Using the EM Algorithm for Finite Mixtures.},
-  author={Woodruff, David J and Hanson, Bradley A},
-  year={1996},
-  publisher={ERIC}
+@misc{bigdata2024educdm,
+  title={EduCDM},
+  author={bigdata-ustc},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  year = {2024},
+  howpublished = {\url{https://github.com/bigdata-ustc/EduCDM}},
 }
 ```
 
-## Introduction of model
+## Brief Introduction to IRT
 
-![这是图片](_static\IRT\EMIRT\emirt1.png "Magic Gardens")
+Item response theory (IRT) is one of the most representative model for cognitive diagnosis. IRT uses parameters to represent students' abilities and the traits of exercises (e.g., difficulty, discrimination, guess). In this EMIRT, we implement the three-parameter logistic model whose item response function is as follows:
 
-![这是图片](_static\IRT\EMIRT\emirt2.png "Magic Gardens")
+![这是图片](_static\IRT\EMIRT\emirt4.png "Magic Gardens")
 
-![这是图片](_static\IRT\EMIRT\emirt3.png "Magic Gardens")
+In EMIRT, EM algorithm is adopted to estimate the parameters.
 
-![这是图片](/assets/img/philly-magic-garden.jpg "Magic Gardens")
+
 
 ## Parameters description
 
-| PARAMETERS | TYPE | DESCRIPTION                                                    |
-| ---------- | ---- | -------------------------------------------------------------- |
+| PARAMETERS | TYPE | DESCRIPTION                              |
+| ---------- | ---- | ---------------------------------------- |
 | meta_data  | dict | a  dictionary containing all the userIds, itemIds, and skills. |
-| dim        | int  | the  dimension of student's ability. Default: 1                |
-| skip_value | int  | the skip_value of the item response matrix. Default: -1        |
+| dim        | int  | the  dimension of student's ability. Default: 1 |
+| skip_value | int  | the skip_value of the item response matrix. Default: -1 |
 
 ##Examples
 
@@ -46,8 +50,8 @@ mrse, mse = model.eval(test_data)
 
 ## Methods summary
 
-| METHODS           | DESCRIPTION                                                                                                                                                             |
-| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| fit               | Fits  the model to the training data.                                                                                                                                   |
+| METHODS           | DESCRIPTION                              |
+| ----------------- | ---------------------------------------- |
+| fit               | Fits  the model to the training data.    |
 | fit_predict       | Use  the model to predict the responses in the testing data and returns the  results. The responses are either 1 (i.e., correct answer) or 0 (i.e.,  incorrect answer). |
-| fit_predict_proba | Use  the model to predict the responses in the testing data and returns the  probabilities (that the correct answers will be provided).                                 |
+| fit_predict_proba | Use  the model to predict the responses in the testing data and returns the  probabilities (that the correct answers will be provided). |
