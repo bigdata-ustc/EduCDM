@@ -15,7 +15,7 @@ def init_parameters(prob_num, dim):
     r"""
     Initialize the parameters of IRT model
 
-    Parameter:
+    Args:
         prob_num: the number of problems
         dim: the dimension of  student's ability
 
@@ -32,7 +32,7 @@ def init_prior_prof_distribution(dim):
     r"""
     Initialize the prior distribution of student abilities
 
-    Parameter:
+    Args:
         dim: Dimension of student's ability
 
     Return:
@@ -48,7 +48,7 @@ def get_Likelihood(a, b, c, prof, R):
     r"""
     get the likelihood function
 
-    Parameter:
+    Args:
         a: Discrimination of the problems
         b: Difficulty of the problems
         c: Guess parameters of the problems
@@ -71,7 +71,7 @@ def update_prior(prior_dis, prof_stu_like):
     r"""
     update the prior distribution of student abilities
 
-    Parameter:
+    Args:
         prior_dis: prior distribution of student abilities
         prof_stu_like: Probability matrix of which ability level a student belongs to
 
@@ -89,7 +89,7 @@ def update_irt(a, b, c, D, prof, R, r_ek, s_ek, lr, epoch=10, epsilon=1e-3):
     r"""
     update the parameters of IRT model
 
-    Parameter:
+    Args:
         a: Discrimination of the problems
         b: Difficulty of the problems
         c: Guess parameters of the problems
