@@ -363,6 +363,18 @@ class HierCDF(CDM):
         self.hier_net.train()
         loss_function = HierCDLoss(self.hier_net, nn.NLLLoss, loss_factor)
         optimizer = torch.optim.Adam(params=self.hier_net.parameters(), lr=lr)
+        r'''
+        Train the model with train_data. If val_data is provided, print the AUC and accuracy on val_data after each epoch.
+        Args:
+            train_data: a dataframe containing training userIds, itemIds and responses.
+            epoch: number of training epochs.
+            val_data: a dataframe containing validation userIds, itemIds and responses. Default: None.
+            device: device on which the model is trained. Default: 'cpu'. If you want to run it on your
+                    GPU, e.g., the first cuda gpu on your machine, you can change it to 'cuda:0'.
+            lr: learning rate. Default: 0.002.
+            batch_size: the batch size during the training.
+            loss_factor: the factor of the penalty term of the loss function of HierCDF, which is equivalent to $\lambda$ in the original paper of HierCDF.
+        '''
         train_data = self.transform__(train_data, batch_size, shuffle=True)
         for epoch_i in range(epoch):
             self.hier_net.train()
