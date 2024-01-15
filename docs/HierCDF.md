@@ -30,7 +30,7 @@ series = {KDD '22}
 | Parameters | Type | Description                              |
 | ---------- | ---- | ---------------------------------------- |
 | meta_data  | dict | a dictionary containing all the userIds, itemIds, and skills. |
-| knowledge_graph        | pandas.DataFrame  | the dimension of the latent vectors of users, items and skills. default: 40 |
+| knowledge_graph        | pandas.DataFrame  | the data frame that contains the knowledge graph, whose columns = ['source', 'target']. Each row represents an edge from the 'source' vertex to the 'target' vertex|
 | hidd_dim    | int  | the dimension of inner layers of HierCDF |
 
 
