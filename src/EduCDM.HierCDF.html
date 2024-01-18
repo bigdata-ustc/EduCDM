@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EduCDM.HierCDF package &mdash; docs v2.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=731f67d5"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            docs
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">EduCDM.HierCDF package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-EduCDM.HierCDF.HierCDF">EduCDM.HierCDF.HierCDF module</a><ul>
+<li><a class="reference internal" href="#EduCDM.HierCDF.HierCDF.irt2pl"><code class="docutils literal notranslate"><span class="pre">irt2pl()</span></code></a></li>
+<li><a class="reference internal" href="#EduCDM.HierCDF.HierCDF.mirt2pl"><code class="docutils literal notranslate"><span class="pre">mirt2pl()</span></code></a></li>
+<li><a class="reference internal" href="#EduCDM.HierCDF.HierCDF.sigmoid_dot"><code class="docutils literal notranslate"><span class="pre">sigmoid_dot()</span></code></a></li>
+<li><a class="reference internal" href="#EduCDM.HierCDF.HierCDF.dot"><code class="docutils literal notranslate"><span class="pre">dot()</span></code></a></li>
+<li><a class="reference internal" href="#EduCDM.HierCDF.HierCDF.Net"><code class="docutils literal notranslate"><span class="pre">Net</span></code></a><ul>
+<li><a class="reference internal" href="#EduCDM.HierCDF.HierCDF.Net.ncd"><code class="docutils literal notranslate"><span class="pre">Net.ncd()</span></code></a></li>
+<li><a class="reference internal" href="#EduCDM.HierCDF.HierCDF.Net.set_itf"><code class="docutils literal notranslate"><span class="pre">Net.set_itf()</span></code></a></li>
+<li><a class="reference internal" href="#EduCDM.HierCDF.HierCDF.Net.get_posterior"><code class="docutils literal notranslate"><span class="pre">Net.get_posterior()</span></code></a></li>
+<li><a class="reference internal" href="#EduCDM.HierCDF.HierCDF.Net.get_condi_p"><code class="docutils literal notranslate"><span class="pre">Net.get_condi_p()</span></code></a></li>
+<li><a class="reference internal" href="#EduCDM.HierCDF.HierCDF.Net.get_condi_n"><code class="docutils literal notranslate"><span class="pre">Net.get_condi_n()</span></code></a></li>
+<li><a class="reference internal" href="#EduCDM.HierCDF.HierCDF.Net.concat"><code class="docutils literal notranslate"><span class="pre">Net.concat()</span></code></a></li>
+<li><a class="reference internal" href="#EduCDM.HierCDF.HierCDF.Net.forward"><code class="docutils literal notranslate"><span class="pre">Net.forward()</span></code></a></li>
+<li><a class="reference internal" href="#EduCDM.HierCDF.HierCDF.Net.pos_clipper"><code class="docutils literal notranslate"><span class="pre">Net.pos_clipper()</span></code></a></li>
+<li><a class="reference internal" href="#EduCDM.HierCDF.HierCDF.Net.neg_clipper"><code class="docutils literal notranslate"><span class="pre">Net.neg_clipper()</span></code></a></li>
+<li><a class="reference internal" href="#EduCDM.HierCDF.HierCDF.Net.save"><code class="docutils literal notranslate"><span class="pre">Net.save()</span></code></a></li>
+<li><a class="reference internal" href="#EduCDM.HierCDF.HierCDF.Net.load"><code class="docutils literal notranslate"><span class="pre">Net.load()</span></code></a></li>
+<li><a class="reference internal" href="#EduCDM.HierCDF.HierCDF.Net.training"><code class="docutils literal notranslate"><span class="pre">Net.training</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#EduCDM.HierCDF.HierCDF.HierCDF"><code class="docutils literal notranslate"><span class="pre">HierCDF</span></code></a><ul>
+<li><a class="reference internal" href="#EduCDM.HierCDF.HierCDF.HierCDF.transform__"><code class="docutils literal notranslate"><span class="pre">HierCDF.transform__()</span></code></a></li>
+<li><a class="reference internal" href="#EduCDM.HierCDF.HierCDF.HierCDF.fit"><code class="docutils literal notranslate"><span class="pre">HierCDF.fit()</span></code></a></li>
+<li><a class="reference internal" href="#EduCDM.HierCDF.HierCDF.HierCDF.predict_proba"><code class="docutils literal notranslate"><span class="pre">HierCDF.predict_proba()</span></code></a></li>
+<li><a class="reference internal" href="#EduCDM.HierCDF.HierCDF.HierCDF.predict"><code class="docutils literal notranslate"><span class="pre">HierCDF.predict()</span></code></a></li>
+<li><a class="reference internal" href="#EduCDM.HierCDF.HierCDF.HierCDF.eval"><code class="docutils literal notranslate"><span class="pre">HierCDF.eval()</span></code></a></li>
+<li><a class="reference internal" href="#EduCDM.HierCDF.HierCDF.HierCDF.save"><code class="docutils literal notranslate"><span class="pre">HierCDF.save()</span></code></a></li>
+<li><a class="reference internal" href="#EduCDM.HierCDF.HierCDF.HierCDF.load"><code class="docutils literal notranslate"><span class="pre">HierCDF.load()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#EduCDM.HierCDF.HierCDF.HierCDLoss"><code class="docutils literal notranslate"><span class="pre">HierCDLoss</span></code></a><ul>
+<li><a class="reference internal" href="#EduCDM.HierCDF.HierCDF.HierCDLoss.forward"><code class="docutils literal notranslate"><span class="pre">HierCDLoss.forward()</span></code></a></li>
+<li><a class="reference internal" href="#EduCDM.HierCDF.HierCDF.HierCDLoss.training"><code class="docutils literal notranslate"><span class="pre">HierCDLoss.training</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-EduCDM.HierCDF">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">docs</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">EduCDM.HierCDF package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/src/EduCDM.HierCDF.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="educdm-hiercdf-package">
+<h1>EduCDM.HierCDF package<a class="headerlink" href="#educdm-hiercdf-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-EduCDM.HierCDF.HierCDF">
+<span id="educdm-hiercdf-hiercdf-module"></span><h2>EduCDM.HierCDF.HierCDF module<a class="headerlink" href="#module-EduCDM.HierCDF.HierCDF" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="EduCDM.HierCDF.HierCDF.irt2pl">
+<span class="sig-prename descclassname"><span class="pre">EduCDM.HierCDF.HierCDF.</span></span><span class="sig-name descname"><span class="pre">irt2pl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_emb</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_emb</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#EduCDM.HierCDF.HierCDF.irt2pl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="EduCDM.HierCDF.HierCDF.mirt2pl">
+<span class="sig-prename descclassname"><span class="pre">EduCDM.HierCDF.HierCDF.</span></span><span class="sig-name descname"><span class="pre">mirt2pl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_emb</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_emb</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#EduCDM.HierCDF.HierCDF.mirt2pl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="EduCDM.HierCDF.HierCDF.sigmoid_dot">
+<span class="sig-prename descclassname"><span class="pre">EduCDM.HierCDF.HierCDF.</span></span><span class="sig-name descname"><span class="pre">sigmoid_dot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_emb</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_emb</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#EduCDM.HierCDF.HierCDF.sigmoid_dot" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="EduCDM.HierCDF.HierCDF.dot">
+<span class="sig-prename descclassname"><span class="pre">EduCDM.HierCDF.HierCDF.</span></span><span class="sig-name descname"><span class="pre">dot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_emb</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_emb</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#EduCDM.HierCDF.HierCDF.dot" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="EduCDM.HierCDF.HierCDF.Net">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">EduCDM.HierCDF.HierCDF.</span></span><span class="sig-name descname"><span class="pre">Net</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_item</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_know</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">know_graph</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">itf_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mirt'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#EduCDM.HierCDF.HierCDF.Net" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<p>The hierarchical cognitive diagnosis model</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="EduCDM.HierCDF.HierCDF.Net.ncd">
+<span class="sig-name descname"><span class="pre">ncd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_emb</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_emb</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#EduCDM.HierCDF.HierCDF.Net.ncd" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="EduCDM.HierCDF.HierCDF.Net.set_itf">
+<span class="sig-name descname"><span class="pre">set_itf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">itf_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#EduCDM.HierCDF.HierCDF.Net.set_itf" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="EduCDM.HierCDF.HierCDF.Net.get_posterior">
+<span class="sig-name descname"><span class="pre">get_posterior</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">LongTensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cpu'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tensor</span></span></span><a class="headerlink" href="#EduCDM.HierCDF.HierCDF.Net.get_posterior" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="EduCDM.HierCDF.HierCDF.Net.get_condi_p">
+<span class="sig-name descname"><span class="pre">get_condi_p</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">LongTensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cpu'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tensor</span></span></span><a class="headerlink" href="#EduCDM.HierCDF.HierCDF.Net.get_condi_p" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="EduCDM.HierCDF.HierCDF.Net.get_condi_n">
+<span class="sig-name descname"><span class="pre">get_condi_n</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">LongTensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cpu'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tensor</span></span></span><a class="headerlink" href="#EduCDM.HierCDF.HierCDF.Net.get_condi_n" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="EduCDM.HierCDF.HierCDF.Net.concat">
+<span class="sig-name descname"><span class="pre">concat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#EduCDM.HierCDF.HierCDF.Net.concat" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="EduCDM.HierCDF.HierCDF.Net.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">LongTensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">LongTensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_know</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cpu'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tensor</span></span></span><a class="headerlink" href="#EduCDM.HierCDF.HierCDF.Net.forward" title="Link to this definition"></a></dt>
+<dd><p>&#64;Param item_know: the item q matrix of the batch</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="EduCDM.HierCDF.HierCDF.Net.pos_clipper">
+<span class="sig-name descname"><span class="pre">pos_clipper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#EduCDM.HierCDF.HierCDF.Net.pos_clipper" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="EduCDM.HierCDF.HierCDF.Net.neg_clipper">
+<span class="sig-name descname"><span class="pre">neg_clipper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#EduCDM.HierCDF.HierCDF.Net.neg_clipper" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="EduCDM.HierCDF.HierCDF.Net.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./model.pkl'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#EduCDM.HierCDF.HierCDF.Net.save" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="EduCDM.HierCDF.HierCDF.Net.load">
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./model.pkl'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#EduCDM.HierCDF.HierCDF.Net.load" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="EduCDM.HierCDF.HierCDF.Net.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#EduCDM.HierCDF.HierCDF.Net.training" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="EduCDM.HierCDF.HierCDF.HierCDF">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">EduCDM.HierCDF.HierCDF.</span></span><span class="sig-name descname"><span class="pre">HierCDF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">meta_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">knowledge_graph</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidd_dim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#EduCDM.HierCDF.HierCDF.HierCDF" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="EduCDM.html#EduCDM.meta.CDM" title="EduCDM.meta.CDM"><code class="xref py py-class docutils literal notranslate"><span class="pre">CDM</span></code></a></p>
+<p>The HierCDF model.
+:param meta_data: a dictionary containing all the</p>
+<blockquote>
+<div><p>userIds, itemIds, and skills.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>knowledge_graph</strong> – pd.DataFrame, columns =
+[‘source’,’target’], a data frame containing
+all directed edge of the knowledge graph
+W(attribute hierarchy). The <cite>source</cite> of
+each row denotes the name of the source vertex,
+while the <cite>target</cite> of each row denotes the name
+of the target vertex.</p>
+</dd>
+</dl>
+<dl>
+<dt>Examples::</dt><dd><dl class="simple">
+<dt>meta_data = {</dt><dd><p>‘userId’: [‘001’, ‘002’, ‘003’],
+‘itemId’: [‘adf’, ‘w5’],
+‘skill’: [‘skill1’, ‘skill2’, ‘skill3’, ‘skill4’]}</p>
+</dd>
+</dl>
+<p>model = HierCDF(meta_data, know_graph)</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="EduCDM.HierCDF.HierCDF.HierCDF.transform__">
+<span class="sig-name descname"><span class="pre">transform__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shuffle</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#EduCDM.HierCDF.HierCDF.HierCDF.transform__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="EduCDM.HierCDF.HierCDF.HierCDF.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cpu'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.002</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#EduCDM.HierCDF.HierCDF.HierCDF.fit" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="EduCDM.HierCDF.HierCDF.HierCDF.predict_proba">
+<span class="sig-name descname"><span class="pre">predict_proba</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cpu'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#EduCDM.HierCDF.HierCDF.HierCDF.predict_proba" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>Output the predicted probabilities that the users</dt><dd><p>would provide correct answers using test_data.</p>
+</dd>
+</dl>
+<p>The probabilities are within (0, 1).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>test_data</strong> – a dataframe containing testing userIds and itemIds.</p></li>
+<li><p><strong>device</strong> – device on which the model is trained. Default: ‘cpu’.
+If you want to run it on your GPU, e.g., the first cuda
+gpu on your machine, you can change it to ‘cuda:0’.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>A dataframe containing the userIds, itemIds, and proba</dt><dd><p>(predicted probabilities).</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="EduCDM.HierCDF.HierCDF.HierCDF.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cpu'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#EduCDM.HierCDF.HierCDF.HierCDF.predict" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>Output the predicted responses using test_data.</dt><dd><p>The responses are either 0 or 1.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>test_data</strong> – a dataframe containing testing userIds and itemIds.</p></li>
+<li><p><strong>device</strong> – device on which the model is trained. Default: ‘cpu’.
+If you want to run it on your GPU, e.g., the first cuda
+gpu on your machine, you can change it to ‘cuda:0’.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>A dataframe containing the userIds, itemIds, and</dt><dd><p>predicted responses.</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="EduCDM.HierCDF.HierCDF.HierCDF.eval">
+<span class="sig-name descname"><span class="pre">eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cpu'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#EduCDM.HierCDF.HierCDF.HierCDF.eval" title="Link to this definition"></a></dt>
+<dd><p>Output the AUC and accuracy using the val_data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>val_data</strong> – a dataframe containing testing userIds and itemIds.</p></li>
+<li><p><strong>device</strong> – device on which the model is trained. Default: ‘cpu’.
+If you want to run it on your GPU, e.g., the first cuda
+gpu on your machine, you can change it to ‘cuda:0’.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>AUC, accuracy</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="EduCDM.HierCDF.HierCDF.HierCDF.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#EduCDM.HierCDF.HierCDF.HierCDF.save" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>Save the model. This method is implemented based on the PyTorch’s</dt><dd><p>torch.save() method. Only the parameters in self.hier_net will
+be saved. You can save the whole HierCDF object using pickle.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filepath</strong> – the path to save the model.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="EduCDM.HierCDF.HierCDF.HierCDF.load">
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#EduCDM.HierCDF.HierCDF.HierCDF.load" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>Load the model. This method loads the model saved at filepath into</dt><dd><p>self.hier_net. Before loading, the object</p>
+</dd>
+</dl>
+<p>needs to be properly initialized.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filepath</strong> – the path from which to load the model.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<dl class="simple">
+<dt>model = HierCDF(meta_data, knowledge_graph)</dt><dd><p># where meta_data is from the same dataset
+# which is used to train the model at filepath</p>
+</dd>
+</dl>
+<p>model.load(‘path_to_the_pre-trained_model’)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="EduCDM.HierCDF.HierCDF.HierCDLoss">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">EduCDM.HierCDF.HierCDF.</span></span><span class="sig-name descname"><span class="pre">HierCDLoss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">net</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#EduCDM.HierCDF.HierCDF.Net" title="EduCDM.HierCDF.HierCDF.Net"><span class="pre">Net</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_fn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#EduCDM.HierCDF.HierCDF.HierCDLoss" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<p>The loss function of HierCDM</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="EduCDM.HierCDF.HierCDF.HierCDLoss.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_pred</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_ids</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#EduCDM.HierCDF.HierCDF.HierCDLoss.forward" title="Link to this definition"></a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="EduCDM.HierCDF.HierCDF.HierCDLoss.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#EduCDM.HierCDF.HierCDF.HierCDLoss.training" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-EduCDM.HierCDF">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-EduCDM.HierCDF" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, FeiWang.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

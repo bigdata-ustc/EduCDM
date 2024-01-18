@@ -1,0 +1,7 @@
+EduCDM
+======
+
+.. toctree::
+   :maxdepth: 4
+
+   EduCDM

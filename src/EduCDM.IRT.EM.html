@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EduCDM.IRT.EM package &mdash; docs v2.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=731f67d5"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            docs
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">EduCDM.IRT.EM package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-EduCDM.IRT.EM.IRT">EduCDM.IRT.EM.IRT module</a><ul>
+<li><a class="reference internal" href="#EduCDM.IRT.EM.IRT.init_parameters"><code class="docutils literal notranslate"><span class="pre">init_parameters()</span></code></a></li>
+<li><a class="reference internal" href="#EduCDM.IRT.EM.IRT.init_prior_prof_distribution"><code class="docutils literal notranslate"><span class="pre">init_prior_prof_distribution()</span></code></a></li>
+<li><a class="reference internal" href="#EduCDM.IRT.EM.IRT.get_Likelihood"><code class="docutils literal notranslate"><span class="pre">get_Likelihood()</span></code></a></li>
+<li><a class="reference internal" href="#EduCDM.IRT.EM.IRT.update_prior"><code class="docutils literal notranslate"><span class="pre">update_prior()</span></code></a></li>
+<li><a class="reference internal" href="#EduCDM.IRT.EM.IRT.update_irt"><code class="docutils literal notranslate"><span class="pre">update_irt()</span></code></a></li>
+<li><a class="reference internal" href="#EduCDM.IRT.EM.IRT.IRT"><code class="docutils literal notranslate"><span class="pre">IRT</span></code></a><ul>
+<li><a class="reference internal" href="#EduCDM.IRT.EM.IRT.IRT.transform__"><code class="docutils literal notranslate"><span class="pre">IRT.transform__()</span></code></a></li>
+<li><a class="reference internal" href="#EduCDM.IRT.EM.IRT.IRT.fit"><code class="docutils literal notranslate"><span class="pre">IRT.fit()</span></code></a></li>
+<li><a class="reference internal" href="#EduCDM.IRT.EM.IRT.IRT.predict_proba"><code class="docutils literal notranslate"><span class="pre">IRT.predict_proba()</span></code></a></li>
+<li><a class="reference internal" href="#EduCDM.IRT.EM.IRT.IRT.predict"><code class="docutils literal notranslate"><span class="pre">IRT.predict()</span></code></a></li>
+<li><a class="reference internal" href="#EduCDM.IRT.EM.IRT.IRT.eval"><code class="docutils literal notranslate"><span class="pre">IRT.eval()</span></code></a></li>
+<li><a class="reference internal" href="#EduCDM.IRT.EM.IRT.IRT.save"><code class="docutils literal notranslate"><span class="pre">IRT.save()</span></code></a></li>
+<li><a class="reference internal" href="#EduCDM.IRT.EM.IRT.IRT.load"><code class="docutils literal notranslate"><span class="pre">IRT.load()</span></code></a></li>
+<li><a class="reference internal" href="#EduCDM.IRT.EM.IRT.IRT.Get_stu_ability"><code class="docutils literal notranslate"><span class="pre">IRT.Get_stu_ability()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-EduCDM.IRT.EM">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">docs</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">EduCDM.IRT.EM package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/src/EduCDM.IRT.EM.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="educdm-irt-em-package">
+<h1>EduCDM.IRT.EM package<a class="headerlink" href="#educdm-irt-em-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-EduCDM.IRT.EM.IRT">
+<span id="educdm-irt-em-irt-module"></span><h2>EduCDM.IRT.EM.IRT module<a class="headerlink" href="#module-EduCDM.IRT.EM.IRT" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="EduCDM.IRT.EM.IRT.init_parameters">
+<span class="sig-prename descclassname"><span class="pre">EduCDM.IRT.EM.IRT.</span></span><span class="sig-name descname"><span class="pre">init_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prob_num</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#EduCDM.IRT.EM.IRT.init_parameters" title="Link to this definition"></a></dt>
+<dd><p>Initialize the parameters of IRT model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>prob_num</strong> – the number of problems</p></li>
+<li><p><strong>dim</strong> – the dimension of  student’s ability</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>(alpha, beta, gamma), i.e., the initialized discrimination, difficulty and guess parameters</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="EduCDM.IRT.EM.IRT.init_prior_prof_distribution">
+<span class="sig-prename descclassname"><span class="pre">EduCDM.IRT.EM.IRT.</span></span><span class="sig-name descname"><span class="pre">init_prior_prof_distribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#EduCDM.IRT.EM.IRT.init_prior_prof_distribution" title="Link to this definition"></a></dt>
+<dd><p>Initialize the prior distribution of student abilities</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dim</strong> – Dimension of student’s ability</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>(prof, norm_dis), i.e., the discrete student proficiency levels and their probabilities</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="EduCDM.IRT.EM.IRT.get_Likelihood">
+<span class="sig-prename descclassname"><span class="pre">EduCDM.IRT.EM.IRT.</span></span><span class="sig-name descname"><span class="pre">get_Likelihood</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prof</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#EduCDM.IRT.EM.IRT.get_Likelihood" title="Link to this definition"></a></dt>
+<dd><p>get the likelihood function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> – Discrimination of the problems</p></li>
+<li><p><strong>b</strong> – Difficulty of the problems</p></li>
+<li><p><strong>c</strong> – Guess parameters of the problems</p></li>
+<li><p><strong>prof</strong> – Normalized distribution of student’s ability</p></li>
+<li><p><strong>R</strong> – matrix of item response</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>(prof_prob, prob_stu)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="EduCDM.IRT.EM.IRT.update_prior">
+<span class="sig-prename descclassname"><span class="pre">EduCDM.IRT.EM.IRT.</span></span><span class="sig-name descname"><span class="pre">update_prior</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prior_dis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prof_stu_like</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#EduCDM.IRT.EM.IRT.update_prior" title="Link to this definition"></a></dt>
+<dd><p>update the prior distribution of student abilities</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>prior_dis</strong> – prior distribution of student abilities</p></li>
+<li><p><strong>prof_stu_like</strong> – Probability matrix of which ability level a student belongs to</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>(update_prior_dis, norm_dis_like), i.e., the updated prior distribution of student abilities
+and the normalized distribution of student abilities</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="EduCDM.IRT.EM.IRT.update_irt">
+<span class="sig-prename descclassname"><span class="pre">EduCDM.IRT.EM.IRT.</span></span><span class="sig-name descname"><span class="pre">update_irt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">D</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prof</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r_ek</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s_ek</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#EduCDM.IRT.EM.IRT.update_irt" title="Link to this definition"></a></dt>
+<dd><p>update the parameters of IRT model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> – Discrimination of the problems</p></li>
+<li><p><strong>b</strong> – Difficulty of the problems</p></li>
+<li><p><strong>c</strong> – Guess parameters of the problems</p></li>
+<li><p><strong>D</strong> – the value of D</p></li>
+<li><p><strong>prof</strong> – Normalized distribution of student’s ability</p></li>
+<li><p><strong>R</strong> – matrix of item response</p></li>
+<li><p><strong>r_ek</strong> – the number of students who answered correctly</p></li>
+<li><p><strong>s_ek</strong> – the number of students who answered</p></li>
+<li><p><strong>lr</strong> – learning rate</p></li>
+<li><p><strong>epoch</strong> – the number of iterations</p></li>
+<li><p><strong>epsilon</strong> – threshold of convergence</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the updated (a, b, c)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="EduCDM.IRT.EM.IRT.IRT">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">EduCDM.IRT.EM.IRT.</span></span><span class="sig-name descname"><span class="pre">IRT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">meta_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#EduCDM.IRT.EM.IRT.IRT" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="EduCDM.html#EduCDM.meta.CDM" title="EduCDM.meta.CDM"><code class="xref py py-class docutils literal notranslate"><span class="pre">CDM</span></code></a></p>
+<p>IRT model, training (EM) and testing methods</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>meta_data</strong> – a dictionary containing all the userIds, itemIds, and skills.</p></li>
+<li><p><strong>dim</strong> (<em>int</em>) – the dimension of student/problem embedding, MIRT for dim &gt; 1</p></li>
+<li><p><strong>skip_value</strong> (<em>int</em>) – the unavailable value in matrix need to be skipped</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="EduCDM.IRT.EM.IRT.IRT.transform__">
+<span class="sig-name descname"><span class="pre">transform__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#EduCDM.IRT.EM.IRT.IRT.transform__" title="Link to this definition"></a></dt>
+<dd><p>transform the train data to matrix of item response</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>train_data</strong> – training dataset</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the matrix of item response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="EduCDM.IRT.EM.IRT.IRT.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch_m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#EduCDM.IRT.EM.IRT.IRT.fit" title="Link to this definition"></a></dt>
+<dd><p>Train the IRT model
+This function uses the EM algorithm to train the model, in which the M step uses gradient descent to maximize parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train_data</strong> – training dataset</p></li>
+<li><p><strong>lr</strong> – learning rate</p></li>
+<li><p><strong>epoch</strong> – the number of iterations in the EM algorithm, default: 10</p></li>
+<li><p><strong>epoch_m</strong> – the number of iterations in the M step (update_irt), default: 10</p></li>
+<li><p><strong>epsilon</strong> – convergence threshold, default: 1e-3</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="EduCDM.IRT.EM.IRT.IRT.predict_proba">
+<span class="sig-name descname"><span class="pre">predict_proba</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#EduCDM.IRT.EM.IRT.IRT.predict_proba" title="Link to this definition"></a></dt>
+<dd><p>calculate the probability</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>test_data</strong> – a dataframe containing testing userIds and itemIds.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a dataframe containing the userIds, itemIds, and proba (predicted probabilities).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="EduCDM.IRT.EM.IRT.IRT.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#EduCDM.IRT.EM.IRT.IRT.predict" title="Link to this definition"></a></dt>
+<dd><p>predict the probability</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>test_data</strong> – a dataframe containing testing userIds and itemIds.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a dataframe containing the userIds, itemIds, and predicted responses.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="EduCDM.IRT.EM.IRT.IRT.eval">
+<span class="sig-name descname"><span class="pre">eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#EduCDM.IRT.EM.IRT.IRT.eval" title="Link to this definition"></a></dt>
+<dd><p>Evaluate the IRT model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>val_data</strong> – a dataframe containing testing userIds and itemIds.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>(test_rmse, test_mae)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="EduCDM.IRT.EM.IRT.IRT.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#EduCDM.IRT.EM.IRT.IRT.save" title="Link to this definition"></a></dt>
+<dd><p>save the parameters of IRT model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filepath</strong> – the path of file</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="EduCDM.IRT.EM.IRT.IRT.load">
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#EduCDM.IRT.EM.IRT.IRT.load" title="Link to this definition"></a></dt>
+<dd><p>load the parameters of IRT model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filepath</strong> – the path of file</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="EduCDM.IRT.EM.IRT.IRT.Get_stu_ability">
+<span class="sig-name descname"><span class="pre">Get_stu_ability</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">records</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#EduCDM.IRT.EM.IRT.IRT.Get_stu_ability" title="Link to this definition"></a></dt>
+<dd><p>Transform the records to student’s ability by MLE method
+can evaluate multiple students’ states simultaneously, thus output shape = (stu_num, dim)
+initialization stu_prof, shape = (stu_num, dim)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>records</strong> – records of students’ answers</p></li>
+<li><p><strong>lr</strong> – learning rate</p></li>
+<li><p><strong>epoch</strong> – the number of iterations</p></li>
+<li><p><strong>epsilon</strong> – threshold of convergence</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>students’ ability distributions</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-EduCDM.IRT.EM">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-EduCDM.IRT.EM" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, FeiWang.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,29 @@
+EduCDM.IRT package
+==================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   EduCDM.IRT.EM
+
+Submodules
+----------
+
+EduCDM.IRT.irt module
+---------------------
+
+.. automodule:: EduCDM.IRT.irt
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: EduCDM.IRT
+   :members:
+   :undoc-members:
+   :show-inheritance:

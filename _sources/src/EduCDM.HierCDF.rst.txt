@@ -1,0 +1,21 @@
+EduCDM.HierCDF package
+======================
+
+Submodules
+----------
+
+EduCDM.HierCDF.HierCDF module
+-----------------------------
+
+.. automodule:: EduCDM.HierCDF.HierCDF
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: EduCDM.HierCDF
+   :members:
+   :undoc-members:
+   :show-inheritance:

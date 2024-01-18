@@ -1,0 +1,21 @@
+EduCDM.IRT.EM package
+=====================
+
+Submodules
+----------
+
+EduCDM.IRT.EM.IRT module
+------------------------
+
+.. automodule:: EduCDM.IRT.EM.IRT
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: EduCDM.IRT.EM
+   :members:
+   :undoc-members:
+   :show-inheritance:
