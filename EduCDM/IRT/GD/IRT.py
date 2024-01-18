@@ -58,13 +58,9 @@ class IRT(CDM):
     The IRT model.
 
     Args:
-        meta_data: a dictionary containing all the userIds, itemIds, and skills.
-        range: the dimension of the first hidden layer. Default: 512
-        hidd_dim2: the dimension of the second hidden layer. Default: 256
 
     Examples:
-        meta_data = {'userId': ['001', '002', '003'], 'itemId': ['adf', 'w5'], 'skill': ['skill1', 'skill2', 'skill3', 'skill4']}
-        model = IRT(meta_data, 512, 256)
+
     '''
 
     def __init__(self, meta_data: dict):
@@ -219,8 +215,7 @@ class IRT(CDM):
             filepath: the path from which to load the model.
 
         Examples:
-            model = IRT(meta_data)  # where meta_data is from the same dataset which is used to train the model at filepath
-            model.load('path_to_the_pre-trained_model')
+
         '''
 
         self.irt_net.load_state_dict(torch.load(filepath, map_location=lambda s, loc: s))

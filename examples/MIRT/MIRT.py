@@ -32,7 +32,7 @@ test_data = pd.merge(test_data, df_item, how='left', on='item_id').rename(column
 batch_size = 32
 logging.getLogger().setLevel(logging.INFO)
 cdm = MIRT(meta_data)
-cdm.fit(train_data, epoch=1, val_data=valid_data, device="cpu") # cuda
+cdm.fit(train_data, epoch=1, val_data=valid_data, device="cuda")
 
 # predict using the trained model
 print(cdm.predict(test_data))
