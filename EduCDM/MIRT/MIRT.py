@@ -52,7 +52,6 @@ class MIRT(CDM):
     Args:
         meta_data: a dictionary containing all the userIds, itemIds.
         latent_dim: the dimension of user embedding. Default: 20
-        [a_range]: the influence degree of item discrimination. Default: 1
 
     Examples:
         meta_data = {'userId': ['001', '002', '003'], 'itemId': ['adf', 'w5']}
@@ -60,11 +59,12 @@ class MIRT(CDM):
 
     '''
 
-    def __init__(self, meta_data: dict, latent_dim=20, a_range=1):
+    def __init__(self, meta_data: dict, latent_dim=20):
         super(MIRT, self).__init__()
         self.id_reindex, _ = re_index(meta_data)
         self.student_n = len(self.id_reindex['userId'])
         self.exer_n = len(self.id_reindex['itemId'])
+        a_range = 10
         self.mirt_net = MIRTNet(self.student_n, self.exer_n, latent_dim, a_range)
 
     def transform__(self, df_data: pd.DataFrame, batch_size: int, shuffle):
