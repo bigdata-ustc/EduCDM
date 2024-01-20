@@ -1,14 +1,14 @@
 # coding: utf-8
-# 2023/11/17 @ WangFei
-from EduCDM import NCDM
+# 2023/12/29 @ CSLiJT
+from EduCDM import HierCDF
 
 
 def test_train(data, meta, tmp_path):
-    df_data = data
+    df_data, know_graph = data
     meta_data = meta
-    cdm = NCDM(meta_data)
+    cdm = HierCDF(meta_data, know_graph, hidd_dim=32)
     cdm.fit(train_data=df_data, epoch=2, val_data=df_data)
-    filepath = tmp_path / "ncdm.params"
+    filepath = tmp_path / "hiercdf.params"
     cdm.save(filepath)
     cdm.load(filepath)
     cdm.predict(df_data)

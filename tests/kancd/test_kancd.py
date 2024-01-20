@@ -1,18 +1,21 @@
 # coding: utf-8
-# 2023/3/8 @ WangFei
+# 2023/11/17 @ WangFei
 from EduCDM import KaNCD
 
 
-def test_train(data, conf, tmp_path):
-    user_num, item_num, knowledge_num = conf
-    cdm = KaNCD(exer_n=item_num, student_n=user_num, knowledge_n=knowledge_num, mf_type='mf', dim=2)
-    cdm.train(data, data, epoch_n=2)
-    cdm = KaNCD(exer_n=item_num, student_n=user_num, knowledge_n=knowledge_num, mf_type='gmf', dim=2)
-    cdm.train(data, data, epoch_n=2)
-    cdm = KaNCD(exer_n=item_num, student_n=user_num, knowledge_n=knowledge_num, mf_type='ncf1', dim=2)
-    cdm.train(data, data, epoch_n=2)
-    cdm = KaNCD(exer_n=item_num, student_n=user_num, knowledge_n=knowledge_num, mf_type='ncf2', dim=2)
-    cdm.train(data, data, epoch_n=2)
+def test_train(data, meta, tmp_path):
+    df_data = data
+    meta_data = meta
+    cdm = KaNCD(meta_data, mf_type='mf')
+    cdm.fit(train_data=df_data, epoch=1, val_data=df_data)
+    cdm = KaNCD(meta_data, mf_type='gmf')
+    cdm.fit(train_data=df_data, epoch=1, val_data=df_data)
+    cdm = KaNCD(meta_data, mf_type='ncf1')
+    cdm.fit(train_data=df_data, epoch=1, val_data=df_data)
+    cdm = KaNCD(meta_data, mf_type='ncf2')
+    cdm.fit(train_data=df_data, epoch=1, val_data=df_data)
     filepath = tmp_path / "kancd.params"
     cdm.save(filepath)
     cdm.load(filepath)
+    cdm.predict(df_data)
+    cdm.eval(df_data)

@@ -1,5 +1,8 @@
 # coding: utf-8
-# 2021/3/17 @ tongshiwei
+# 2023/11/4 @ Fei Wang
+
+from typing import List
+import pandas as pd
 
 
 def etl(*args, **kwargs) -> ...:  # pragma: no cover
@@ -18,13 +21,16 @@ def evaluate(*args, **kwargs) -> ...:  # pragma: no cover
 
 
 class CDM(object):
-    def __init__(self, *args, **kwargs) -> ...:
+    def __init__(self, *args, **kwargs) -> None:
         pass
 
-    def train(self, *args, **kwargs) -> ...:
+    def fit(self, *args, **kwargs) -> None:
         raise NotImplementedError
 
-    def eval(self, *args, **kwargs) -> ...:
+    def predict(self, *args, **kwargs) -> pd.DataFrame:
+        raise NotImplementedError
+
+    def predict_proba(self, *args, **kwargs) -> pd.DataFrame:
         raise NotImplementedError
 
     def save(self, *args, **kwargs) -> ...:
