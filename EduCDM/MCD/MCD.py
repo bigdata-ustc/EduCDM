@@ -24,7 +24,7 @@ class MFNet(nn.Module):
 
         super(MFNet, self).__init__()
 
-        # prediction sub-net
+        # prediction
         self.user_embedding = nn.Embedding(self.user_num, self.latent_dim)
         self.item_embedding = nn.Embedding(self.item_num, self.latent_dim)
         self.response = nn.Linear(2 * self.latent_dim, 1)
@@ -46,12 +46,11 @@ class MCD(CDM):
 
     Args:
         meta_data: a dictionary containing all the userIds, itemIds, and skills.
-        hidd_dim1: the dimension of the first hidden layer. Default: 512
-        hidd_dim2: the dimension of the second hidden layer. Default: 256
+        [latent_dim]: the dimension of user embedding. Default: 20
 
     Examples:
         meta_data = {'userId': ['001', '002', '003'], 'itemId': ['adf', 'w5'], 'skill': ['skill1', 'skill2', 'skill3', 'skill4']}
-        model = NCDM(meta_data, 512, 256)
+        model = MCD(meta_data, 20)
     '''
 
     def __init__(self, meta_data: dict, latent_dim=20):

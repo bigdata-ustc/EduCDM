@@ -51,7 +51,7 @@ class MIRT(CDM):
 
     Args:
         meta_data: a dictionary containing all the userIds, itemIds.
-        latent_dim: the dimension of user embedding. Default: 20
+        [latent_dim]: the dimension of user embedding. Default: 20
 
     Examples:
         meta_data = {'userId': ['001', '002', '003'], 'itemId': ['adf', 'w5']}
