@@ -26,7 +26,6 @@ class MIRTNet(nn.Module):
 
         super(MIRTNet, self).__init__()
 
-        # prediction sub-net
         self.theta = nn.Embedding(self.user_num, latent_dim)
         self.a = nn.Embedding(self.item_num, latent_dim)
         self.b = nn.Embedding(self.item_num, 1)
@@ -39,10 +38,7 @@ class MIRTNet(nn.Module):
     def forward(self, stu_id: torch.Tensor, input_exercise: torch.Tensor) -> torch.Tensor:
         theta = torch.squeeze(self.theta(stu_id), dim=-1)
         a = torch.squeeze(self.a(input_exercise), dim=-1)
-        if self.a_range != 0:
-            a = self.a_range * torch.sigmoid(a)
-        else:
-            a = F.softplus(a)
+        a = self.a_range * torch.sigmoid(a)
         b = torch.squeeze(self.b(input_exercise), dim=-1)
         if torch.max(theta != theta) or torch.max(a != a) or torch.max(b != b):  # pragma: no cover
             raise ValueError('ValueError:theta,a,b may contains nan!  The a_range is too large.')
@@ -51,19 +47,20 @@ class MIRTNet(nn.Module):
 
 class MIRT(CDM):
     r'''
-    The Matrix factorization based Cognitive Diagnosis Model.
+    The MIRT model.
 
     Args:
-        meta_data: a dictionary containing all the userIds, itemIds, and skills.
-        hidd_dim1: the dimension of the first hidden layer. Default: 512
-        hidd_dim2: the dimension of the second hidden layer. Default: 256
+        meta_data: a dictionary containing all the userIds, itemIds.
+        latent_dim: the dimension of user embedding. Default: 20
+        [a_range]: the influence degree of item discrimination. Default: 1
 
     Examples:
-        meta_data = {'userId': ['001', '002', '003'], 'itemId': ['adf', 'w5'], 'skill': ['skill1', 'skill2', 'skill3', 'skill4']}
-        model = NCDM(meta_data, 512, 256)
+        meta_data = {'userId': ['001', '002', '003'], 'itemId': ['adf', 'w5']}
+        model = MIRT(meta_data, 20)
+
     '''
 
-    def __init__(self, meta_data: dict, latent_dim=20, a_range=0):
+    def __init__(self, meta_data: dict, latent_dim=20, a_range=1):
         super(MIRT, self).__init__()
         self.id_reindex, _ = re_index(meta_data)
         self.student_n = len(self.id_reindex['userId'])
