@@ -55,11 +55,14 @@ class Net(nn.Module):
 
 class IRT(CDM):
     r'''
-    The IRT model.
+    The IRT model optimized by gradient descent.
 
     Args:
+        meta_data: a dictionary containing all the userIds, and itemIds.
 
     Examples:
+        meta_data = {'userId': ['001', '002', '003'], 'itemId': ['adf', 'w5']}
+        model = GDIRT(meta_data)
 
     '''
 
