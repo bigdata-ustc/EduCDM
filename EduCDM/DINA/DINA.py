@@ -315,48 +315,48 @@ class DINA(CDM):
         logging.info("load parameters from %s" % filepath)
 
 
-def _test():
-    train_data = pd.read_csv('../tests/data/train_0.8_0.2.csv').head(100)
-    q_matrix = np.loadtxt('../tests/data/Q_matrix.txt')
-    # train_data = pd.DataFrame({
-    #     'userId': [
-    #         '001', '001', '001', '001', '002', '002',
-    #         '002', '002', '003', '003', '003', '003'],
-    #     'itemId': [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3],
-    #     'response': [0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1]
-    # })
-    # q_matrix = np.array([
-    #     [1, 1, 0, 0],
-    #     [0, 1, 1, 0],
-    #     [0, 0, 1, 1],
-    #     [1, 0, 0, 1]
-    # ])
+# def _test():
+#     train_data = pd.read_csv('../tests/data/train_0.8_0.2.csv').head(100)
+#     q_matrix = np.loadtxt('../tests/data/Q_matrix.txt')
+#     # train_data = pd.DataFrame({
+#     #     'userId': [
+#     #         '001', '001', '001', '001', '002', '002',
+#     #         '002', '002', '003', '003', '003', '003'],
+#     #     'itemId': [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3],
+#     #     'response': [0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1]
+#     # })
+#     # q_matrix = np.array([
+#     #     [1, 1, 0, 0],
+#     #     [0, 1, 1, 0],
+#     #     [0, 0, 1, 1],
+#     #     [1, 0, 0, 1]
+#     # ])
 
-    train_data['skill'] = 0
-    for id in range(train_data.shape[0]):
-        item_id = train_data.loc[id, 'itemId']
-        concepts = np.where(
-            q_matrix[item_id] > 0)[0].tolist()
-        train_data.loc[id, 'skill'] = str(concepts)
-    meta_data = {'userId': [], 'itemId': [], 'skill': []}
-    meta_data['userId'] = train_data['userId'].unique().tolist()
-    meta_data['itemId'] = train_data['itemId'].unique().tolist()
-    meta_data['skill'] = [i for i in range(q_matrix.shape[1])]
+#     train_data['skill'] = 0
+#     for id in range(train_data.shape[0]):
+#         item_id = train_data.loc[id, 'itemId']
+#         concepts = np.where(
+#             q_matrix[item_id] > 0)[0].tolist()
+#         train_data.loc[id, 'skill'] = str(concepts)
+#     meta_data = {'userId': [], 'itemId': [], 'skill': []}
+#     meta_data['userId'] = train_data['userId'].unique().tolist()
+#     meta_data['itemId'] = train_data['itemId'].unique().tolist()
+#     meta_data['skill'] = [i for i in range(q_matrix.shape[1])]
 
-    dina = DINA(meta_data)
-    dina.fit(
-        train_data,
-        val_data=train_data,
-        batch_size=4, epoch=5, lr=0.01)
-    dina.save('./dina.pt')
-    new_dina = DINA(meta_data)
-    new_dina.load('./dina.pt')
-    new_dina.fit(
-        train_data,
-        val_data=train_data,
-        batch_size=1, epoch=3, lr=0.01)
-    new_dina.eval(train_data)
+#     dina = DINA(meta_data)
+#     dina.fit(
+#         train_data,
+#         val_data=train_data,
+#         batch_size=4, epoch=5, lr=0.01)
+#     dina.save('./dina.pt')
+#     new_dina = DINA(meta_data)
+#     new_dina.load('./dina.pt')
+#     new_dina.fit(
+#         train_data,
+#         val_data=train_data,
+#         batch_size=1, epoch=3, lr=0.01)
+#     new_dina.eval(train_data)
 
 
-if __name__ == '__main__':
-    _test()
+# if __name__ == '__main__':
+#     _test()
