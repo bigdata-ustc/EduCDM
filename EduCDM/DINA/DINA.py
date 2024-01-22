@@ -11,11 +11,6 @@ from typing import Tuple
 from tqdm import tqdm
 from sklearn.metrics import roc_auc_score, accuracy_score
 from torch.utils.data import TensorDataset, DataLoader
-
-# TODO: delete this line in deployment
-import sys
-sys.path.append('..')
-
 from EduCDM import CDM, re_index
 
 
