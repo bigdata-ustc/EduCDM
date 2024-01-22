@@ -13,3 +13,4 @@ from .NCDM import NCDM
 # from .MIRT import MIRT
 from .KaNCD import KaNCD
 from .HierCDF import HierCDF
+from .DINA import DINA

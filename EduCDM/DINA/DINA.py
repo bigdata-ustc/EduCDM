@@ -2,15 +2,22 @@
 # 2024/01/17 @ CSLiJT
 
 import logging
-import numpy as np
 import torch
-from EduCDM import CDM
-from torch import nn
+import torch.nn as nn
+import torch.optim as optim
+import numpy as np
+import pandas as pd
+from typing import Tuple
 from tqdm import tqdm
 from sklearn.metrics import roc_auc_score, accuracy_score
-import torch.autograd as autograd
-import torch.nn.functional as F
+from torch.utils.data import TensorDataset, DataLoader
+
+# TODO: delete this line in deployment
+import sys
+sys.path.append('..')
+
 from EduCDM import CDM, re_index
+
 
 class DINANet(nn.Module):
     def __init__(self, user_num, item_num, hidden_dim, max_slip=0.4, max_guess=0.4, *args, **kwargs):
@@ -139,17 +146,23 @@ class DINANet(nn.Module):
 #         logging.info("load parameters from %s" % filepath)
 
 
-# TODO 2.0 version DINA
 class DINA(CDM):
 
-    def __init__(self, meta_data: dict):
+    def __init__(self, meta_data: dict,
+                 max_slip: float = 0.4,
+                 max_guess: float = 0.4):
         super(DINA, self).__init__()
         self.id_reindex, _ = re_index(meta_data)
         self.student_n = len(self.id_reindex['userId'])
         self.exer_n = len(self.id_reindex['itemId'])
         self.knowledge_n = len(self.id_reindex['skill'])
-        self.net = DINANet(self.exer_n, self.student_n, self.knowledge_n, mf_type, dim, layer_dim1, layer_dim2)
-    
+        self.net = DINANet(
+            self.student_n,
+            self.exer_n,
+            self.knowledge_n,
+            max_slip=max_slip,
+            max_guess=max_guess)
+
     def transform__(self, df_data: pd.DataFrame, batch_size: int, shuffle):
         users = [self.id_reindex['userId'][userId] for userId in df_data['userId'].values]
         items = [self.id_reindex['itemId'][itemId] for itemId in df_data['itemId'].values]
@@ -168,7 +181,6 @@ class DINA(CDM):
             torch.tensor(responses, dtype=torch.float32)
         )
         return DataLoader(data_set, batch_size=batch_size, shuffle=shuffle)
-
 
     def fit(self, train_data: pd.DataFrame, epoch: int, val_data=None, device="cpu", lr=0.002, batch_size=64):
         r'''
@@ -282,7 +294,7 @@ class DINA(CDM):
     def save(self, filepath):
         r'''
         Save the model. This method is implemented based on the PyTorch's torch.save() method. Only the parameters
-        in self.ncdm_net will be saved. You can save the whole NCDM object using pickle.
+        in self.dina_net will be saved. You can save the whole DINA object using pickle.
 
         Args:
             filepath: the path to save the model.
@@ -293,16 +305,63 @@ class DINA(CDM):
 
     def load(self, filepath):
         r'''
-        Load the model. This method loads the model saved at filepath into self.ncdm_net. Before loading, the object
+        Load the model. This method loads the model saved at filepath into self.dina_net. Before loading, the object
         needs to be properly initialized.
 
         Args:
             filepath: the path from which to load the model.
 
         Examples:
-            model = NCDM(meta_data)  # where meta_data is from the same dataset which is used to train the model at filepath
+            model = DINA(meta_data)  # where meta_data is from the same dataset which is used to train the model at filepath
             model.load('path_to_the_pre-trained_model')
         '''
 
         self.net.load_state_dict(torch.load(filepath, map_location=lambda s, loc: s))
         logging.info("load parameters from %s" % filepath)
+
+
+def _test():
+    train_data = pd.read_csv('../tests/data/train_0.8_0.2.csv').head(100)
+    q_matrix = np.loadtxt('../tests/data/Q_matrix.txt')
+    # train_data = pd.DataFrame({
+    #     'userId': [
+    #         '001', '001', '001', '001', '002', '002',
+    #         '002', '002', '003', '003', '003', '003'],
+    #     'itemId': [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3],
+    #     'response': [0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1]
+    # })
+    # q_matrix = np.array([
+    #     [1, 1, 0, 0],
+    #     [0, 1, 1, 0],
+    #     [0, 0, 1, 1],
+    #     [1, 0, 0, 1]
+    # ])
+
+    train_data['skill'] = 0
+    for id in range(train_data.shape[0]):
+        item_id = train_data.loc[id, 'itemId']
+        concepts = np.where(
+            q_matrix[item_id] > 0)[0].tolist()
+        train_data.loc[id, 'skill'] = str(concepts)
+    meta_data = {'userId': [], 'itemId': [], 'skill': []}
+    meta_data['userId'] = train_data['userId'].unique().tolist()
+    meta_data['itemId'] = train_data['itemId'].unique().tolist()
+    meta_data['skill'] = [i for i in range(q_matrix.shape[1])]
+
+    dina = DINA(meta_data)
+    dina.fit(
+        train_data,
+        val_data=train_data,
+        batch_size=4, epoch=5, lr=0.01)
+    dina.save('./dina.pt')
+    new_dina = DINA(meta_data)
+    new_dina.load('./dina.pt')
+    new_dina.fit(
+        train_data,
+        val_data=train_data,
+        batch_size=1, epoch=3, lr=0.01)
+    new_dina.eval(train_data)
+
+
+if __name__ == '__main__':
+    _test()

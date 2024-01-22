@@ -1,6 +1,4 @@
 # coding: utf-8
-# 2021/3/28 @ liujiayu
+# 2024/01/17 @ CSLiJT
 
-
-from .GD import DINA as GDDINA
-from .EM import DINA as EMDINA
+from .DINA import DINA
