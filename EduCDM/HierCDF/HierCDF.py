@@ -15,10 +15,6 @@ from torch.utils.data import TensorDataset, DataLoader
 from tqdm import tqdm
 from typing import Tuple
 
-# TODO: delete this line in deployment
-import sys
-sys.path.append('..')
-
 from EduCDM import CDM, re_index
 
 

@@ -1,5 +1,5 @@
 # coding: utf-8
-# 2024/1/15 @ CSLiJT
+# 2024/01/15 @ CSLiJT
 import logging
 from EduCDM import HierCDF
 import torch
