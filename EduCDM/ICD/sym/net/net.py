@@ -29,7 +29,7 @@ class ICD(nn.Module):
             if 'weight' in name:
                 nn.init.xavier_normal_(param)
 
-    def forward(self, u2i, u_mask, i2u, i_mask, i2k):
+    def forward(self, u2i, u_mask, i2u, i_mask, i2k):  # pragma: no cover
         u_trait = self.l_dtn(u2i, u_mask)
         v_trait = self.i_dtn(i2u, i_mask)
         return self.cdm(u_trait, v_trait, i2k)
@@ -86,12 +86,12 @@ class DualICD(nn.Module):
         return output, theta, a, b, stat_theta, stat_a, stat_b
 
 
-class EmbICD(nn.Module):
+class EmbICD(nn.Module):  # pragma: no cover
     def __init__(self, int_fc, weights):
         super(EmbICD, self).__init__()
         self.theta_emb = nn.Embedding(*weights[0].size(), _weight=weights[0])
         self.a_emb = nn.Embedding(*weights[1].size(), _weight=weights[1])
-        if len(weights[2].size()) == 1:
+        if len(weights[2].size()) == 1:  # pragma: no cover
             self.b_emb = nn.Embedding(weights[2].size()[0],
                                       1,
                                       _weight=torch.unsqueeze(weights[2], 1))

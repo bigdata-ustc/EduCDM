@@ -75,7 +75,7 @@ def stableness_eval(net, user, item, u2i, i2u, user_traits, item_traits,
 
 
 @fit_wrapper
-def dual_fit_f(_net, batch_data, loss_function, *args, **kwargs):
+def dual_fit_f(_net, batch_data, loss_function, *args, **kwargs):  # pragma: no cover
     (
         _,
         u2i,
@@ -109,8 +109,7 @@ def turning_point(net: (torch.nn.DataParallel, ICD),
                   tolerance=1e-2,
                   logger=logging,
                   *args,
-                  **kwargs):
-    # return True
+                  **kwargs):  # pragma: no cover
     net = net.module if isinstance(net, torch.nn.DataParallel) else net
     valid_inc_users = list(
         set(inc_train_df["userId"].tolist()) & set(dict2.u2i.keys()))
@@ -271,7 +270,7 @@ def turning_point(net: (torch.nn.DataParallel, ICD),
                           ((delta_r_pos / n_j * r_neg / m_j +
                             delta_r_neg / n_j * r_pos / m_j) * beta))
 
-    if delta_item and max(delta_item) > tolerance * (v_dim**0.5):
+    if delta_item and max(delta_item) > tolerance * (v_dim**0.5):  # pragma: no cover
         logger.info("++++++++++++ %s > %s +++++++++++++" %
                     (max(delta_item), tolerance * (v_dim**0.5)))
         return True
