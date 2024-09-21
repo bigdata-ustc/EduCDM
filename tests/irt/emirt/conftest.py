@@ -1,5 +1,5 @@
 # coding: utf-8
-# 2023/11/17 @ WangFei
+# 2023/12/28 @ ChenSiHang
 
 import pytest
 import pandas as pd
@@ -25,8 +25,7 @@ def data(meta):
             userIds.append(user)
             itemIds.append(item)
             skills.append(str([item_skills[i]]))
-            # responses.append(random.randint(0, 1))
-    responses = [0, 1, 0, 1, 0, 0]
+            responses.append(random.randint(0, 1))
 
     df_data = pd.DataFrame({'userId': userIds, 'itemId': itemIds, 'skill': skills, 'response': responses})
     return df_data

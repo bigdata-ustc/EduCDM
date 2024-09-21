@@ -10,6 +10,8 @@ from .MCD import MCD
 # from .DINA import EMDINA, GDDINA
 # from .FuzzyCDF import FuzzyCDF
 from .NCDM import NCDM
-# from .IRT import EMIRT, GDIRT
+from .IRT import EMIRT, GDIRT
 from .MIRT import MIRT
 from .KaNCD import KaNCD
+from .HierCDF import HierCDF
+from .DINA import DINA
