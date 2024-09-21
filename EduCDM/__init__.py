@@ -5,7 +5,6 @@
 from .utils import re_index
 
 from .meta import CDM
-from .IRT import GDIRT
 from .MCD import MCD
 # from .DINA import EMDINA, GDDINA
 # from .FuzzyCDF import FuzzyCDF

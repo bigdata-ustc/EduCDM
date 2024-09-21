@@ -15,6 +15,7 @@ from torch.utils.data import TensorDataset, DataLoader
 from typing import Tuple, List
 from EduCDM import CDM, re_index
 
+
 class MFNet(nn.Module):
 
     def __init__(self, student_n: int, exer_n: int, latent_dim: int):

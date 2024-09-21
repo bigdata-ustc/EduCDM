@@ -43,15 +43,15 @@ class Net(nn.Module):
         c = torch.sigmoid(c)
         theta = self.value_range * (torch.sigmoid(theta) - 0.5)
         b = self.value_range * (torch.sigmoid(b) - 0.5)
-        if self.a_range is not 0:
+        if self.a_range != 0:
             a = self.a_range * torch.sigmoid(a)
         else:
             a = F.softplus(a)
         if torch.max(theta != theta) or torch.max(a != a) or torch.max(b != b):  # pragma: no cover
             raise ValueError('ValueError:theta,a,b may contains nan!  The value_range or a_range is too large.')
-        
         # prednet using irt3pl
         return c + (1 - c) / (1 + torch.exp(-1.702 * a * (theta - b)))
+
 
 class IRT(CDM):
     r'''
@@ -78,7 +78,6 @@ class IRT(CDM):
         users = [self.id_reindex['userId'][userId] for userId in df_data['userId'].values]
         items = [self.id_reindex['itemId'][itemId] for itemId in df_data['itemId'].values]
         responses = df_data['response'].values
-
 
         data_set = TensorDataset(
             torch.tensor(users, dtype=torch.int64),
