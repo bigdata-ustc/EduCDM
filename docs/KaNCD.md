@@ -24,11 +24,11 @@ KaNCD is an **K**nowledge-**a**ssociation based extension of the **N**eural**CD*
 
 The knowledge difficulty vector of an exercise is calculated from the latent trait of the exercise and the latent trait of each knowledge concept. 
 
-![KDM_MF](F:\git_project\EduCDM\EduCDM\docs\_static\KDM_MF.png)
+![KDM_MF](_static\KDM_MF.png)
 
 Similarly, the knowledge proficiency vector of a student is calculated from the latent trait of the student and the latent trait of each knowledge concept.
 
-![KPM_MF](F:\git_project\EduCDM\EduCDM\docs\_static\KPM_MF.png)
+![KPM_MF](_static\KPM_MF.png)
 
 Please refer to the paper for more details.
 

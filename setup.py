@@ -4,7 +4,7 @@ test_deps = [
     'pytest>=4',
     'pytest-cov>=2.6.0',
     # 'pytest-flake8==4.0.1',
-    'pytest-flake8<5.0.0',
+    'pytest-flake8<1.1.2',  # When >=1.2.2, incompatable with flake8>=5.0.0. E.g., flake8.options.config.load_config
     'flake8<5.0.0'
 ]
 

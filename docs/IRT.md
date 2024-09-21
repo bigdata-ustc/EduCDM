@@ -33,7 +33,7 @@ In EMIRT, EM algorithm is adopted to estimate the parameters.
 | dim        | int  | the  dimension of student's ability. Default: 1 |
 | skip_value | int  | the skip_value of the item response matrix. Default: -1 |
 
-##Examples
+## Examples
 
 ```python
 import pandas as pd
