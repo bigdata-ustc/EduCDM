@@ -217,4 +217,3 @@ class DINA(CDM):
 
         self.net.load_state_dict(torch.load(filepath, map_location=lambda s, loc: s))
         logging.info("load parameters from %s" % filepath)
-
