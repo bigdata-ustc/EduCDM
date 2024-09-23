@@ -1,6 +1,6 @@
-# Matrix-factorization-based Cognitive Diagnosis model
+# Item response theory
 
-MCD in this package is based on the Matrix factorization. 
+GDIRT in this package denotes the IRT model trained with gradient descent.
 If this code helps you, please cite our work
 
 ```bibtex
@@ -14,31 +14,35 @@ If this code helps you, please cite our work
 }
 ```
 
-## Brief Introduction to MCD
-In MCD, each learner and item are represented with multidimensional latent vectors. The interaction among learners and items are depicted as the following figure. Although competent to predicting learners' future performance, the estimated learner vectors are not as interpretable as most traditional cognitive diagnosis models.
+## Brief Introduction to IRT
 
-![model](_static/MCD.png)
+Item response theory (IRT) is one of the most representative model for cognitive diagnosis. IRT uses parameters to represent students' abilities and the traits of exercises (e.g., difficulty, discrimination, guess). In this EMIRT, we implement the three-parameter logistic model whose item response function is as follows:
+
+![这是图片](_static\IRT\EMIRT\emirt4.png "Magic Gardens")
+
+In EMIRT, EM algorithm is adopted to estimate the parameters.
+
+
 
 ## Parameters description
 
 | PARAMETERS | TYPE | DESCRIPTION                              |
 | ---------- | ---- | ---------------------------------------- |
 | meta_data  | dict | a  dictionary containing all the userIds, itemIds, and skills. |
-| latent_dim        | int  | the  dimension of student's ability. Default: 20. |
 
 ## Examples
 
 ```python
 import pandas as pd
-from EduCDM import MCD
+from EduCDM import GDIRT
 meta_data = {'userId': ['001', '002', '003'], 'itemId': ['adf', 'w5'], 'skill': ['skill1', 'skill2', 'skill3', 'skill4']}
-model = MCD(meta_data, 10)
+model = GDIRT(meta_data)
 
 train_data = pd.DataFrame({'userId':[1,1,2,2,3,3], 'itemId': [1,2,1,3,2,3], 'skill': ["[1]", "[1,3]", "[1]", "[1,2,3]", "[1,3]", "[1,2,3]"], 'response': [1,1,0,1,1,0]})
 test_data = pd.DataFrame({'userId':[1,2,3], 'itemId': [3,2,1], 'skill': ["[1,2,3]", "[1,3]", "[1]"], 'response': [1,1,0]})
 model.fit(train_data, epoch=2)
 predict = model.predict()
-auc, acc = model.eval(test_data)
+AUC, Acc = model.eval(test_data)
 ```
 
 ## Methods summary
@@ -51,4 +55,3 @@ auc, acc = model.eval(test_data)
 | eval | Predict learners' responses in the input val_data, and then return the AUC and Accuracy of the prediction. |
 | save | Save the model to the given path. |
 | load | Load the snapshot saved before from the given path. |
-

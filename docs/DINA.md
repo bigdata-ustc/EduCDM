@@ -40,4 +40,6 @@ $$
 | fit               | Fits the model to the training data.     |
 | fit_predict       | Use the model to predict the responses in the testing data and returns the results. The responses are either 1 (i.e., correct answer) or 0 (i.e., incorrect answer). |
 | fit_predict_proba | Use the model to predict the responses in the testing data and returns the probabilities (that the correct answers will be provided). |
-
+| eval | Predict learners' responses in the input val_data, and then return the AUC and Accuracy of the prediction. |
+| save | Save the model to the given path. |
+| load | Load the snapshot saved before from the given path. |

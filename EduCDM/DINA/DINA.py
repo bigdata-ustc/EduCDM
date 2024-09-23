@@ -84,12 +84,12 @@ class DINA(CDM):
     def fit(self, train_data: pd.DataFrame, epoch: int, val_data=None, device="cpu", lr=0.002, batch_size=64):
         r'''
         Train the model with train_data. If val_data is provided, print the AUC and accuracy on val_data after each epoch.
+
         Args:
             train_data: a dataframe containing training userIds, itemIds and responses.
             epoch: number of training epochs.
             val_data: a dataframe containing validation userIds, itemIds and responses. Default: None.
-            device: device on which the model is trained. Default: 'cpu'. If you want to run it on your
-                    GPU, e.g., the first cuda gpu on your machine, you can change it to 'cuda:0'.
+            device: device on which the model is trained. Default: 'cpu'. If you want to run it on your GPU, e.g., the first cuda gpu on your machine, you can change it to 'cuda:0'.
             lr: learning rate. Default: 0.002.
             batch_size: the batch size during the training.
         '''

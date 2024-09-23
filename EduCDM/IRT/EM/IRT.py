@@ -6,7 +6,7 @@ import numpy as np
 import pickle
 from tqdm import tqdm
 from scipy import stats
-# sys.path.append("..")
+from sklearn.metrics import roc_auc_score, accuracy_score
 from ..irt import irt3pl
 from EduCDM import CDM, re_index
 
@@ -240,20 +240,12 @@ class IRT(CDM):
             val_data: a dataframe containing testing userIds and itemIds.
 
         Return:
-            (test_rmse, test_mae)
+            AUC, accuracy
         """
-        pred_score = self.predict_proba(val_data)
-        # print(pred_score)
-        true_score, test_rmse, test_mae = [], [], []
-        for index, i in tqdm(val_data.iterrows(), "evaluating_get_true_score"):
-            true_score.append(i['response'])
-        k = 0
-        for index, pred_score_j in tqdm(pred_score.iterrows(), "evaluating_rmse_mae"):
-            pre_score_now = pred_score_j['response']
-            test_rmse.append((pre_score_now[0] - true_score[k]) ** 2)
-            test_mae.append(abs(pre_score_now[0] - true_score[k]))
-            k += 1
-        return np.sqrt(np.average(test_rmse)), np.average(test_mae)
+        y_true = val_data['response'].values
+        df_proba = self.predict_proba(val_data)
+        pred_proba = df_proba['proba'].values
+        return roc_auc_score(y_true, pred_proba), accuracy_score(y_true, np.array(pred_proba) >= 0.5)
 
     def save(self, filepath: str):
         r"""

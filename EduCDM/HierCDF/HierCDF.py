@@ -18,46 +18,38 @@ from typing import Tuple
 from EduCDM import CDM, re_index
 
 
-def irt2pl(
-    user_emb: torch.Tensor, item_emb: torch.Tensor,
-        item_offset: torch.Tensor):
+def _irt2pl(user_emb: torch.Tensor, item_emb: torch.Tensor, item_offset: torch.Tensor):
     return 1 / (1 + torch.exp(-1.7 * item_offset * (user_emb - item_emb)))
 
 
-def mirt2pl(
-    user_emb: torch.Tensor, item_emb: torch.Tensor,
-        item_offset: torch.Tensor):
+def _mirt2pl(user_emb: torch.Tensor, item_emb: torch.Tensor, item_offset: torch.Tensor):
     return 1 / (1 + torch.exp(
         -torch.sum(
             torch.mul(
                 user_emb, item_emb), axis=1).reshape(-1, 1) + item_offset))
 
 
-def sigmoid_dot(
-    user_emb: torch.Tensor, item_emb: torch.Tensor,
-        item_offset: torch.Tensor):
+def _sigmoid_dot(user_emb: torch.Tensor, item_emb: torch.Tensor, item_offset: torch.Tensor):
     return torch.sigmoid(
         torch.sum(
             torch.mul(user_emb, item_emb), axis=-1)).reshape(-1, 1)
 
 
-def dot(
-    user_emb: torch.Tensor, item_emb: torch.Tensor,
-        item_offset: torch.Tensor):
+def _dot(user_emb: torch.Tensor, item_emb: torch.Tensor, item_offset: torch.Tensor):
     return torch.sum(torch.mul(user_emb, item_emb), axis=-1).reshape(-1, 1)
 
 
 itf_dict = {
-    'irt': irt2pl,
-    'mirt': mirt2pl,
-    'mf': dot,
-    'sigmoid-mf': sigmoid_dot
+    'irt': _irt2pl,
+    'mirt': _mirt2pl,
+    'mf': _dot,
+    'sigmoid-mf': _sigmoid_dot
 }
 
 
 class Net(nn.Module):
     '''
-    The hierarchical cognitive diagnosis model
+    The network module of hierarchical cognitive diagnosis model (HierCDF).
     '''
     def __init__(
         self, n_user, n_item, n_know, hidden_dim,
@@ -240,9 +232,7 @@ class Net(nn.Module):
     def forward(
         self, user_ids: torch.LongTensor, item_ids: torch.LongTensor,
             item_know: torch.Tensor, device='cpu') -> torch.Tensor:
-        '''
-        @Param item_know: the item q matrix of the batch
-        '''
+        # item_know: the item q matrix of the batch
         user_mastery = self.get_posterior(user_ids, device)
         item_diff = torch.sigmoid(self.item_diff(item_ids))
         item_disc = torch.sigmoid(self.item_disc(item_ids))
@@ -254,9 +244,7 @@ class Net(nn.Module):
 
         return output
 
-    '''
-    clip the parameters of each module in the moduleList to nonnegative
-    '''
+    # clip the parameters of each module in the moduleList to nonnegative
     def pos_clipper(self, module_list: list):
         for module in module_list:
             module.weight.data = module.weight.clamp_min(0)
@@ -291,6 +279,7 @@ class Net(nn.Module):
 class HierCDF(CDM):
     r'''
     The HierCDF model.
+
     Args:
         meta_data: a dictionary containing all the
             userIds, itemIds, and skills.
@@ -301,13 +290,18 @@ class HierCDF(CDM):
             each row denotes the name of the source vertex,
             while the `target` of each row denotes the name
             of the target vertex.
+        hidd_dim: the dimension of hidden layer for embedding transformation
 
-    Examples::
-        meta_data = {
+    Examples:
+        >>> meta_data = {
             'userId': ['001', '002', '003'],
             'itemId': ['adf', 'w5'],
             'skill': ['skill1', 'skill2', 'skill3', 'skill4']}
-        model = HierCDF(meta_data, know_graph)
+        >>> know_graph = know_graph = pd.DataFrame({
+                'source': ['skill1', 'skill1', 'skill2'],
+                'target': ['skill2', 'skill3', 'skill4']
+            })
+        >>> model = HierCDF(meta_data, know_graph, 16)
     '''
     def __init__(
         self, meta_data: dict, knowledge_graph: pd.DataFrame,
@@ -355,12 +349,9 @@ class HierCDF(CDM):
     def fit(
         self, train_data: pd.DataFrame, epoch: int, val_data=None,
             device="cpu", lr=0.002, batch_size=64, loss_factor=1.0):
-        self.hier_net = self.hier_net.to(device)
-        self.hier_net.train()
-        loss_function = HierCDLoss(self.hier_net, nn.NLLLoss, loss_factor)
-        optimizer = torch.optim.Adam(params=self.hier_net.parameters(), lr=lr)
         r'''
         Train the model with train_data. If val_data is provided, print the AUC and accuracy on val_data after each epoch.
+
         Args:
             train_data: a dataframe containing training userIds, itemIds and responses.
             epoch: number of training epochs.
@@ -371,6 +362,11 @@ class HierCDF(CDM):
             batch_size: the batch size during the training.
             loss_factor: the factor of the penalty term of the loss function of HierCDF, which is equivalent to $\lambda$ in the original paper of HierCDF.
         '''
+        self.hier_net = self.hier_net.to(device)
+        self.hier_net.train()
+        loss_function = HierCDLoss(self.hier_net, nn.NLLLoss, loss_factor)
+        optimizer = torch.optim.Adam(params=self.hier_net.parameters(), lr=lr)
+
         train_data = self.transform__(train_data, batch_size, shuffle=True)
         for epoch_i in range(epoch):
             self.hier_net.train()
@@ -404,19 +400,14 @@ class HierCDF(CDM):
                 print("[Epoch %d] auc: %.6f, accuracy: %.6f" % (
                     epoch_i, auc, accuracy))
 
-    def predict_proba(
-        self, test_data: pd.DataFrame,
-            device="cpu") -> pd.DataFrame:
+    def predict_proba(self, test_data: pd.DataFrame, device="cpu") -> pd.DataFrame:
         r'''
-        Output the predicted probabilities that the users
-            would provide correct answers using test_data.
+        Output the predicted probabilities that the users would provide correct answers using test_data.
         The probabilities are within (0, 1).
 
         Args:
             test_data: a dataframe containing testing userIds and itemIds.
-            device: device on which the model is trained. Default: 'cpu'.
-                If you want to run it on your GPU, e.g., the first cuda
-                gpu on your machine, you can change it to 'cuda:0'.
+            device: device on which the model is trained. Default: 'cpu'. If you want to run it on your GPU, e.g., the first cuda gpu on your machine, you can change it to 'cuda:0'.
 
         Return:
             A dataframe containing the userIds, itemIds, and proba
@@ -445,18 +436,14 @@ class HierCDF(CDM):
 
     def predict(self, test_data: pd.DataFrame, device="cpu") -> pd.DataFrame:
         r'''
-        Output the predicted responses using test_data.
-            The responses are either 0 or 1.
+        Output the predicted responses using test_data. The responses are either 0 or 1.
 
         Args:
             test_data: a dataframe containing testing userIds and itemIds.
-            device: device on which the model is trained. Default: 'cpu'.
-                If you want to run it on your GPU, e.g., the first cuda
-                gpu on your machine, you can change it to 'cuda:0'.
+            device: device on which the model is trained. Default: 'cpu'. If you want to run it on your GPU, e.g., the first cuda gpu on your machine, you can change it to 'cuda:0'.
 
         Return:
-            A dataframe containing the userIds, itemIds, and
-                predicted responses.
+            A dataframe containing the userIds, itemIds, and predicted responses.
         '''
 
         df_proba = self.predict_proba(test_data, device)
@@ -507,18 +494,14 @@ class HierCDF(CDM):
 
     def load(self, filepath: str):
         r'''
-        Load the model. This method loads the model saved at filepath into
-            self.hier_net. Before loading, the object
-        needs to be properly initialized.
+        Load the model. This method loads the model saved at filepath into self.hier_net. Before loading, the object needs to be properly initialized.
 
         Args:
             filepath: the path from which to load the model.
 
         Examples:
-            model = HierCDF(meta_data, knowledge_graph)
-                # where meta_data is from the same dataset
-                # which is used to train the model at filepath
-            model.load('path_to_the_pre-trained_model')
+            >>> model = HierCDF(meta_data, knowledge_graph) # where meta_data is from the same dataset which is used to train the model at filepath
+            >>> model.load('path_to_the_pre-trained_model')
         '''
 
         self.hier_net.load_state_dict(
@@ -540,55 +523,3 @@ class HierCDLoss(nn.Module):
         return self.loss_fn(y_pred, y_target)
         + self.factor * torch.sum(torch.relu(
             self.net.condi_n[user_ids, :] - self.net.condi_p[user_ids, :]))
-
-
-def _test():
-    # train_data = pd.read_csv('../tests/data/train_0.8_0.2.csv')
-    # know_graph = pd.read_csv('../tests/data/hier.csv')
-    # q_matrix = np.loadtxt('../tests/data/Q_matrix.txt')
-    train_data = pd.DataFrame({
-        'userId': [
-            '001', '001', '001', '001', '002', '002',
-            '002', '002', '003', '003', '003', '003'],
-        'itemId': [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3],
-        'response': [0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1]
-    })
-    know_graph = pd.DataFrame({
-        'source': [0, 0, 1],
-        'target': [1, 2, 3]
-    })
-    q_matrix = np.array([
-        [1, 1, 0, 0],
-        [0, 1, 1, 0],
-        [0, 0, 1, 1],
-        [1, 0, 0, 1]
-    ])
-
-    train_data['skill'] = 0
-    for id in range(train_data.shape[0]):
-        item_id = train_data.loc[id, 'itemId']
-        concepts = np.where(
-            q_matrix[item_id] > 0)[0].tolist()
-        train_data.loc[id, 'skill'] = str(concepts)
-    meta_data = {'userId': [], 'itemId': [], 'skill': []}
-    meta_data['userId'] = train_data['userId'].unique().tolist()
-    meta_data['itemId'] = train_data['itemId'].unique().tolist()
-    meta_data['skill'] = [i for i in range(q_matrix.shape[1])]
-
-    hiercdm = HierCDF(meta_data, know_graph, hidd_dim=32)
-    hiercdm.fit(
-        train_data,
-        val_data=train_data,
-        batch_size=1, epoch=3, lr=0.01)
-    hiercdm.save('./hiercdf.pt')
-    new_hiercdm = HierCDF(meta_data, know_graph, hidd_dim=32)
-    new_hiercdm.load('./hiercdf.pt')
-    new_hiercdm.fit(
-        train_data,
-        val_data=train_data,
-        batch_size=1, epoch=1, lr=0.01)
-    new_hiercdm.eval(train_data)
-
-
-if __name__ == '__main__':
-    _test()

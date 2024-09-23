@@ -36,5 +36,5 @@ cdm.save("emirt.snapshot")
 
 # load model and evaluate it on the test set
 cdm.load("emirt.snapshot")
-rmse, mae = cdm.eval(test_data)
-print("rmse: %.6f, mae: %.6f" % (rmse, mae))
+auc, acc = cdm.eval(test_data)
+print("auc: %.6f, acc: %.6f" % (auc, acc))

@@ -107,6 +107,7 @@ class Net(nn.Module):
 class KaNCD(CDM):
     r'''
     The KaNCD model.
+
     Args:
         meta_data: a dictionary containing all the userIds, itemIds, and skills.
         dim: the dimension of the latent vectors of users, items and skills. default: 40
@@ -118,9 +119,9 @@ class KaNCD(CDM):
         layer_dim1: the dimension of the first hidden layer. Default: 512
         layer_dim2: the dimension of the second hidden layer. Default: 256
 
-    Examples::
-        meta_data = {'userId': ['001', '002', '003'], 'itemId': ['adf', 'w5'], 'skill': ['skill1', 'skill2', 'skill3', 'skill4']}
-        model = KaNCD(meta_data, 40, 'gmf', 512, 256)
+    Examples:
+        >>> meta_data = {'userId': ['001', '002', '003'], 'itemId': ['adf', 'w5'], 'skill': ['skill1', 'skill2', 'skill3', 'skill4']}
+        >>> model = KaNCD(meta_data, 40, 'gmf', 512, 256)
     '''
     def __init__(self, meta_data: dict, dim: int = 40, mf_type: str = 'gmf', layer_dim1: int = 512, layer_dim2: int = 256):
         super(KaNCD, self).__init__()
@@ -153,6 +154,7 @@ class KaNCD(CDM):
     def fit(self, train_data: pd.DataFrame, epoch: int, val_data=None, device="cpu", lr=0.002, batch_size=64):
         r'''
         Train the model with train_data. If val_data is provided, print the AUC and accuracy on val_data after each epoch.
+        
         Args:
             train_data: a dataframe containing training userIds, itemIds and responses.
             epoch: number of training epochs.
@@ -261,8 +263,7 @@ class KaNCD(CDM):
 
     def save(self, filepath):
         r'''
-        Save the model. This method is implemented based on the PyTorch's torch.save() method. Only the parameters
-        in self.ncdm_net will be saved. You can save the whole NCDM object using pickle.
+        Save the model. This method is implemented based on the PyTorch's torch.save() method. Only the parameters in self.ncdm_net will be saved. You can save the whole NCDM object using pickle.
 
         Args:
             filepath: the path to save the model.
@@ -273,15 +274,14 @@ class KaNCD(CDM):
 
     def load(self, filepath):
         r'''
-        Load the model. This method loads the model saved at filepath into self.ncdm_net. Before loading, the object
-        needs to be properly initialized.
+        Load the model. This method loads the model saved at filepath into self.ncdm_net. Before loading, the object needs to be properly initialized.
 
         Args:
             filepath: the path from which to load the model.
 
         Examples:
-            model = NCDM(meta_data)  # where meta_data is from the same dataset which is used to train the model at filepath
-            model.load('path_to_the_pre-trained_model')
+            >>> model = KaNCD(meta_data)  # where meta_data is from the same dataset which is used to train the model at filepath
+            >>> model.load('path_to_the_pre-trained_model')
         '''
 
         self.net.load_state_dict(torch.load(filepath, map_location=lambda s, loc: s))

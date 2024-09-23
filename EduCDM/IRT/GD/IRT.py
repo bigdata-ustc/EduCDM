@@ -61,8 +61,8 @@ class IRT(CDM):
         meta_data: a dictionary containing all the userIds, and itemIds.
 
     Examples:
-        meta_data = {'userId': ['001', '002', '003'], 'itemId': ['adf', 'w5']}
-        model = GDIRT(meta_data)
+        >>> meta_data = {'userId': ['001', '002', '003'], 'itemId': ['adf', 'w5']}
+        >>> model = GDIRT(meta_data)
     '''
 
     def __init__(self, meta_data: dict):
@@ -197,8 +197,7 @@ class IRT(CDM):
 
     def save(self, filepath: str):
         r'''
-        Save the model. This method is implemented based on the PyTorch's torch.save() method. Only the parameters
-        in self.irt_net will be saved. You can save the whole IRT object using pickle.
+        Save the model. This method is implemented based on the PyTorch's torch.save() method. Only the parameters in self.irt_net will be saved. You can save the whole IRT object using pickle.
 
         Args:
             filepath: the path to save the model.
@@ -209,14 +208,10 @@ class IRT(CDM):
 
     def load(self, filepath: str):
         r'''
-        Load the model. This method loads the model saved at filepath into self.irt_net. Before loading, the object
-        needs to be properly initialized.
+        Load the model. This method loads the model saved at filepath into self.irt_net. Before loading, the object needs to be properly initialized.
 
         Args:
             filepath: the path from which to load the model.
-
-        Examples:
-
         '''
 
         self.irt_net.load_state_dict(torch.load(filepath, map_location=lambda s, loc: s))
