@@ -74,8 +74,9 @@ class NCDM(CDM):
         hidd_dim2: the dimension of the second hidden layer. Default: 256
 
     Examples:
-        >>> meta_data = {'userId': ['001', '002', '003'], 'itemId': ['adf', 'w5'], 'skill': ['skill1', 'skill2', 'skill3', 'skill4']}
-        >>> model = NCDM(meta_data, 512, 256)
+        meta_data = {'userId': ['001', '002', '003'], 'itemId': ['adf', 'w5'], 'skill': ['skill1', 'skill2', 'skill3', 'skill4']}
+
+        model = NCDM(meta_data, 512, 256)
     '''
 
     def __init__(self, meta_data: dict, hidd_dim1=512, hidd_dim2=256):
@@ -237,8 +238,9 @@ class NCDM(CDM):
             filepath: the path from which to load the model.
 
         Examples:
-            >>> model = NCDM(meta_data)  # where meta_data is from the same dataset which is used to train the model at filepath
-            >>> model.load('path_to_the_pre-trained_model')
+            model = NCDM(meta_data)  # where meta_data is from the same dataset which is used to train the model at filepath
+
+            model.load('path_to_the_pre-trained_model')
         '''
 
         self.ncdm_net.load_state_dict(torch.load(filepath, map_location=lambda s, loc: s))

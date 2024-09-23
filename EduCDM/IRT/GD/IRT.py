@@ -61,8 +61,9 @@ class IRT(CDM):
         meta_data: a dictionary containing all the userIds, and itemIds.
 
     Examples:
-        >>> meta_data = {'userId': ['001', '002', '003'], 'itemId': ['adf', 'w5']}
-        >>> model = GDIRT(meta_data)
+        meta_data = {'userId': ['001', '002', '003'], 'itemId': ['adf', 'w5']}
+
+        model = GDIRT(meta_data)
     '''
 
     def __init__(self, meta_data: dict):

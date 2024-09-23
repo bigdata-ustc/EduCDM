@@ -293,15 +293,11 @@ class HierCDF(CDM):
         hidd_dim: the dimension of hidden layer for embedding transformation
 
     Examples:
-        >>> meta_data = {
-            'userId': ['001', '002', '003'],
-            'itemId': ['adf', 'w5'],
-            'skill': ['skill1', 'skill2', 'skill3', 'skill4']}
-        >>> know_graph = know_graph = pd.DataFrame({
-                'source': ['skill1', 'skill1', 'skill2'],
-                'target': ['skill2', 'skill3', 'skill4']
-            })
-        >>> model = HierCDF(meta_data, know_graph, 16)
+        meta_data = {'userId': ['001', '002', '003'], 'itemId': ['adf', 'w5'], 'skill': ['skill1', 'skill2', 'skill3', 'skill4']}
+
+        know_graph = know_graph = pd.DataFrame({'source': ['skill1', 'skill1', 'skill2'], 'target': ['skill2', 'skill3', 'skill4']})
+
+        model = HierCDF(meta_data, know_graph, 16)
     '''
     def __init__(
         self, meta_data: dict, knowledge_graph: pd.DataFrame,
@@ -500,8 +496,9 @@ class HierCDF(CDM):
             filepath: the path from which to load the model.
 
         Examples:
-            >>> model = HierCDF(meta_data, knowledge_graph) # where meta_data is from the same dataset which is used to train the model at filepath
-            >>> model.load('path_to_the_pre-trained_model')
+            model = HierCDF(meta_data, knowledge_graph) # where meta_data is from the same dataset which is used to train the model at filepath
+
+            model.load('path_to_the_pre-trained_model')
         '''
 
         self.hier_net.load_state_dict(

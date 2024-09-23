@@ -28,8 +28,8 @@ jobs:
           sed -i "s/extensions = \[\]/extensions = \['sphinx.ext.napoleon','sphinx.ext.autodoc','sphinx.ext.doctest','sphinx.ext.githubpages',\]/g" conf.py
           sed -i "s/html_theme = 'alabaster'/html_theme = 'sphinx_rtd_theme'/g" conf.py
           sed -i "/^html_theme/a\autodoc_member_order = 'bysource'" conf.py
-          sed -i '/^:caption:/a\  
-            
+          sed -i '/:caption:/a\  
+          \
           \tdocs/EduCDM' index.rst
           sphinx-apidoc -o src EduCDM
           sphinx-build . _build

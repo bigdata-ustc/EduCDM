@@ -50,8 +50,9 @@ class MCD(CDM):
         [latent_dim]: the dimension of user embedding. Default: 20
 
     Examples:
-        >>> meta_data = {'userId': ['001', '002', '003'], 'itemId': ['adf', 'w5'], 'skill': ['skill1', 'skill2', 'skill3', 'skill4']}
-        >>> model = MCD(meta_data, 20)
+        meta_data = {'userId': ['001', '002', '003'], 'itemId': ['adf', 'w5'], 'skill': ['skill1', 'skill2', 'skill3', 'skill4']}
+
+        model = MCD(meta_data, 20)
     '''
 
     def __init__(self, meta_data: dict, latent_dim=20):

@@ -120,8 +120,9 @@ class KaNCD(CDM):
         layer_dim2: the dimension of the second hidden layer. Default: 256
 
     Examples:
-        >>> meta_data = {'userId': ['001', '002', '003'], 'itemId': ['adf', 'w5'], 'skill': ['skill1', 'skill2', 'skill3', 'skill4']}
-        >>> model = KaNCD(meta_data, 40, 'gmf', 512, 256)
+        meta_data = {'userId': ['001', '002', '003'], 'itemId': ['adf', 'w5'], 'skill': ['skill1', 'skill2', 'skill3', 'skill4']}
+
+        model = KaNCD(meta_data, 40, 'gmf', 512, 256)
     '''
     def __init__(self, meta_data: dict, dim: int = 40, mf_type: str = 'gmf', layer_dim1: int = 512, layer_dim2: int = 256):
         super(KaNCD, self).__init__()
@@ -280,8 +281,9 @@ class KaNCD(CDM):
             filepath: the path from which to load the model.
 
         Examples:
-            >>> model = KaNCD(meta_data)  # where meta_data is from the same dataset which is used to train the model at filepath
-            >>> model.load('path_to_the_pre-trained_model')
+            model = KaNCD(meta_data)  # where meta_data is from the same dataset which is used to train the model at filepath
+
+            model.load('path_to_the_pre-trained_model')
         '''
 
         self.net.load_state_dict(torch.load(filepath, map_location=lambda s, loc: s))
