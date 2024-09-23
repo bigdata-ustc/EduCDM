@@ -214,7 +214,7 @@ class IRT(CDM):
             userIds.append(re_stu_id)
             itemIds.append(re_item_id)
             responses.append(irt3pl(np.sum(self.a[re_item_id] * (np.expand_dims(self.stu_prof[re_stu_id], axis=1) - self.b[re_item_id]), axis=-1), 1, 0, self.c[re_item_id]))
-        return pd.DataFrame({'userId': userIds, 'itemId': itemIds, 'response': responses})
+        return pd.DataFrame({'userId': userIds, 'itemId': itemIds, 'proba': responses})
 
     def predict(self, test_data: pd.DataFrame) -> pd.DataFrame:
         r"""
@@ -227,8 +227,8 @@ class IRT(CDM):
             a dataframe containing the userIds, itemIds, and predicted responses.
         """
         irt_proba = self.predict_proba(test_data)
-        irt_proba.loc[irt_proba['response'] < 0.5, 'response'] = 0
-        irt_proba.loc[irt_proba['response'] >= 0.5, 'response'] = 1
+        irt_proba.loc[irt_proba['proba'] < 0.5, 'proba'] = 0
+        irt_proba.loc[irt_proba['proba'] >= 0.5, 'proba'] = 1
         df_pred = pd.DataFrame(irt_proba)
         return df_pred
 
