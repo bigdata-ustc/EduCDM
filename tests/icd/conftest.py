@@ -18,9 +18,10 @@ def conf():
 @pytest.fixture(scope="package")
 def data(conf):
     user_num, item_num, knowledge_num = conf
-    i2k = {}
+    i2k = []
     for i in range(item_num):
-        i2k[i] = [random.randint(0, knowledge_num - 1)]
+        i2k.append([i, [random.randint(0, knowledge_num - 1)]])
+    df_item = pd.DataFrame(i2k, columns=['itemId', 'skill'])
     log = []
     for i in range(user_num):
         for j in range(item_num):
@@ -28,6 +29,6 @@ def data(conf):
             log.append([i, j, score])
     random.shuffle(log)
     df = pd.DataFrame(log, columns=['userId', 'itemId', 'response'])
-    inc_train_df_list = list(inc_stream(df, stream_size=int(len(df) // 50)))
+    stream_num = 50
     meta_data = {'userId': list(range(1, user_num + 1)), 'itemId': list(range(1, item_num + 1)), 'skill': list(range(knowledge_num))}
-    return inc_train_df_list, i2k, meta_data
+    return df, stream_num, df_item, meta_data

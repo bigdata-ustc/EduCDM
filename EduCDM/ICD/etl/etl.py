@@ -77,16 +77,14 @@ class Dict2(object):
             self.i2u_r_dis[iid][1] += inc_dict2.i2u_r_dis[iid][1]
 
 
-def item2knowledge(df_item, k_offset=1):  # pragma: no cover
+def item2knowledge(df_item, k_offset=0):
     # df_item = pd.read_csv(filepath)
     item2knowledge = {}
-    knowledge_set = set()
     for i, item_know in df_item.iterrows():
-        item_id, knowledge_codes = item_know['itemId'], [
-            k - k_offset for k in set(eval(item_know['skill']))
-        ]
+        know = item_know['skill']
+        know = set(eval(know)) if isinstance(know, str) else set(know)
+        item_id, knowledge_codes = item_know['itemId'], [k - k_offset for k in know]
         item2knowledge[item_id] = knowledge_codes
-        knowledge_set.update(knowledge_codes)
 
     return item2knowledge
 
@@ -176,16 +174,6 @@ def transform(logs_df: pd.DataFrame,
     #     batch_data.append(pack_batch(batch))
     #
     # return batch_data
-
-
-def extract(filepath,
-            item2know_filepath,
-            dict2: Dict2 = None):  # pragma: no cover
-    df = pd.read_csv(filepath)
-    i2k = item2knowledge(item2know_filepath)
-    u2i = user2items(df, dict2)
-    i2u = item2users(df, dict2)
-    return df, u2i, i2u, i2k
 
 
 def test_etl(filepath,

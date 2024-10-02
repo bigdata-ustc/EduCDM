@@ -6,7 +6,7 @@ import torch
 from baize.torch import Configuration
 from baize.torch import light_module as lm
 
-from EduCDM.ICD.etl import transform, user2items, item2users, dict_etl, Dict2
+from EduCDM.ICD.etl import transform, user2items, item2users, dict_etl, Dict2, inc_stream, item2knowledge
 from EduCDM.ICD.sym import eval_f, get_net, DualICD, get_dual_loss, dual_fit_f, stableness_eval, turning_point
 from EduCDM.ICD.utils import output_metrics
 
@@ -42,9 +42,10 @@ class ICD(CDM):
                  **kwargs):
         super(ICD, self).__init__()
         torch.manual_seed(0)
-        user_n = max(meta_data['userId'])
-        item_n = max(meta_data['itemId'])
-        know_n = max(meta_data['skill']) + 1
+        self.id_reindex, _ = re_index(meta_data)
+        user_n = len(self.id_reindex['userId'])
+        item_n = len(self.id_reindex['itemId'])
+        know_n = len(self.id_reindex['skill']) + 1
         self.cfg = Configuration(
             model_name="icd_%s" % cdm,
             model_dir="icd_%s" % cdm,
@@ -69,9 +70,26 @@ class ICD(CDM):
         self.dual_net = DualICD(deepcopy(self.net), self.net, alpha=alpha)
         self.inner_metrics = inner_metrics
 
+    def transform__(self, df_data: pd.DataFrame):
+        items = [self.id_reindex['itemId'][itemId] for itemId in df_data['itemId'].values]
+        skills = []
+        for item_skills in df_data['skill']:
+            item_skills = eval(item_skills)  # str of list to list
+            skills.append([self.id_reindex['skill'][s] for s in item_skills])
+        ret = pd.DataFrame({'itemId': items, 'skill': skills})
+
+        if 'userId' in df_data.columns:
+            users = [self.id_reindex['userId'][userId] for userId in df_data['userId'].values]
+            responses = df_data['response'].values
+            ret['userId'] = users
+            ret['response'] = responses
+
+        return ret
+
     def fit(self,
-            inc_train_df_list,
-            i2k,
+            train_data,
+            df_item,
+            stream_num,
             beta=0.95,
             warmup_ratio=0.1,
             tolerance=1e-3,
@@ -83,8 +101,9 @@ class ICD(CDM):
         Train the model with train_data. .
 
         Args:
-            inc_train_df_list: a List containing training userIds, itemIds and responses.
-            i2k: a map that transform item to knowledge list.
+            train_data: a dataframe containing training userIds, itemIds and responses.
+            df_item: 
+            stream_num: 
             beta: a factor balancing the model effectiveness and trait stableness.
             warmup_ratio: the warmup data will be trained in the full training way to implement initialization.,
             tolerance: a factor that determine whether to train the incremental data.
@@ -97,6 +116,12 @@ class ICD(CDM):
         act_dual_loss_f = get_dual_loss(self.cfg.ctx, beta=beta)
         warmup_dual_loss_f = get_dual_loss(self.cfg.ctx, beta=1)
         tps = []
+
+        # process data
+        train_data = self.transform__(train_data)
+        inc_train_df_list = list(inc_stream(train_data, stream_size=int(len(train_data) // stream_num)))
+        i2k = item2knowledge(self.transform__(df_item))
+
         warmup = int(warmup_ratio * len(inc_train_df_list))
         train_df = pd.DataFrame()
         for i, inc_train_df in enumerate(inc_train_df_list):
@@ -168,7 +193,7 @@ class ICD(CDM):
             dict2.merge_u2i_r(inc_dict2)
             dict2.merge_i2u_r(inc_dict2)
 
-            if i + 2 == len(inc_train_df_list) or self.inner_metrics:
+            if i + 2 <= len(inc_train_df_list) or self.inner_metrics:
                 inc_test_data = transform(inc_train_df_list[i + 1],
                                           dict2.u2i,
                                           dict2.i2u,
