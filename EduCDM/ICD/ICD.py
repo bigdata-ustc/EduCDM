@@ -19,10 +19,10 @@ class ICD(CDM):
         cdm: the base cognitive diagnosis model.
         meta_data: a dictionary containing all the userIds, itemIds, and skills.
         epoch: the training times when a new stream log data comes.
-        weight_decay: a optimizer_param reducing the learning rate.
-        inner_metrics: whether to print inner experiment results.
-        logger: whether to log into file.
-        alpha: a factor balance the accumulated data and incremental data.
+        weight_decay: a optimizer_param reducing the learning rate. Default: 0.1
+        inner_metrics: whether to print inner evaluation results on each data stream. Default: True
+        logger: whether to log into file. Default: logging
+        alpha: a factor balance the accumulated data and incremental data. Default: 0.9
         device: device on which the model is trained. Default: 'cpu'. If you want to run it on your
         GPU, e.g., the first cuda gpu on your machine, you can change it to 'cuda:0'.
     Examples:
@@ -33,7 +33,7 @@ class ICD(CDM):
     def __init__(self,
                  cdm,
                  meta_data: dict,
-                 epoch=1,
+                 epoch,
                  weight_decay=0.1,
                  inner_metrics=True,
                  logger=logging,
@@ -102,8 +102,8 @@ class ICD(CDM):
 
         Args:
             train_data: a dataframe containing training userIds, itemIds and responses.
-            df_item: 
-            stream_num: 
+            df_item: a dataframe containing each item and corresponding skills.
+            stream_num: the expected number of streams that the train_data will be devided into.
             beta: a factor balancing the model effectiveness and trait stableness.
             warmup_ratio: the warmup data will be trained in the full training way to implement initialization.,
             tolerance: a factor that determine whether to train the incremental data.
@@ -179,7 +179,7 @@ class ICD(CDM):
                     fit_f=dual_fit_f,
                     eval_f=eval_f,
                     initial_net=False,
-                    verbose=not hyper_tag,
+                    verbose=hyper_tag,
                 )
                 if i > warmup:
                     self.dual_net.momentum_weight_update(
@@ -193,7 +193,7 @@ class ICD(CDM):
             dict2.merge_u2i_r(inc_dict2)
             dict2.merge_i2u_r(inc_dict2)
 
-            if i + 2 <= len(inc_train_df_list) or self.inner_metrics:
+            if i + 2 == len(inc_train_df_list) or self.inner_metrics:
                 inc_test_data = transform(inc_train_df_list[i + 1],
                                           dict2.u2i,
                                           dict2.i2u,
@@ -203,65 +203,63 @@ class ICD(CDM):
                                           max_i2u=max_i2u,
                                           batch_size=self.cfg.batch_size,
                                           silent=True)
-                self.predict(i, inc_train_df_list, inc_test_data, pre_dict2,
-                             inc_u2i, inc_i2u, tps, wfs)
-
-    def predict(self, i, inc_train_df_list, inc_test_data, pre_dict2, inc_u2i,
-                inc_i2u, tps, wfs):
+                output_metrics(0, {"tps": tps, "tp_cnt": len(tps), "total": len(inc_train_df_list) - 1},
+                               wfs, "tp", self.logger)
+                self.eval_prediction(inc_test_data, wfs=wfs)
+                if i > 0:
+                    self.eval_stableness(pre_dict2, inc_u2i, inc_i2u, wfs=wfs)
+    
+    def eval_prediction(self, val_data, logger_id=None, wfs=None):
         r'''
-        Output the predicted responses using test_data. The responses are either 0 or 1.
+        Evaluate the student performance prediction results on the test_data.
+
         Args:
-            i: the serial number of the incremental data.
-            inc_train_df_list: the incremental data that use to train.
-            inc_test_data: the next incremental data that use to test.
+            val_data: a dataframe containing testing userIds and itemIds.
+            logger_id: the id when output the metrics. Default: None
+            wfs: whether to save experiment result into file. Default: None
+        '''
+        inc_met = eval_f(self.net, val_data)
+        output_metrics(logger_id, inc_met, wfs, "metrics", self.logger)
+
+    def eval_stableness(self, pre_dict2, inc_u2i, inc_i2u, logger_id=None, wfs=None):
+        r'''
+        Evaluate the parameter stableness after the final data stream during training.
+
+        Args:
             pre_dict2: a dictionary containing all the userIds, itemIds, and skills of the next incremental data.
             inc_u2i: a dictionary containing all the user data of the incremental data.
             inc_i2u: a dictionary containing all the user data of the incremental data.
-            tps: the current turning points: The serial numbers of the trained data.
-            wfs: whether to save experiment result into file.
-            device: device on which the model is trained. Default: 'cpu'. If you want to run it on your
-                    GPU, e.g., the first cuda gpu on your machine, you can change it to 'cuda:0'.
-
-        Return:
-            a dataframe containing the userIds, itemIds, and predicted responses.
+            logger_id: the id when output the metrics. Default: None
+            wfs: whether to save experiment result into file. Default: None
         '''
-        inc_met = eval_f(self.net, inc_test_data)
-        output_metrics(i, inc_met, wfs, "metrics", self.logger)
-        if i > 0:
-            _net = self.dual_net.stat_net
-            stat_net = _net.module if isinstance(_net, torch.nn.DataParallel) else _net
-
-            users = list(pre_dict2.u2i.keys())
-            items = list(pre_dict2.i2u.keys())
-            user_traits = stat_net.get_user_profiles(
-                dict_etl(users, pre_dict2.u2i, batch_size=self.cfg.batch_size))
-            item_traits = stat_net.get_item_profiles(
-                dict_etl(items, pre_dict2.i2u, batch_size=self.cfg.batch_size))
-            sta_met = stableness_eval(self.dual_net.net, users, items,
-                                      pre_dict2.u2i, pre_dict2.i2u,
-                                      user_traits, item_traits,
+        _net = self.dual_net.stat_net
+        stat_net = _net.module if isinstance(_net, torch.nn.DataParallel) else _net
+        
+        users = list(pre_dict2.u2i.keys())
+        items = list(pre_dict2.i2u.keys())
+        user_traits = stat_net.get_user_profiles(
+            dict_etl(users, pre_dict2.u2i, batch_size=self.cfg.batch_size))
+        item_traits = stat_net.get_item_profiles(
+            dict_etl(items, pre_dict2.i2u, batch_size=self.cfg.batch_size))
+        sta_met = stableness_eval(self.dual_net.net, users, items,
+                                  pre_dict2.u2i, pre_dict2.i2u,
+                                  user_traits, item_traits,
+                                  self.cfg.batch_size)
+        
+        inc_users = list(inc_u2i.keys())
+        inc_items = list(inc_i2u.keys())
+        inc_user_traits = stat_net.get_user_profiles(
+            dict_etl(inc_users, inc_u2i, batch_size=self.cfg.batch_size))
+        inc_item_traits = stat_net.get_item_profiles(
+            dict_etl(inc_items, inc_i2u, batch_size=self.cfg.batch_size))
+        inc_sta_met = stableness_eval(self.dual_net.net, inc_users,
+                                      inc_items, inc_u2i, inc_i2u,
+                                      inc_user_traits, inc_item_traits,
                                       self.cfg.batch_size)
-
-            inc_users = list(inc_u2i.keys())
-            inc_items = list(inc_i2u.keys())
-            inc_user_traits = stat_net.get_user_profiles(
-                dict_etl(inc_users, inc_u2i, batch_size=self.cfg.batch_size))
-            inc_item_traits = stat_net.get_item_profiles(
-                dict_etl(inc_items, inc_i2u, batch_size=self.cfg.batch_size))
-            inc_sta_met = stableness_eval(self.dual_net.net, inc_users,
-                                          inc_items, inc_u2i, inc_i2u,
-                                          inc_user_traits, inc_item_traits,
-                                          self.cfg.batch_size)
-
-            output_metrics(i, sta_met, wfs, "trait", self.logger)
-            output_metrics(i, inc_sta_met, wfs, "inc_trait", self.logger)
-
-        output_metrics(0, {
-            "tps": tps,
-            "tp_cnt": len(tps),
-            "total": len(inc_train_df_list) - 1
-        }, wfs, "tp", self.logger)
-
+        
+        output_metrics(logger_id, sta_met, wfs, "trait", self.logger)
+        output_metrics(logger_id, inc_sta_met, wfs, "inc_trait", self.logger)
+        
     def predict_proba(self, *args, **kwargs) -> pd.DataFrame:
         pass
 
