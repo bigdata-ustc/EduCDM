@@ -10,7 +10,7 @@ path_prefix = os.path.abspath('.')
 
 
 def main(dataset="a0910",
-         ctx="cpu",
+         device="cpu",
          cdm="ncd",
          alpha=0.2,
          beta=0.9,
@@ -44,7 +44,7 @@ def main(dataset="a0910",
     train_data = pd.merge(train_data, df_item, how='left', on='itemId')
     inc_train_df_list = list(
         inc_stream(train_data, stream_size=int(len(train_data) // stream_num)))
-    ICDNet = ICD(cdm, meta_data, epoch, weight_decay, inner_metrics, logger, alpha, ctx)
+    ICDNet = ICD(cdm, meta_data, epoch, weight_decay, inner_metrics, logger, alpha, device)
     ICDNet.fit(inc_train_df_list, i2k, beta, warmup_ratio, tolerance, max_u2i, max_i2u, hyper_tag, wfs)
     
 

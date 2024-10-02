@@ -23,7 +23,7 @@ class ICD(CDM):
         inner_metrics: whether to print inner experiment results.
         logger: whether to log into file.
         alpha: a factor balance the accumulated data and incremental data.
-        ctx: device on which the model is trained. Default: 'cpu'. If you want to run it on your
+        device: device on which the model is trained. Default: 'cpu'. If you want to run it on your
         GPU, e.g., the first cuda gpu on your machine, you can change it to 'cuda:0'.
     Examples:
         meta_data = {'userId': ['001', '002', '003'], 'itemId': ['adf', 'w5'], 'skill': ['skill1', 'skill2', 'skill3', 'skill4']}
@@ -38,7 +38,7 @@ class ICD(CDM):
                  inner_metrics=True,
                  logger=logging,
                  alpha=0.9,
-                 ctx='cpu',
+                 device='cpu',
                  **kwargs):
         super(ICD, self).__init__()
         torch.manual_seed(0)
@@ -60,7 +60,7 @@ class ICD(CDM):
                 'lr': kwargs.get("lr", 0.002),
                 'weight_decay': weight_decay
             },
-            ctx=ctx,
+            ctx=device,
             time_digital=True,
         )
         self.logger = logger
