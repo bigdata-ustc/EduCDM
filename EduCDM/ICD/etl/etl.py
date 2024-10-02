@@ -92,7 +92,7 @@ def item2knowledge(df_item, k_offset=1):  # pragma: no cover
 
 
 def user2items(df: pd.DataFrame, dict2: Dict2 = None):
-    grouped = df.groupby(['userId'])
+    grouped = df.groupby('userId')
     ul_dict = {}
     if dict2:
         dict2.u2i = ul_dict
@@ -108,7 +108,7 @@ def user2items(df: pd.DataFrame, dict2: Dict2 = None):
 
 
 def item2users(df: pd.DataFrame, dict2: Dict2 = None):
-    grouped = df.groupby(['itemId'])
+    grouped = df.groupby('itemId')
     il_dict = {}
     for gp in tqdm(grouped, 'group item'):
         rs = gp[1]['userId'] * 2 + gp[1]['response'] + 1
@@ -128,7 +128,7 @@ def merge_dict(src: dict, to_add: dict):
         src[k].extend(v)
 
 
-@iterwrap()
+# # @iterwrap()
 def transform(logs_df: pd.DataFrame,
               u2i,
               i2u,
@@ -144,14 +144,9 @@ def transform(logs_df: pd.DataFrame,
               item_set: set = None):
     random_state = np.random.default_rng(0)
     batch = []
-    for _, logs in tqdm(logs_df.iterrows(),
-                        "batchify %s" % desc,
-                        disable=silent):
-        user_id, item_id, score = logs["userId"], logs["itemId"], logs[
-            "response"]
-        if (user_set
-                and user_id not in user_set) or (item_set
-                                                 and item_id not in item_set):
+    for _, logs in tqdm(logs_df.iterrows(), "batchify %s" % desc, disable=silent):
+        user_id, item_id, score = logs["userId"], logs["itemId"], logs["response"]
+        if (user_set and user_id not in user_set) or (item_set and item_id not in item_set):
             continue  # pragma: no cover
         if user_id not in u2i or item_id not in i2u:  # pragma: no cover
             if allow_missing == "skip":

@@ -204,8 +204,7 @@ class ICD(CDM):
         output_metrics(i, inc_met, wfs, "metrics", self.logger)
         if i > 0:
             _net = self.dual_net.stat_net
-            stat_net = _net.module if isinstance(
-                _net, torch.nn.DataParallel) else _net
+            stat_net = _net.module if isinstance(_net, torch.nn.DataParallel) else _net
 
             users = list(pre_dict2.u2i.keys())
             items = list(pre_dict2.i2u.keys())
