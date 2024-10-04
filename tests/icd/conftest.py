@@ -31,5 +31,5 @@ def data(conf):
     train_data = pd.DataFrame(log, columns=['userId', 'itemId', 'response'])
     train_data = pd.merge(train_data, df_item, on="itemId", how="left")
     stream_num = 50
-    meta_data = {'userId': list(range(1, user_num + 1)), 'itemId': list(range(1, item_num + 1)), 'skill': list(range(knowledge_num))}
+    meta_data = {'userId': list(range(user_num)), 'itemId': list(range(item_num)), 'skill': list(range(knowledge_num))}
     return train_data, stream_num, df_item, meta_data
