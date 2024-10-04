@@ -1,0 +1,21 @@
+EduCDM.MCD package
+==================
+
+Submodules
+----------
+
+EduCDM.MCD.MCD module
+---------------------
+
+.. automodule:: EduCDM.MCD.MCD
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: EduCDM.MCD
+   :members:
+   :undoc-members:
+   :show-inheritance:

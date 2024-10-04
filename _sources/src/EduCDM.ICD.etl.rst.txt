@@ -1,0 +1,29 @@
+EduCDM.ICD.etl package
+======================
+
+Submodules
+----------
+
+EduCDM.ICD.etl.etl module
+-------------------------
+
+.. automodule:: EduCDM.ICD.etl.etl
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+EduCDM.ICD.etl.utils module
+---------------------------
+
+.. automodule:: EduCDM.ICD.etl.utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: EduCDM.ICD.etl
+   :members:
+   :undoc-members:
+   :show-inheritance:

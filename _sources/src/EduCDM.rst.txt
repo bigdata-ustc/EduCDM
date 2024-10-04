@@ -1,0 +1,44 @@
+EduCDM package
+==============
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   EduCDM.DINA
+   EduCDM.HierCDF
+   EduCDM.ICD
+   EduCDM.IRT
+   EduCDM.KaNCD
+   EduCDM.MCD
+   EduCDM.MIRT
+   EduCDM.NCDM
+
+Submodules
+----------
+
+EduCDM.meta module
+------------------
+
+.. automodule:: EduCDM.meta
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+EduCDM.utils module
+-------------------
+
+.. automodule:: EduCDM.utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: EduCDM
+   :members:
+   :undoc-members:
+   :show-inheritance:

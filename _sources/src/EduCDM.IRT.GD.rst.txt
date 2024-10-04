@@ -1,0 +1,21 @@
+EduCDM.IRT.GD package
+=====================
+
+Submodules
+----------
+
+EduCDM.IRT.GD.IRT module
+------------------------
+
+.. automodule:: EduCDM.IRT.GD.IRT
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: EduCDM.IRT.GD
+   :members:
+   :undoc-members:
+   :show-inheritance:

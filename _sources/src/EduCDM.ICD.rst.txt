@@ -1,0 +1,39 @@
+EduCDM.ICD package
+==================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   EduCDM.ICD.etl
+   EduCDM.ICD.metrics
+   EduCDM.ICD.sym
+
+Submodules
+----------
+
+EduCDM.ICD.ICD module
+---------------------
+
+.. automodule:: EduCDM.ICD.ICD
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+EduCDM.ICD.utils module
+-----------------------
+
+.. automodule:: EduCDM.ICD.utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: EduCDM.ICD
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,21 @@
+EduCDM.MIRT package
+===================
+
+Submodules
+----------
+
+EduCDM.MIRT.MIRT module
+-----------------------
+
+.. automodule:: EduCDM.MIRT.MIRT
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: EduCDM.MIRT
+   :members:
+   :undoc-members:
+   :show-inheritance:

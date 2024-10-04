@@ -1,0 +1,21 @@
+EduCDM.ICD.metrics package
+==========================
+
+Submodules
+----------
+
+EduCDM.ICD.metrics.metrics module
+---------------------------------
+
+.. automodule:: EduCDM.ICD.metrics.metrics
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: EduCDM.ICD.metrics
+   :members:
+   :undoc-members:
+   :show-inheritance:

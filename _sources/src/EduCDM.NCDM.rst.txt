@@ -1,0 +1,21 @@
+EduCDM.NCDM package
+===================
+
+Submodules
+----------
+
+EduCDM.NCDM.NCDM module
+-----------------------
+
+.. automodule:: EduCDM.NCDM.NCDM
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: EduCDM.NCDM
+   :members:
+   :undoc-members:
+   :show-inheritance:

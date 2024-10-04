@@ -1,0 +1,21 @@
+EduCDM.KaNCD package
+====================
+
+Submodules
+----------
+
+EduCDM.KaNCD.KaNCD module
+-------------------------
+
+.. automodule:: EduCDM.KaNCD.KaNCD
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: EduCDM.KaNCD
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,37 @@
+EduCDM.ICD.sym package
+======================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   EduCDM.ICD.sym.net
+
+Submodules
+----------
+
+EduCDM.ICD.sym.fit\_eval module
+-------------------------------
+
+.. automodule:: EduCDM.ICD.sym.fit_eval
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+EduCDM.ICD.sym.pos\_linear module
+---------------------------------
+
+.. automodule:: EduCDM.ICD.sym.pos_linear
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: EduCDM.ICD.sym
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,21 @@
+EduCDM.DINA package
+===================
+
+Submodules
+----------
+
+EduCDM.DINA.DINA module
+-----------------------
+
+.. automodule:: EduCDM.DINA.DINA
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: EduCDM.DINA
+   :members:
+   :undoc-members:
+   :show-inheritance:
