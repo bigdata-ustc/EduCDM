@@ -226,10 +226,9 @@ class IRT(CDM):
         Return:
             a dataframe containing the userIds, itemIds, and predicted responses.
         """
-        irt_proba = self.predict_proba(test_data)
-        irt_proba.loc[irt_proba['proba'] < 0.5, 'proba'] = 0
-        irt_proba.loc[irt_proba['proba'] >= 0.5, 'proba'] = 1
-        df_pred = pd.DataFrame(irt_proba)
+        df_proba = self.predict_proba(test_data)
+        y_pred = [1.0 if proba >= 0.5 else 0 for proba in df_proba['proba'].values]
+        df_pred = pd.DataFrame({'userId': df_proba['userId'], 'itemId': df_proba['itemId'], 'pred': y_pred})
         return df_pred
 
     def eval(self, val_data: pd.DataFrame):

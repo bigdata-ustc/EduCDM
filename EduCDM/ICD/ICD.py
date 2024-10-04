@@ -302,7 +302,7 @@ class ICD(CDM):
     
         df_proba = self.predict_proba(test_data)
         y_pred = [1.0 if proba >= 0.5 else 0 for proba in df_proba['proba'].values]
-        df_pred = pd.DataFrame({'userId': df_proba['userId'], 'itemId': df_proba['itemId'], 'proba': y_pred})
+        df_pred = pd.DataFrame({'userId': df_proba['userId'], 'itemId': df_proba['itemId'], 'pred': y_pred})
     
         return df_pred
 

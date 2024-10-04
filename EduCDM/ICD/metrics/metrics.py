@@ -77,13 +77,13 @@ def doa_eval(y_true, y_pred):
     ...     [np.array([.5, .4, .6])],
     ...     [np.array([.2, .3, .5])]
     ... ]
-    >>> doa_eval(y_true, y_pred)['doa']
+    >>> float(doa_eval(y_true, y_pred)['doa'])
     1.0
     >>> y_pred = [
     ...     [np.array([.4, .5, .6])],
     ...     [np.array([.3, .2, .5])]
     ... ]
-    >>> doa_eval(y_true, y_pred)['doa']
+    >>> float(doa_eval(y_true, y_pred)['doa'])
     0.5
     """
     doa = []

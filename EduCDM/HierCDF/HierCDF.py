@@ -449,7 +449,7 @@ class HierCDF(CDM):
         df_pred = pd.DataFrame({
             'userId': df_proba['userId'],
             'itemId': df_proba['itemId'],
-            'proba': y_pred})
+            'pred': y_pred})
 
         return df_pred
 
