@@ -20,11 +20,15 @@ def test_train(data, conf, tmp_path):
     max_i2u = None
     hyper_tag = False
     wfs = None
-    log, i2k, meta_data = data
+
+    train_data, stream_num, df_item, meta_data = data
     cdm = ICD(cdm, meta_data, epoch, weight_decay, inner_metrics, logger, alpha, ctx)
-    cdm.fit(log, i2k, beta, warmup_ratio, tolerance, max_u2i, max_i2u, hyper_tag, wfs)
-    cdm.save()
-    cdm.load()
+    cdm.fit(train_data, df_item, stream_num, beta, warmup_ratio, tolerance, max_u2i, max_i2u, hyper_tag, wfs)
+    
+    filepath = tmp_path / "kancd.params"
+    cdm.save(filepath)
+    cdm.load(filepath)
+    print(cdm.predict(train_data))
 
 
 def test_exception(data, conf, tmp_path):
