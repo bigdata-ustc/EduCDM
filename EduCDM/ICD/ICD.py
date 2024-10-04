@@ -78,7 +78,8 @@ class ICD(CDM):
         items = [self.id_reindex['itemId'][itemId] + 1 for itemId in df_data['itemId'].values]
         skills = []
         for item_skills in df_data['skill']:
-            item_skills = eval(item_skills)  # str of list to list
+            if isinstance(item_skills, str):
+                item_skills = eval(item_skills)  # str of list to list
             skills.append([self.id_reindex['skill'][s] + 1 for s in item_skills])
         ret = pd.DataFrame({'itemId': items, 'skill': skills})
 
