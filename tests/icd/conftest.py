@@ -28,7 +28,8 @@ def data(conf):
             score = random.randint(0, 1)
             log.append([i, j, score])
     random.shuffle(log)
-    df = pd.DataFrame(log, columns=['userId', 'itemId', 'response'])
+    train_data = pd.DataFrame(log, columns=['userId', 'itemId', 'response'])
+    train_data = pd.merge(train_data, df_item, on="itemId", how="left")
     stream_num = 50
     meta_data = {'userId': list(range(1, user_num + 1)), 'itemId': list(range(1, item_num + 1)), 'skill': list(range(knowledge_num))}
-    return df, stream_num, df_item, meta_data
+    return train_data, stream_num, df_item, meta_data

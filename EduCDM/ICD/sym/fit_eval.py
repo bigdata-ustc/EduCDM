@@ -52,14 +52,12 @@ def eval_f(_net, test_data, *args, **kwargs):
         ret = classification_report(y_true, y_label, y_pred)
     except ValueError:  # pragma: no cover
         ret = POrderedDict()
-    ret.update(doa_report(user_id, item_id, item_knowledge, y_true,
-                          user_theta))
+    ret.update(doa_report(user_id, item_id, item_knowledge, y_true, user_theta))
     return ret
 
 
 @eval_wrapper
-def stableness_eval(net, user, item, u2i, i2u, user_traits, item_traits,
-                    batch_size):
+def stableness_eval(net, user, item, u2i, i2u, user_traits, item_traits, batch_size):
     pred_net = net.module if isinstance(net, torch.nn.DataParallel) else net
 
     new_user_traits = pred_net.get_user_profiles(
@@ -91,8 +89,7 @@ def dual_fit_f(_net, batch_data, loss_function, *args, **kwargs):  # pragma: no 
 
     loss_function["BCE"](out, r)
     loss_function["DTL"](theta, a, b, stat_theta, stat_a, stat_b)
-    loss = loss_function["Loss"](out, r, theta, a, b, stat_theta, stat_a,
-                                 stat_b)
+    loss = loss_function["Loss"](out, r, theta, a, b, stat_theta, stat_a, stat_b)
     return loss
 
 
