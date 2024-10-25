@@ -1,3 +1,9 @@
+v1.0.1:
+   * update version requirements of longling and pytest-flake8
+
+v1.0.0：
+   * add KaNCD and ICD
+
 v0.0.13:
    * Bugfix: update dependency version of `longling`
    * use PosLinear to replace clipper operation
