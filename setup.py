@@ -10,7 +10,7 @@ test_deps = [
 
 setup(
     name='EduCDM',
-    version='0.0.13',
+    version='1.0.1',
     extras_require={
         'test': test_deps,
     },

@@ -30,7 +30,7 @@ def irt2pl(theta, a, b, *, F=np):
     >>> theta = [1, 0.5, 0.3]
     >>> a = [-3, 1, 3]
     >>> b = 0.5
-    >>> irt2pl(theta, a, b) # doctest: +ELLIPSIS
+    >>> float(irt2pl(theta, a, b)) # doctest: +ELLIPSIS
     0.109...
     >>> theta = [[1, 0.5, 0.3], [2, 1, 0]]
     >>> a = [[-3, 1, 3], [-3, 1, 3]]
